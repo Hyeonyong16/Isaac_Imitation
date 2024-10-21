@@ -21,6 +21,8 @@ https://www.spriters-resource.com/pc_computer/bindingofisaacrebirth/
 
 ---
 ## 프로젝트 개발 로드맵
+https://docs.google.com/spreadsheets/d/1AmnNOEQIEIc_h4LOT36UaBcONyJCIVY-a6rVudFqnBI/edit?usp=sharing
+
 ### 1주차 (10/23 ~ 10/29)
 - 에디터 구현
   - 맵
