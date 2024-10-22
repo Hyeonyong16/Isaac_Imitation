@@ -30,6 +30,10 @@ https://docs.google.com/spreadsheets/d/1AmnNOEQIEIc_h4LOT36UaBcONyJCIVY-a6rVudFq
   - 애니메이션
 - Player Script
   - 기본 이동
+  - 공격
+- RigidBody
+  - 플레이어 이동
+  - 총알 중력 영향
 - Main Menu
   - 메인 화면
   - 게임 진입
@@ -39,11 +43,18 @@ https://docs.google.com/spreadsheets/d/1AmnNOEQIEIc_h4LOT36UaBcONyJCIVY-a6rVudFq
 ### 2주차 (10/30 ~ 11/05)
 - Player Script
 - Monster Script
+  - Charger (가로, 세로 방향에 플레이어가 있을 시 일직선 돌진)
+  - Trite (플레이어 방향으로 점프)
+  - Pooter (플레이어 인식 시 플레이어 방향 핏방울 발사)
+- Bullet Script
 - Camera Script
   - 플레이어의 방 이동에 따른 카메라 움직임
 
 ### 3주차 (11/06 ~ 11/12)
-- Boss Script
+- Boss Script - Monstro
+  - 플레이어 방향으로 무작위 핏방울들 분출
+  - 점프를 반복하며 플레이어에게 접근
+  - 도약 후 플레이어 위치에 강하, 강하하면서 핏방울 주변으로 분출
 - UI
 
 ### 4주차 (11/13 ~ 11/19)
