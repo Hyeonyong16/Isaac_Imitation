@@ -31,7 +31,7 @@ https://docs.google.com/spreadsheets/d/1AmnNOEQIEIc_h4LOT36UaBcONyJCIVY-a6rVudFq
 - Player Script
   - 기본 이동
   - 공격
-- RigidBody
+- Rigidbody
   - 플레이어 이동
   - 총알 중력 영향
 - Main Menu
