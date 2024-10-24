@@ -119,7 +119,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE    hInstance,      // 프로세스 주소(I
 // 1. 전역변수
 // 2. 동적할당
 
-bool EditorMenu(HINSTANCE _inst, HWND _wnd, int wParam);
+bool TileMapEditorMenu(HINSTANCE _inst, HWND _wnd, int wParam);
+bool SpriteEditorMenu(HINSTANCE _inst, HWND _wnd, int wParam);
 
 // 메세지를 처리하는 함수
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -130,7 +131,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             int wmId = LOWORD(wParam);
 
-            if (EditorMenu(g_hInst, hWnd, wmId))
+            if (TileMapEditorMenu(g_hInst, hWnd, wmId))
+            {
+                break;
+            }
+
+            if (SpriteEditorMenu(g_hInst, hWnd, wmId))
             {
                 break;
             }

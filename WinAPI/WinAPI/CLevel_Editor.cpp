@@ -42,7 +42,7 @@ void CLevel_Editor::Begin()
 	// 메뉴바 로드 및 메인 윈도우에 부착
 	if (nullptr == m_hMenu)
 	{
-		m_hMenu = LoadMenu(nullptr, MAKEINTRESOURCEW(IDC_WINAPI));
+		m_hMenu = LoadMenu(nullptr, MAKEINTRESOURCEW(IDC_WINAPI_TILEMAP));
 	}
 	SetMenu(CEngine::GetInst()->GetMainWndHwnd(), m_hMenu);
 
@@ -53,6 +53,7 @@ void CLevel_Editor::Begin()
 
 
 	// PanelUI 생성
+	/*
 	CPanelUI* pPanel = new CPanelUI;
 	pPanel->SetName(L"Panel 1");
 	Vec2 vScale = Vec2(380.f, 500.f);
@@ -90,12 +91,13 @@ void CLevel_Editor::Begin()
 
 	pPanel->AddChildUI(pBtn);
 	AddObject(pPanel, LAYER_TYPE::UI);
-
+	*/
 
 
 	// 샘플용 Map 오브젝트 생성
 	m_MapObj = new CMap;
 	AddObject(m_MapObj, LAYER_TYPE::TILE);
+	
 
 
 
@@ -133,6 +135,8 @@ void CLevel_Editor::Tick()
 	// 마우스 좌표 : Render 좌표(마우스좌표) -> 실제 좌표로 변경
 	if (KEY_TAP(KEY::LBTN))
 	{
+		if (nullptr == m_MapObj)
+			return;
 		Vec2 vMousePos = CKeyMgr::GetInst()->GetMousePos();
 		tTile* TileInfo = m_MapObj->GetTileMap()->GetTileInfo(vMousePos);
 
@@ -234,11 +238,11 @@ void LoadTileMap()
 }
 
 
-bool EditorMenu(HINSTANCE _inst, HWND _wnd, int wParam)
+bool TileMapEditorMenu(HINSTANCE _inst, HWND _wnd, int wParam)
 {
 	switch (wParam)
 	{
-	case ID_TILE_INFO:
+	case ID_TILEMAP_INFO:
 	{
 		DialogBox(_inst, MAKEINTRESOURCE(DLG_TILEMAP_INFO), _wnd, &TileMapInfoProc);
 
@@ -270,6 +274,8 @@ bool EditorMenu(HINSTANCE _inst, HWND _wnd, int wParam)
 		pEditorLevel->LoadTileMap();
 	}
 	return true;
+	case ID_EDIT_CHANGE_SPRITE:
+		ChangeLevel(LEVEL_TYPE::EDITOR_SPRITE);
 	};
 
 	return false;

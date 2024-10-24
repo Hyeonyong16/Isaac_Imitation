@@ -24,7 +24,8 @@ enum class LEVEL_TYPE
 	STAGE_0,
 	STAGE_1,
 	STAGE_2,
-	EDITOR,
+	EDITOR_TILE,
+	EDITOR_SPRITE,
 
 	END,
 };

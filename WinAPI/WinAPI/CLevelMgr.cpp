@@ -3,6 +3,7 @@
 #include "CLevel.h"
 #include "CLevel_Start.h"
 #include "CLevel_Editor.h"
+#include "CLevel_Editor_Sprite.h"
 
 CLevelMgr::CLevelMgr()
 	: m_arrLevel{}
@@ -20,11 +21,12 @@ void CLevelMgr::Init()
 {
     // 레벨 제작
     m_arrLevel[(UINT)LEVEL_TYPE::START] = new CLevel_Start;
-    m_arrLevel[(UINT)LEVEL_TYPE::EDITOR] = new CLevel_Editor;
+    m_arrLevel[(UINT)LEVEL_TYPE::EDITOR_TILE] = new CLevel_Editor;
+    m_arrLevel[(UINT)LEVEL_TYPE::EDITOR_SPRITE] = new CLevel_Editor_Sprite;
 
 
     // 생성한 레벨을 START 레벨이면서 현재 재생중인 레벨로 설정 > Begin 호출
-    m_CurLevel = m_arrLevel[(UINT)LEVEL_TYPE::EDITOR];
+    m_CurLevel = m_arrLevel[(UINT)LEVEL_TYPE::EDITOR_TILE];
     m_CurLevel->Begin();
     
 }
