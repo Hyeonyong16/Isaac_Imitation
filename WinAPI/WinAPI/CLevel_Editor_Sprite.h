@@ -19,6 +19,8 @@ private:
     Vec2        m_SpritePos;
     Vec2        m_SpriteScale;
 
+    bool        m_bDrawSprite;
+
     // Flipbook 관련 변수
 
     // collider 관련 변수
@@ -28,7 +30,10 @@ private:
 public:
     void SetSpriteMenu(bool _bSpriteMenu) { m_bSpriteMenu = _bSpriteMenu; }
     void SetDlgHandle(HWND _hwnd) { m_hDlgHandle = _hwnd; }
-
+    void SetSpritePos(Vec2 _pos) { m_SpritePos = _pos; }
+    void SetSpriteScale(Vec2 _scale) { m_SpriteScale = _scale; }
+    void SetDrawSprite(bool _drawSprite) { m_bDrawSprite = _drawSprite; }
+   
 
     bool GetSpriteMenu() { return m_bSpriteMenu; }
     Vec2 GetSpritePos() { return m_SpritePos; }

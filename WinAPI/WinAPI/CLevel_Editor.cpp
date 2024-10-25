@@ -53,7 +53,7 @@ void CLevel_Editor::Begin()
 
 
 	// PanelUI 생성
-	/*
+	
 	CPanelUI* pPanel = new CPanelUI;
 	pPanel->SetName(L"Panel 1");
 	Vec2 vScale = Vec2(380.f, 500.f);
@@ -91,7 +91,7 @@ void CLevel_Editor::Begin()
 
 	pPanel->AddChildUI(pBtn);
 	AddObject(pPanel, LAYER_TYPE::UI);
-	*/
+	
 
 
 	// 샘플용 Map 오브젝트 생성

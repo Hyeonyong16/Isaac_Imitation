@@ -19,13 +19,19 @@
 #include "CAssetMgr.h"
 #include "CSound.h"
 
+#include "CSelectGDI.h"
+#include "CSprite.h"
+
+
 CLevel_Editor_Sprite::CLevel_Editor_Sprite()
 	: m_AtlasTexture(nullptr)
 	, m_hMenu(nullptr)
 	, m_bSpriteMenu(false)
 	, m_SpritePos{}
 	, m_SpriteScale{}
+	, m_bDrawSprite(false)
 {
+	
 }
 
 CLevel_Editor_Sprite::~CLevel_Editor_Sprite()
@@ -53,6 +59,9 @@ void CLevel_Editor_Sprite::Begin()
 	CEngine::GetInst()->ChangeWindowSize(CEngine::GetInst()->GetResolution());
 
 	Vec2 vResolution = CEngine::GetInst()->GetResolution();
+
+	// atlas 초기화
+	m_AtlasTexture = nullptr;
 
 
 	// PanelUI 생성
@@ -96,13 +105,13 @@ void CLevel_Editor_Sprite::Begin()
 	AddObject(pPanel, LAYER_TYPE::UI);
 	*/
 
-
 	// 레벨 소속 모든 오브젝트가 Begin 을 호출받을 수 있도록 한다
 	CLevel::Begin();
 }
 
 void CLevel_Editor_Sprite::End()
 {
+	//DELETE(m_AtlasTexture);
 	DeleteAllObject();
 
 	// 메뉴바 제거
@@ -126,25 +135,24 @@ void CLevel_Editor_Sprite::Tick()
 	// 마우스 클릭으로 CMap 오브젝트의 타일 이미지 인덱스 변경
 	// 일반적인 렌더링 : 실제 좌표 -> Render 좌표 변경
 	// 마우스 좌표 : Render 좌표(마우스좌표) -> 실제 좌표로 변경
-	if (KEY_TAP(KEY::LBTN))
+	if (m_bSpriteMenu && KEY_PRESSED(KEY::T))
 	{
-		m_SpritePos = CCamera::GetInst()->GetRealPos(CKeyMgr::GetInst()->GetMousePos());
-		if (m_bSpriteMenu)
+		if (KEY_TAP(KEY::LBTN))
 		{
+			m_SpritePos = CCamera::GetInst()->GetRealPos(CKeyMgr::GetInst()->GetMousePos());
 			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_POS_X, m_SpritePos.x, FALSE);
 			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_POS_Y, m_SpritePos.y, FALSE);
 		}
-	}
 
-	if (KEY_RELEASED(KEY::LBTN))
-	{
-		m_SpriteScale = CCamera::GetInst()->GetRealPos(CKeyMgr::GetInst()->GetMousePos()) - m_SpritePos;
-		if (m_bSpriteMenu)
+		if (KEY_RELEASED(KEY::LBTN))
 		{
+			m_SpriteScale = CCamera::GetInst()->GetRealPos(CKeyMgr::GetInst()->GetMousePos()) - m_SpritePos;
 			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_SCALE_X, m_SpriteScale.x, FALSE);
 			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_SCALE_Y, m_SpriteScale.y, FALSE);
+			m_bDrawSprite = true;
 		}
 	}
+	
 }
 
 void CLevel_Editor_Sprite::Render()
@@ -165,7 +173,27 @@ void CLevel_Editor_Sprite::Render()
 			, 0, 0, Width, Height, RGB(255, 0, 255));
 
 		TextOut(CEngine::GetInst()->GetSecondDC(), 10, 10, L"Editor Level", wcslen(L"Editor Level"));
+
+		if (m_bSpriteMenu && m_bDrawSprite)
+		{
+			HWND findhandle = GetDlgItem(m_hDlgHandle, IDC_SPRITE_EXAMPLE);
+			HDC m_hDC = GetDC(findhandle);
+			RECT rect;
+			GetClientRect(findhandle, &rect); 
+			 
+			SELECT_BRUSH(BRUSH_TYPE::GRAY);
+			Rectangle(m_hDC, -1, -1, (int)(rect.right - rect.left) + 1, (int)(rect.bottom - rect.top) + 1);
+			BitBlt(m_hDC
+				, (int)(((rect.right - rect.left)/2) - (m_SpriteScale.x / 2))
+				, (int)(((rect.bottom - rect.top) / 2) - (m_SpriteScale.y / 2))
+				, m_SpriteScale.x, m_SpriteScale.y
+				, m_AtlasTexture->GetDC()
+				, m_SpritePos.x, m_SpritePos.y, SRCCOPY);
+
+			m_bDrawSprite = false;
+		}
 	}
+
 
 	wchar_t str1[255];
 	wchar_t str2[255];
@@ -197,13 +225,91 @@ void CLevel_Editor_Sprite::LoadAtlasTexture()
 	{
 		wstring tempString = szFilePath;
 		tempString = tempString.substr(strContentPath.length());
-		m_AtlasTexture = CAssetMgr::GetInst()->LoadTexture(tempString, (L"Texture\\" + tempString));
+		wstring tempKey = tempString.substr(1, tempString.find(L".")-1);
+
+		m_AtlasTexture = CAssetMgr::GetInst()->LoadTexture(tempKey, (L"Texture" + tempString));
+	}
+}
+
+void CLevel_Editor_Sprite::SaveSprite()
+{
+	wstring strContentPath = CPathMgr::GetContentPath();
+	strContentPath += L"Sprite";
+
+	// 파일 경로 문자열
+	wchar_t szFilePath[255] = {};
+
+	OPENFILENAME Desc = {};
+
+	Desc.lStructSize = sizeof(OPENFILENAME);
+	Desc.hwndOwner = nullptr;
+	Desc.lpstrFile = szFilePath;
+	Desc.nMaxFile = 255;
+	Desc.lpstrFilter = L"\0SPRITE\0.sprite\0ALL\0*.*";
+	Desc.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+	Desc.lpstrInitialDir = strContentPath.c_str();
+
+	if (GetSaveFileName(&Desc))
+	{
+		wstring tempString = szFilePath;
+		tempString = tempString.substr(strContentPath.length());
+		//m_AtlasTexture = CAssetMgr::GetInst()->LoadTexture(tempString, (L"Texture\\" + tempString));
+
+		// sprite 
+		CSprite* pSprite = new CSprite;
+		pSprite->Create(m_AtlasTexture, m_SpritePos, m_SpriteScale);
+
+		wchar_t Key[50] = {};
+		swprintf_s(Key, 50, (tempString).c_str());
+		CAssetMgr::GetInst()->AddSprite(Key, pSprite);
+
+		pSprite->Save(L"Sprite\\" + tempString);
 	}
 }
 
 void CLevel_Editor_Sprite::LoadSprite()
 {
-	
+	wstring strContentPath = CPathMgr::GetContentPath();
+	strContentPath += L"Sprite";
+
+	// 파일 경로 문자열
+	wchar_t szFilePath[255] = {};
+
+	OPENFILENAME Desc = {};
+
+	Desc.lStructSize = sizeof(OPENFILENAME);
+	Desc.hwndOwner = nullptr;
+	Desc.lpstrFile = szFilePath;
+	Desc.nMaxFile = 255;
+	Desc.lpstrFilter = L"\0SPRITE\0.sprite\0ALL\0*.*";
+	Desc.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+	Desc.lpstrInitialDir = strContentPath.c_str();
+
+	if (GetOpenFileName(&Desc))
+	{
+		wstring tempString = szFilePath;
+		tempString = tempString.substr(strContentPath.length());
+		//m_AtlasTexture = CAssetMgr::GetInst()->LoadTexture(tempString, (L"Texture\\" + tempString));
+		
+		wchar_t Key[50] = {};
+		swprintf_s(Key, 50, (tempString.substr(0, tempString.length() - 7)).c_str());
+		CSprite* pSprite = CAssetMgr::GetInst()->LoadSprite(Key, L"Sprite" + tempString);
+
+		// 스프라이트 Pos 와 Slice 설정
+		m_SpritePos = pSprite->GetLeftTop();
+		m_SpriteScale = pSprite->GetSlice();
+
+		// 설정한 값으로 Edit Control 에 값 설정
+		SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_POS_X, m_SpritePos.x, FALSE);
+		SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_POS_Y, m_SpritePos.y, FALSE);
+
+		SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_SCALE_X, m_SpriteScale.x, FALSE);
+		SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_SCALE_Y, m_SpriteScale.y, FALSE);
+
+		// picture control 에 다시 render 하도록 true 로 변경
+		m_bDrawSprite = true;
+		
+	}
 }
 
 
@@ -323,15 +429,18 @@ bool SpriteEditorMenu(HINSTANCE _inst, HWND _wnd, int wParam)
 
 		pEditorLevel->SetSpriteMenu(true);
 
+		// 모달리스 dialog box 로 에디터 메뉴 생성
 		HWND g_hDlg = nullptr;
 		if (nullptr == g_hDlg)
 			g_hDlg = CreateDialog(_inst, MAKEINTRESOURCE(DLG_SPRITE_INFO), _wnd, &SpriteInfoProc);
 
+		// editor level 에서 dialog box 내 요소 접근이 가능하게 hwnd 넘겨줌
 		pEditorLevel->SetDlgHandle(g_hDlg);
 		ShowWindow(g_hDlg, true);
 	}
 	return true;
 	case ID_EDIT_CHANGE_TILEMAP:
+		// 레벨 변경
 		ChangeLevel(LEVEL_TYPE::EDITOR_TILE);
 	};
 
@@ -352,6 +461,12 @@ INT_PTR CALLBACK SpriteInfoProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 	case WM_COMMAND:
 		if (LOWORD(wParam) == IDOK)
 		{
+			CLevel* pLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+			CLevel_Editor_Sprite* pEditorLevel = dynamic_cast<CLevel_Editor_Sprite*>(pLevel);
+			assert(pEditorLevel);
+
+			pEditorLevel->SaveSprite();
+
 			return (INT_PTR)TRUE;
 		}
 
@@ -366,8 +481,34 @@ INT_PTR CALLBACK SpriteInfoProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 			EndDialog(hDlg, LOWORD(wParam));
 		}
 
+		else if (LOWORD(wParam) == ID_APPLY_DATA)
+		{
+			CLevel* pLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+			CLevel_Editor_Sprite* pEditorLevel = dynamic_cast<CLevel_Editor_Sprite*>(pLevel);
+			assert(pEditorLevel);
+
+			int posX = GetDlgItemInt(hDlg, IDC_SPRITE_POS_X, nullptr, true);
+			int posY = GetDlgItemInt(hDlg, IDC_SPRITE_POS_Y, nullptr, true);
+			int scaleX = GetDlgItemInt(hDlg, IDC_SPRITE_SCALE_X, nullptr, true);
+			int scaleY = GetDlgItemInt(hDlg, IDC_SPRITE_SCALE_Y, nullptr, true);
+
+			pEditorLevel->SetSpritePos({ posX, posY });
+			pEditorLevel->SetSpriteScale({ scaleX, scaleY });
+			pEditorLevel->SetDrawSprite(true);
+		}
+
+		else if (LOWORD(wParam) == ID_LOAD_SPRITE)
+		{
+			CLevel* pLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+			CLevel_Editor_Sprite* pEditorLevel = dynamic_cast<CLevel_Editor_Sprite*>(pLevel);
+			assert(pEditorLevel);
+
+			pEditorLevel->LoadSprite();
+		}
+
 
 		break;
 	}
+
 	return (INT_PTR)FALSE;
 }

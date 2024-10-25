@@ -3,6 +3,9 @@
 // WinAPI.rc에서 사용되고 있습니다.
 //
 #define IDC_MYICON                      2
+#define ID_APPLY_DATA                   3
+#define ID_APPLY_DATA2                  4
+#define ID_LOAD_SPRITE                  4
 #define IDD_WINAPI_DIALOG               102
 #define IDS_APP_TITLE                   103
 #define IDD_ABOUTBOX                    103
