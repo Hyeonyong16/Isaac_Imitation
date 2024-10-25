@@ -8,7 +8,6 @@ private:
     class CMap* m_MapObj;
     HMENU       m_hMenu;
 
-
 public:
     CMap* GetMapObject() { return m_MapObj; }
 

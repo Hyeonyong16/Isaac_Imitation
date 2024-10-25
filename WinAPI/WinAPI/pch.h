@@ -18,3 +18,6 @@ using std::string;
 using std::wstring;
 
 #include "global.h"
+
+//#define _AFXDLL
+//#include <afxwin.h>

@@ -133,6 +133,12 @@
     <Filter Include="Game\State\Trace">
       <UniqueIdentifier>{b7204d8d-4bb2-47ad-8cad-e68b2e15ca44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\04. Level\1. Editor\Map">
+      <UniqueIdentifier>{8bb1a9d6-833e-4950-99d3-4f5b00d80af8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\04. Level\1. Editor\Sprite">
+      <UniqueIdentifier>{e566fe19-e58a-4bf1-b6a6-4a15dcbcbf03}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CEngine.h">
@@ -255,9 +261,6 @@
     <ClInclude Include="CMap.h">
       <Filter>Game\05. Object\Map</Filter>
     </ClInclude>
-    <ClInclude Include="CLevel_Editor.h">
-      <Filter>Game\04. Level\1. Editor</Filter>
-    </ClInclude>
     <ClInclude Include="CLevel_Start.h">
       <Filter>Game\04. Level\2. Start</Filter>
     </ClInclude>
@@ -290,6 +293,12 @@
     </ClInclude>
     <ClInclude Include="CTraceState.h">
       <Filter>Game\State\Trace</Filter>
+    </ClInclude>
+    <ClInclude Include="CLevel_Editor.h">
+      <Filter>Game\04. Level\1. Editor\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="CLevel_Editor_Sprite.h">
+      <Filter>Game\04. Level\1. Editor\Sprite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -387,9 +396,6 @@
     <ClCompile Include="CMap.cpp">
       <Filter>Game\05. Object\Map</Filter>
     </ClCompile>
-    <ClCompile Include="CLevel_Editor.cpp">
-      <Filter>Game\04. Level\1. Editor</Filter>
-    </ClCompile>
     <ClCompile Include="CLevel_Start.cpp">
       <Filter>Game\04. Level\2. Start</Filter>
     </ClCompile>
@@ -422,6 +428,12 @@
     </ClCompile>
     <ClCompile Include="CTraceState.cpp">
       <Filter>Game\State\Trace</Filter>
+    </ClCompile>
+    <ClCompile Include="CLevel_Editor.cpp">
+      <Filter>Game\04. Level\1. Editor\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="CLevel_Editor_Sprite.cpp">
+      <Filter>Game\04. Level\1. Editor\Sprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
