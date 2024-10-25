@@ -30,6 +30,8 @@ CLevel_Editor_Sprite::CLevel_Editor_Sprite()
 	, m_SpritePos{}
 	, m_SpriteScale{}
 	, m_bDrawSprite(false)
+	, m_bMouseLBtnPressed(false)
+	, m_dbgRectPos{}
 {
 	
 }
@@ -140,8 +142,15 @@ void CLevel_Editor_Sprite::Tick()
 		if (KEY_TAP(KEY::LBTN))
 		{
 			m_SpritePos = CCamera::GetInst()->GetRealPos(CKeyMgr::GetInst()->GetMousePos());
+			m_dbgRectPos = m_SpritePos;
 			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_POS_X, m_SpritePos.x, FALSE);
 			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_POS_Y, m_SpritePos.y, FALSE);
+			m_bMouseLBtnPressed = true;
+		}
+
+		if (KEY_PRESSED(KEY::LBTN))
+		{
+			m_dbgRectPos = CCamera::GetInst()->GetRealPos(CKeyMgr::GetInst()->GetMousePos());
 		}
 
 		if (KEY_RELEASED(KEY::LBTN))
@@ -150,6 +159,7 @@ void CLevel_Editor_Sprite::Tick()
 			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_SCALE_X, m_SpriteScale.x, FALSE);
 			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_SCALE_Y, m_SpriteScale.y, FALSE);
 			m_bDrawSprite = true;
+			m_bMouseLBtnPressed = false;
 		}
 	}
 	
@@ -172,10 +182,22 @@ void CLevel_Editor_Sprite::Render()
 			, m_AtlasTexture->GetDC()
 			, 0, 0, Width, Height, RGB(255, 0, 255));
 
+		if (m_bMouseLBtnPressed)
+		{
+			SELECT_PEN(PEN_TYPE::GREEN);
+			SELECT_BRUSH(BRUSH_TYPE::HOLLOW);
+			Rectangle(hBackDC
+				, m_SpritePos.x
+				, m_SpritePos.y
+				, m_dbgRectPos.x
+				, m_dbgRectPos.y);
+		}
+
 		TextOut(CEngine::GetInst()->GetSecondDC(), 10, 10, L"Editor Level", wcslen(L"Editor Level"));
 
 		if (m_bSpriteMenu && m_bDrawSprite)
 		{
+
 			HWND findhandle = GetDlgItem(m_hDlgHandle, IDC_SPRITE_EXAMPLE);
 			HDC m_hDC = GetDC(findhandle);
 			RECT rect;

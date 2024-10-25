@@ -19,7 +19,11 @@ private:
     Vec2        m_SpritePos;
     Vec2        m_SpriteScale;
 
-    bool        m_bDrawSprite;
+    Vec2        m_dbgRectPos;   // 디버그용 사각형 좌표 기록
+
+    bool        m_bDrawSprite;  // Picture Control 에 Sprite 를 다시 그려야 하는가
+    bool        m_bMouseLBtnPressed;    // 마우스 클릭 유지 시 drawRect 여부
+
 
     // Flipbook 관련 변수
 
