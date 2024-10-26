@@ -29,7 +29,12 @@ CLevel_Editor_Sprite::CLevel_Editor_Sprite()
 	, m_bSpriteMenu(false)
 	, m_SpritePos{}
 	, m_SpriteScale{}
+	, m_SpriteOffset{}
 	, m_bDrawSprite(false)
+	, m_bMouseLBtnPressed(false)
+	, m_dbgRectPos{}
+	, m_bFlipbookMenu(false)
+	, m_curSprite(nullptr)
 {
 	
 }
@@ -140,8 +145,15 @@ void CLevel_Editor_Sprite::Tick()
 		if (KEY_TAP(KEY::LBTN))
 		{
 			m_SpritePos = CCamera::GetInst()->GetRealPos(CKeyMgr::GetInst()->GetMousePos());
+			m_dbgRectPos = m_SpritePos;
 			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_POS_X, m_SpritePos.x, FALSE);
 			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_POS_Y, m_SpritePos.y, FALSE);
+			m_bMouseLBtnPressed = true;
+		}
+
+		if (KEY_PRESSED(KEY::LBTN))
+		{
+			m_dbgRectPos = CCamera::GetInst()->GetRealPos(CKeyMgr::GetInst()->GetMousePos());
 		}
 
 		if (KEY_RELEASED(KEY::LBTN))
@@ -150,6 +162,7 @@ void CLevel_Editor_Sprite::Tick()
 			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_SCALE_X, m_SpriteScale.x, FALSE);
 			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_SCALE_Y, m_SpriteScale.y, FALSE);
 			m_bDrawSprite = true;
+			m_bMouseLBtnPressed = false;
 		}
 	}
 	
@@ -159,7 +172,7 @@ void CLevel_Editor_Sprite::Render()
 {
 	CLevel::Render();
 
-	if(nullptr != m_AtlasTexture)
+	if (nullptr != m_AtlasTexture)
 	{
 		UINT Width = m_AtlasTexture->GetWidth();
 		UINT Height = m_AtlasTexture->GetHeight();
@@ -172,6 +185,17 @@ void CLevel_Editor_Sprite::Render()
 			, m_AtlasTexture->GetDC()
 			, 0, 0, Width, Height, RGB(255, 0, 255));
 
+		if (m_bMouseLBtnPressed)
+		{
+			SELECT_PEN(PEN_TYPE::GREEN);
+			SELECT_BRUSH(BRUSH_TYPE::HOLLOW);
+			Rectangle(hBackDC
+				, m_SpritePos.x
+				, m_SpritePos.y
+				, m_dbgRectPos.x
+				, m_dbgRectPos.y);
+		}
+
 		TextOut(CEngine::GetInst()->GetSecondDC(), 10, 10, L"Editor Level", wcslen(L"Editor Level"));
 
 		if (m_bSpriteMenu && m_bDrawSprite)
@@ -179,18 +203,38 @@ void CLevel_Editor_Sprite::Render()
 			HWND findhandle = GetDlgItem(m_hDlgHandle, IDC_SPRITE_EXAMPLE);
 			HDC m_hDC = GetDC(findhandle);
 			RECT rect;
-			GetClientRect(findhandle, &rect); 
-			 
+			GetClientRect(findhandle, &rect);
+
 			SELECT_BRUSH(BRUSH_TYPE::GRAY);
 			Rectangle(m_hDC, -1, -1, (int)(rect.right - rect.left) + 1, (int)(rect.bottom - rect.top) + 1);
 			BitBlt(m_hDC
-				, (int)(((rect.right - rect.left)/2) - (m_SpriteScale.x / 2))
+				, (int)(((rect.right - rect.left) / 2) - (m_SpriteScale.x / 2))
 				, (int)(((rect.bottom - rect.top) / 2) - (m_SpriteScale.y / 2))
 				, m_SpriteScale.x, m_SpriteScale.y
 				, m_AtlasTexture->GetDC()
 				, m_SpritePos.x, m_SpritePos.y, SRCCOPY);
 
 			m_bDrawSprite = false;
+		}
+
+		else if (m_bFlipbookMenu && m_bDrawSprite)
+		{
+			if(0 != m_SpriteList.size())
+			{
+				HWND findhandle = GetDlgItem(m_hDlgHandle, IDC_FLIPBOOK_EXAMPLE);
+				HDC m_hDC = GetDC(findhandle);
+				RECT rect;
+				GetClientRect(findhandle, &rect);
+
+				BitBlt(m_hDC
+					, (int)(((rect.right - rect.left) / 2) - (m_curSprite->GetSlice().x / 2) + m_SpriteOffset.x)
+					, (int)(((rect.bottom - rect.top) / 2) - (m_curSprite->GetSlice().y / 2) + m_SpriteOffset.y)
+					, m_curSprite->GetSlice().x, m_curSprite->GetSlice().y
+					, m_curSprite->GetAtlas()->GetDC()
+					, m_curSprite->GetLeftTop().x, m_curSprite->GetLeftTop().y, SRCCOPY);
+
+				m_bDrawSprite = false;
+			}
 		}
 	}
 
@@ -253,17 +297,23 @@ void CLevel_Editor_Sprite::SaveSprite()
 	{
 		wstring tempString = szFilePath;
 		tempString = tempString.substr(strContentPath.length());
+		wstring tempKey = tempString.substr(1, tempString.find(L".") - 1);
 		//m_AtlasTexture = CAssetMgr::GetInst()->LoadTexture(tempString, (L"Texture\\" + tempString));
 
 		// sprite 
 		CSprite* pSprite = new CSprite;
 		pSprite->Create(m_AtlasTexture, m_SpritePos, m_SpriteScale);
 
-		wchar_t Key[50] = {};
-		swprintf_s(Key, 50, (tempString).c_str());
-		CAssetMgr::GetInst()->AddSprite(Key, pSprite);
-
-		pSprite->Save(L"Sprite\\" + tempString);
+		//wchar_t Key[50] = {};
+		//swprintf_s(Key, 50, (tempString).c_str());
+		if(!CAssetMgr::GetInst()->FindSprite(tempKey))
+			CAssetMgr::GetInst()->AddSprite(tempKey, pSprite);
+		
+		
+		//=======================================================
+		// 어째서 기존 애를 덮어쓰기 하면 메모리 누수가 생기는가?
+		//=======================================================
+		pSprite->Save(L"Sprite" + tempString);
 	}
 }
 
@@ -289,85 +339,42 @@ void CLevel_Editor_Sprite::LoadSprite()
 	{
 		wstring tempString = szFilePath;
 		tempString = tempString.substr(strContentPath.length());
+		wstring tempKey = tempString.substr(1, tempString.find(L".") - 1);
 		//m_AtlasTexture = CAssetMgr::GetInst()->LoadTexture(tempString, (L"Texture\\" + tempString));
+
+		//wchar_t Key[50] = {};
+		//swprintf_s(Key, 50, (tempString).c_str());
+		CSprite* pSprite = CAssetMgr::GetInst()->LoadSprite(tempKey, L"Sprite" + tempString);
+
+		if(m_bSpriteMenu)
+		{
+			// 스프라이트 Pos 와 Slice 설정
+			m_SpritePos = pSprite->GetLeftTop();
+			m_SpriteScale = pSprite->GetSlice();
+
+			// 설정한 값으로 Edit Control 에 값 설정
+			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_POS_X, m_SpritePos.x, FALSE);
+			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_POS_Y, m_SpritePos.y, FALSE);
+
+			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_SCALE_X, m_SpriteScale.x, FALSE);
+			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_SCALE_Y, m_SpriteScale.y, FALSE);
+
+			// picture control 에 다시 render 하도록 true 로 변경
+			m_bDrawSprite = true;
+		}
 		
-		wchar_t Key[50] = {};
-		swprintf_s(Key, 50, (tempString.substr(0, tempString.length() - 7)).c_str());
-		CSprite* pSprite = CAssetMgr::GetInst()->LoadSprite(Key, L"Sprite" + tempString);
+		else if (m_bFlipbookMenu)
+		{
+			m_SpriteOffset = pSprite->GetOffset();
+			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_OFFSET_X, m_SpriteOffset.x, FALSE);
+			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_OFFSET_Y, m_SpriteOffset.y, FALSE);
 
-		// 스프라이트 Pos 와 Slice 설정
-		m_SpritePos = pSprite->GetLeftTop();
-		m_SpriteScale = pSprite->GetSlice();
+			m_SpriteList.push_back(pSprite);
 
-		// 설정한 값으로 Edit Control 에 값 설정
-		SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_POS_X, m_SpritePos.x, FALSE);
-		SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_POS_Y, m_SpritePos.y, FALSE);
-
-		SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_SCALE_X, m_SpriteScale.x, FALSE);
-		SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_SCALE_Y, m_SpriteScale.y, FALSE);
-
-		// picture control 에 다시 render 하도록 true 로 변경
-		m_bDrawSprite = true;
-		
+			m_bDrawSprite = true;
+		}
 	}
 }
-
-
-
-
-/*
-void CLevel_Editor_Sprite::SaveTileMap()
-{
-	wstring strContentPath = CPathMgr::GetContentPath();
-	strContentPath += L"TileMap";
-
-
-	// 파일 경로 문자열
-	wchar_t szFilePath[255] = {};
-
-	OPENFILENAME Desc = {};
-
-	Desc.lStructSize = sizeof(OPENFILENAME);
-	Desc.hwndOwner = nullptr;
-	Desc.lpstrFile = szFilePath;	// 최종적으로 고른 경로를 받아낼 목적지
-	Desc.nMaxFile = 255;
-	Desc.lpstrFilter = L"Tile\0*.tile\0ALL\0*.*";
-	Desc.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-	Desc.lpstrInitialDir = strContentPath.c_str();
-
-	if (GetSaveFileName(&Desc))
-	{
-		// 맵 오브젝트의 TileMap 컴포넌트 정보를 저장한다.
-		m_MapObj->GetTileMap()->SaveTileMap(szFilePath);
-	}
-}
-
-void CLevel_Editor_Sprite::LoadTileMap()
-{
-	wstring strContentPath = CPathMgr::GetContentPath();
-	strContentPath += L"TileMap";
-
-	// 파일 경로 문자열
-	wchar_t szFilePath[255] = {};
-
-	OPENFILENAME Desc = {};
-
-	Desc.lStructSize = sizeof(OPENFILENAME);
-	Desc.hwndOwner = nullptr;
-	Desc.lpstrFile = szFilePath;
-	Desc.nMaxFile = 255;
-	Desc.lpstrFilter = L"Tile\0*.tile\0ALL\0*.*";
-	Desc.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-	Desc.lpstrInitialDir = strContentPath.c_str();
-
-	if (GetOpenFileName(&Desc))
-	{
-		m_MapObj->GetTileMap()->LoadTileMap(szFilePath);
-	}
-}
-*/
-
-
 
 
 
@@ -375,43 +382,12 @@ void CLevel_Editor_Sprite::LoadTileMap()
 // 전역함수
 // =======
 INT_PTR CALLBACK    SpriteInfoProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+INT_PTR CALLBACK	FlipbookInfoProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 bool SpriteEditorMenu(HINSTANCE _inst, HWND _wnd, int wParam)
 {
 	switch (wParam)
 	{
-	//case ID_TILEMAP_INFO:
-	//{
-	//	DialogBox(_inst, MAKEINTRESOURCE(DLG_TILEMAP_INFO), _wnd, &TileMapInfoProc);
-
-	//	/* if(nullptr == g_hDlg)
-	//		g_hDlg = CreateDialog(g_hInst, MAKEINTRESOURCE(DLG_TILEMAP_INFO), hWnd, &TileMapInfoProc);
-
-	//	ShowWindow(g_hDlg, true);*/
-	//	return true;
-	//}
-	//case ID_TILEMAP_SAVE:
-	//{
-	//	// CLevel_Editor 에 있는 MapObject 의 타일맵 컴포넌트의 행 렬을 설정해주어야 함
-	//	// 현재 레벨을 알아낸다. 정황상 현재 레벨은 반드시 CLevel_Editor 여야 한다.
-	//	CLevel* pLevel = CLevelMgr::GetInst()->GetCurrentLevel();
-	//	CLevel_Editor* pEditorLevel = dynamic_cast<CLevel_Editor*>(pLevel);
-	//	assert(pEditorLevel);
-
-	//	pEditorLevel->SaveTileMap();
-	//}
-	//return true;
-	//case ID_TILEMAP_LOAD:
-	//{
-	//	// CLevel_Editor 에 있는 MapObject 의 타일맵 컴포넌트의 행 렬을 설정해주어야 함
-	//	// 현재 레벨을 알아낸다. 정황상 현재 레벨은 반드시 CLevel_Editor 여야 한다.
-	//	CLevel* pLevel = CLevelMgr::GetInst()->GetCurrentLevel();
-	//	CLevel_Editor* pEditorLevel = dynamic_cast<CLevel_Editor*>(pLevel);
-	//	assert(pEditorLevel);
-
-	//	pEditorLevel->LoadTileMap();
-	//}
-	//return true;
 	case ID_ATLAS_LOAD:
 	{
 		CLevel* pLevel = CLevelMgr::GetInst()->GetCurrentLevel();
@@ -421,6 +397,8 @@ bool SpriteEditorMenu(HINSTANCE _inst, HWND _wnd, int wParam)
 		pEditorLevel->LoadAtlasTexture();
 	}
 	return true;
+
+
 	case ID_SPRITE_SET:
 	{
 		CLevel* pLevel = CLevelMgr::GetInst()->GetCurrentLevel();
@@ -435,10 +413,36 @@ bool SpriteEditorMenu(HINSTANCE _inst, HWND _wnd, int wParam)
 			g_hDlg = CreateDialog(_inst, MAKEINTRESOURCE(DLG_SPRITE_INFO), _wnd, &SpriteInfoProc);
 
 		// editor level 에서 dialog box 내 요소 접근이 가능하게 hwnd 넘겨줌
+		if (nullptr != pEditorLevel->GetDlgHandle())
+			EndDialog(pEditorLevel->GetDlgHandle(), IDCANCEL);
 		pEditorLevel->SetDlgHandle(g_hDlg);
 		ShowWindow(g_hDlg, true);
 	}
 	return true;
+
+
+	case ID_FLIPBOOK_SET:
+	{
+		CLevel* pLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+		CLevel_Editor_Sprite* pEditorLevel = dynamic_cast<CLevel_Editor_Sprite*>(pLevel);
+		assert(pEditorLevel);
+
+		pEditorLevel->SetFlipbookMenu(true);
+
+		// 모달리스 dialog box 로 에디터 메뉴 생성
+		HWND g_hDlg = nullptr;
+		if (nullptr == g_hDlg)
+			g_hDlg = CreateDialog(_inst, MAKEINTRESOURCE(DLG_FLIPBOOK_INFO), _wnd, &FlipbookInfoProc);
+
+		// editor level 에서 dialog box 내 요소 접근이 가능하게 hwnd 넘겨줌
+		if (nullptr != pEditorLevel->GetDlgHandle())
+			EndDialog(pEditorLevel->GetDlgHandle(), IDCANCEL);
+		pEditorLevel->SetDlgHandle(g_hDlg);
+		ShowWindow(g_hDlg, true);
+	}
+	return true;
+
+
 	case ID_EDIT_CHANGE_TILEMAP:
 		// 레벨 변경
 		ChangeLevel(LEVEL_TYPE::EDITOR_TILE);
@@ -506,6 +510,95 @@ INT_PTR CALLBACK SpriteInfoProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 			pEditorLevel->LoadSprite();
 		}
 
+
+		break;
+	}
+
+	return (INT_PTR)FALSE;
+}
+
+
+// ============================
+// FLIPBOOK_INFO Dialog 프로시저
+// ============================
+INT_PTR CALLBACK	FlipbookInfoProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	UNREFERENCED_PARAMETER(lParam);
+	switch (message)
+	{
+	case WM_INITDIALOG:
+		return (INT_PTR)TRUE;
+
+	case WM_COMMAND:
+		if (LOWORD(wParam) == IDOK)
+		{
+			CLevel* pLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+			CLevel_Editor_Sprite* pEditorLevel = dynamic_cast<CLevel_Editor_Sprite*>(pLevel);
+			assert(pEditorLevel);
+
+			//pEditorLevel->SaveSprite();
+
+			return (INT_PTR)TRUE;
+		}
+
+		else if (LOWORD(wParam) == IDCANCEL)
+		{
+			CLevel* pLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+			CLevel_Editor_Sprite* pEditorLevel = dynamic_cast<CLevel_Editor_Sprite*>(pLevel);
+			assert(pEditorLevel);
+
+			//pEditorLevel->SetSpriteMenu(false);
+
+			EndDialog(hDlg, LOWORD(wParam));
+		}
+
+		else if (LOWORD(wParam) == ID_APPLY_OFFSET)
+		{
+
+		}
+
+		else if (LOWORD(wParam) == ID_DELETE_SPRITE)
+		{
+
+		}
+
+		else if (LOWORD(wParam) == ID_ADD_SPRITE)
+		{
+			CLevel* pLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+			CLevel_Editor_Sprite* pEditorLevel = dynamic_cast<CLevel_Editor_Sprite*>(pLevel);
+			assert(pEditorLevel);
+
+			pEditorLevel->LoadSprite();
+
+			HWND hwndList = GetDlgItem(hDlg, IDC_SPRITE_LIST);
+			wstring spriteKey = pEditorLevel->GetSpriteList().back()->GetKey();
+			int pos = (int)SendMessage(hwndList, LB_ADDSTRING, 0, (LPARAM)spriteKey.c_str());
+
+		}
+
+		else if (LOWORD(wParam) == IDC_SPRITE_LIST)
+		{
+			CLevel* pLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+			CLevel_Editor_Sprite* pEditorLevel = dynamic_cast<CLevel_Editor_Sprite*>(pLevel);
+			assert(pEditorLevel);
+
+			switch (HIWORD(wParam))
+			{
+			case LBN_SELCHANGE:
+			{
+				HWND hwndList = GetDlgItem(hDlg, IDC_SPRITE_LIST);
+
+				int index = (int)SendMessage(hwndList, LB_GETCURSEL, 0, 0);
+				wchar_t buffer[50] = {};
+				SendMessage(hwndList, LB_GETTEXT, index, (LPARAM)buffer);
+				
+				pEditorLevel->SetCurSprite(CAssetMgr::GetInst()->FindSprite(buffer));
+				pEditorLevel->SetDrawSprite(true);
+			}
+			break;
+			}
+
+		}
 
 		break;
 	}
