@@ -4,7 +4,6 @@
 //
 #define IDC_MYICON                      2
 #define ID_APPLY_DATA                   3
-#define ID_APPLY_DATA2                  4
 #define ID_LOAD_SPRITE                  4
 #define IDD_WINAPI_DIALOG               102
 #define IDS_APP_TITLE                   103
@@ -21,15 +20,25 @@
 #define DLG_TILE_INFO                   129
 #define DLG_TILEMAP_INFO                129
 #define IDD_SPRITE_INFO                 130
-#define DLG_SPRITE_INFO                 130
+#define DLG_FLIPBOOK_INFO               130
+#define DLG_SPRITE_INFO                 131
+#define DLG_SPRITE                      131
 #define IDC_EDIT1                       1000
 #define IDC_COL                         1000
 #define IDC_SPRITE_POS_X                1000
 #define IDC_ROW                         1001
 #define IDC_SPRITE_POS_Y                1001
 #define IDC_SPRITE_EXAMPLE              1002
+#define ID_DELETE_SPRITE                1003
+#define ID_ADD_SPRITE                   1004
+#define IDC_LIST1                       1005
+#define IDC_SPRITE_LIST                 1005
+#define IDC_FLIPBOOK_EXAMPLE            1006
+#define IDC_PREV_BTN                    1007
 #define IDC_SPRITE_SCALE_X              1008
+#define IDC_NEXT_BTN                    1008
 #define IDC_SPRITE_SCALE_Y              1009
+#define ID_APPLY_OFFSET                 1009
 #define IDC_SPRITE_OFFSET_X             1010
 #define IDC_EDIT6                       1011
 #define IDC_SPRITE_OFFSET_Y             1011
@@ -62,7 +71,7 @@
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        131
 #define _APS_NEXT_COMMAND_VALUE         32791
-#define _APS_NEXT_CONTROL_VALUE         1003
+#define _APS_NEXT_CONTROL_VALUE         1008
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
 #endif
