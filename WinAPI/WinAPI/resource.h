@@ -40,8 +40,12 @@
 #define IDC_SPRITE_SCALE_Y              1009
 #define ID_APPLY_OFFSET                 1009
 #define IDC_SPRITE_OFFSET_X             1010
+#define ID_ADD_SPRITE2                  1010
+#define ID_LOAD_FLIPBOOK                1010
 #define IDC_EDIT6                       1011
 #define IDC_SPRITE_OFFSET_Y             1011
+#define IDC_FLIPBOOK_OFFSET_X           1012
+#define IDC_FLIPBOOK_OFFSET_Y           1013
 #define ID_32771                        32771
 #define ID_32772                        32772
 #define ID_32773                        32773
@@ -71,7 +75,7 @@
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        131
 #define _APS_NEXT_COMMAND_VALUE         32791
-#define _APS_NEXT_CONTROL_VALUE         1008
+#define _APS_NEXT_CONTROL_VALUE         1014
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
 #endif

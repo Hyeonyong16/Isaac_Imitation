@@ -20,6 +20,7 @@ private:
     // Sprite Set 관련 변수
     Vec2        m_SpritePos;
     Vec2        m_SpriteScale;
+    Vec2        m_SpriteOffset;
 
     Vec2        m_dbgRectPos;           // 디버그용 사각형 좌표 기록
 
@@ -28,10 +29,8 @@ private:
 
 
     // Flipbook 관련 변수
-    Vec2        m_SpriteOffset;
-
     list<CSprite*>  m_SpriteList;
-    int         m_idxSpriteList;
+
     CSprite*    m_curSprite;
 
     // collider 관련 변수
@@ -44,6 +43,7 @@ public:
     void SetDlgHandle(HWND _hwnd) { m_hDlgHandle = _hwnd; }
     void SetSpritePos(Vec2 _pos) { m_SpritePos = _pos; }
     void SetSpriteScale(Vec2 _scale) { m_SpriteScale = _scale; }
+    void SetSpriteOffset(Vec2 _offset) { m_SpriteOffset = _offset; }
     void SetDrawSprite(bool _drawSprite) { m_bDrawSprite = _drawSprite; }
     void SetCurSprite(CSprite* _sprite) { m_curSprite = _sprite; }
    
@@ -51,7 +51,19 @@ public:
     HWND GetDlgHandle() { return m_hDlgHandle; }
     bool GetSpriteMenu() { return m_bSpriteMenu; }
     Vec2 GetSpritePos() { return m_SpritePos; }
+    CSprite* GetCurSprite() { return m_curSprite; }
     list<CSprite*> GetSpriteList() { return m_SpriteList; }
+
+    void DeleteIdxSpriteList(int _idx)
+    {
+        list<CSprite*>::iterator iter = m_SpriteList.begin();
+
+        for (int i = 0; i < _idx; ++i)
+        {
+            ++iter;
+        }
+        m_SpriteList.erase(iter);
+    }
 
 public:
     virtual void Begin() override;

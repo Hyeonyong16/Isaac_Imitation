@@ -35,7 +35,7 @@ void CLevel_Editor::Begin()
 	CSound* pSound = CAssetMgr::GetInst()->LoadSound(L"DM_Opening", L"Sound\\DM.wav");
 	if (nullptr != pSound)
 	{
-		pSound->SetVolume(70.f);
+		pSound->SetVolume(0.f);
 		pSound->PlayToBGM(true);
 	}
 

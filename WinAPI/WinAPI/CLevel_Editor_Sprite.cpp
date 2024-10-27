@@ -21,6 +21,7 @@
 
 #include "CSelectGDI.h"
 #include "CSprite.h"
+#include "CFlipbook.h"
 
 
 CLevel_Editor_Sprite::CLevel_Editor_Sprite()
@@ -49,7 +50,7 @@ void CLevel_Editor_Sprite::Begin()
 	CSound* pSound = CAssetMgr::GetInst()->LoadSound(L"DM_Opening", L"Sound\\DM.wav");
 	if (nullptr != pSound)
 	{
-		pSound->SetVolume(70.f);
+		pSound->SetVolume(0.f);
 		pSound->PlayToBGM(true);
 	}
 
@@ -208,11 +209,18 @@ void CLevel_Editor_Sprite::Render()
 			SELECT_BRUSH(BRUSH_TYPE::GRAY);
 			Rectangle(m_hDC, -1, -1, (int)(rect.right - rect.left) + 1, (int)(rect.bottom - rect.top) + 1);
 			BitBlt(m_hDC
-				, (int)(((rect.right - rect.left) / 2) - (m_SpriteScale.x / 2))
-				, (int)(((rect.bottom - rect.top) / 2) - (m_SpriteScale.y / 2))
+				, (int)(((rect.right - rect.left) / 2) - (m_SpriteScale.x / 2) + m_SpriteOffset.x)
+				, (int)(((rect.bottom - rect.top) / 2) - (m_SpriteScale.y / 2) + m_SpriteOffset.y)
 				, m_SpriteScale.x, m_SpriteScale.y
 				, m_AtlasTexture->GetDC()
 				, m_SpritePos.x, m_SpritePos.y, SRCCOPY);
+
+			SELECT_PEN(PEN_TYPE::BLUE);
+			MoveToEx(m_hDC, rect.right / 2, 0.f, nullptr);
+			LineTo(m_hDC, rect.right / 2, rect.bottom);
+			MoveToEx(m_hDC, 0.f, rect.bottom / 2, nullptr);
+			LineTo(m_hDC, rect.right, rect.bottom / 2);
+
 
 			m_bDrawSprite = false;
 		}
@@ -225,13 +233,19 @@ void CLevel_Editor_Sprite::Render()
 				HDC m_hDC = GetDC(findhandle);
 				RECT rect;
 				GetClientRect(findhandle, &rect);
-
+				Rectangle(m_hDC, -1, -1, (int)(rect.right - rect.left) + 1, (int)(rect.bottom - rect.top) + 1);
 				BitBlt(m_hDC
-					, (int)(((rect.right - rect.left) / 2) - (m_curSprite->GetSlice().x / 2) + m_SpriteOffset.x)
-					, (int)(((rect.bottom - rect.top) / 2) - (m_curSprite->GetSlice().y / 2) + m_SpriteOffset.y)
+					, (int)(((rect.right - rect.left) / 2) - (m_curSprite->GetSlice().x / 2) + m_curSprite->GetOffset().x)
+					, (int)(((rect.bottom - rect.top) / 2) - (m_curSprite->GetSlice().y / 2) + m_curSprite->GetOffset().y)
 					, m_curSprite->GetSlice().x, m_curSprite->GetSlice().y
 					, m_curSprite->GetAtlas()->GetDC()
 					, m_curSprite->GetLeftTop().x, m_curSprite->GetLeftTop().y, SRCCOPY);
+
+				SELECT_PEN(PEN_TYPE::BLUE);
+				MoveToEx(m_hDC, rect.right / 2, 0.f, nullptr);
+				LineTo(m_hDC, rect.right / 2, rect.bottom);
+				MoveToEx(m_hDC, 0.f, rect.bottom / 2, nullptr);
+				LineTo(m_hDC, rect.right , rect.bottom / 2);
 
 				m_bDrawSprite = false;
 			}
@@ -300,15 +314,22 @@ void CLevel_Editor_Sprite::SaveSprite()
 		wstring tempKey = tempString.substr(1, tempString.find(L".") - 1);
 		//m_AtlasTexture = CAssetMgr::GetInst()->LoadTexture(tempString, (L"Texture\\" + tempString));
 
+
+
 		// sprite 
 		CSprite* pSprite = new CSprite;
 		pSprite->Create(m_AtlasTexture, m_SpritePos, m_SpriteScale);
+		pSprite->SetOffset(m_SpriteOffset);
 
 		//wchar_t Key[50] = {};
 		//swprintf_s(Key, 50, (tempString).c_str());
 		if(!CAssetMgr::GetInst()->FindSprite(tempKey))
 			CAssetMgr::GetInst()->AddSprite(tempKey, pSprite);
 		
+		else
+		{
+			CAssetMgr::GetInst()->FindSprite(tempKey)->SetOffset(m_SpriteOffset);
+		}
 		
 		//=======================================================
 		// 어째서 기존 애를 덮어쓰기 하면 메모리 누수가 생기는가?
@@ -351,6 +372,7 @@ void CLevel_Editor_Sprite::LoadSprite()
 			// 스프라이트 Pos 와 Slice 설정
 			m_SpritePos = pSprite->GetLeftTop();
 			m_SpriteScale = pSprite->GetSlice();
+			m_SpriteOffset = pSprite->GetOffset();
 
 			// 설정한 값으로 Edit Control 에 값 설정
 			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_POS_X, m_SpritePos.x, FALSE);
@@ -359,20 +381,111 @@ void CLevel_Editor_Sprite::LoadSprite()
 			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_SCALE_X, m_SpriteScale.x, FALSE);
 			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_SCALE_Y, m_SpriteScale.y, FALSE);
 
+			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_OFFSET_X, m_SpriteOffset.x, FALSE);
+			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_OFFSET_Y, m_SpriteOffset.y, FALSE);
+
 			// picture control 에 다시 render 하도록 true 로 변경
 			m_bDrawSprite = true;
 		}
 		
 		else if (m_bFlipbookMenu)
 		{
-			m_SpriteOffset = pSprite->GetOffset();
-			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_OFFSET_X, m_SpriteOffset.x, FALSE);
-			SetDlgItemInt(m_hDlgHandle, IDC_SPRITE_OFFSET_Y, m_SpriteOffset.y, FALSE);
+			pSprite->GetOffset();
+			SetDlgItemInt(m_hDlgHandle, IDC_FLIPBOOK_OFFSET_X, pSprite->GetOffset().x, FALSE);
+			SetDlgItemInt(m_hDlgHandle, IDC_FLIPBOOK_OFFSET_Y, pSprite->GetOffset().y, FALSE);
 
 			m_SpriteList.push_back(pSprite);
+			m_curSprite = pSprite;
 
 			m_bDrawSprite = true;
 		}
+	}
+}
+
+void CLevel_Editor_Sprite::SaveFlipbook()
+{
+	wstring strContentPath = CPathMgr::GetContentPath();
+	strContentPath += L"Flipbook";
+
+	// 파일 경로 문자열
+	wchar_t szFilePath[255] = {};
+
+	OPENFILENAME Desc = {};
+
+	Desc.lStructSize = sizeof(OPENFILENAME);
+	Desc.hwndOwner = nullptr;
+	Desc.lpstrFile = szFilePath;
+	Desc.nMaxFile = 255;
+	Desc.lpstrFilter = L"\FLIP\0.flip\0ALL\0*.*";
+	Desc.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+	Desc.lpstrInitialDir = strContentPath.c_str();
+
+	if (GetSaveFileName(&Desc))
+	{
+		wstring tempString = szFilePath;
+		tempString = tempString.substr(strContentPath.length());
+		wstring tempKey = tempString.substr(1, tempString.find(L".") - 1);
+		//m_AtlasTexture = CAssetMgr::GetInst()->LoadTexture(tempString, (L"Texture\\" + tempString));
+
+		CFlipbook* pFlipbook = new CFlipbook;
+
+		list<CSprite*>::iterator iter = m_SpriteList.begin();
+		for (; iter != m_SpriteList.end(); ++iter)
+		{
+			pFlipbook->AddSprite(*iter);
+		}
+
+		if (!CAssetMgr::GetInst()->FindFlipbook(tempKey))
+			CAssetMgr::GetInst()->AddFlipbook(tempKey, pFlipbook);
+
+		//=======================================================
+		// 어째서 기존 애를 덮어쓰기 하면 메모리 누수가 생기는가?
+		//=======================================================
+		pFlipbook->Save(L"Flipbook" + tempString);
+	}
+}
+
+void CLevel_Editor_Sprite::LoadFlipbook()
+{
+	wstring strContentPath = CPathMgr::GetContentPath();
+	strContentPath += L"Flipbook";
+
+	// 파일 경로 문자열
+	wchar_t szFilePath[255] = {};
+
+	OPENFILENAME Desc = {};
+
+	Desc.lStructSize = sizeof(OPENFILENAME);
+	Desc.hwndOwner = nullptr;
+	Desc.lpstrFile = szFilePath;
+	Desc.nMaxFile = 255;
+	Desc.lpstrFilter = L"\FLIP\0.flip\0ALL\0*.*";
+	Desc.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+	Desc.lpstrInitialDir = strContentPath.c_str();
+
+	if (GetOpenFileName(&Desc))
+	{
+		wstring tempString = szFilePath;
+		tempString = tempString.substr(strContentPath.length());
+		wstring tempKey = tempString.substr(1, tempString.find(L".") - 1);
+
+		CFlipbook* pFlipbook = CAssetMgr::GetInst()->LoadFlipbook(tempKey, L"Flipbook" + tempString);
+
+		HWND hwndList = GetDlgItem(m_hDlgHandle, IDC_SPRITE_LIST);
+		
+		m_SpriteList.clear();
+		SendMessage(hwndList, LB_RESETCONTENT, 0, 0);
+
+		for (int i = 0; i < pFlipbook->GetMaxSpriteCount(); ++i)
+		{
+			m_SpriteList.push_back(pFlipbook->GetSprite(i));
+			int pos = SendMessage(hwndList, LB_GETCURSEL, 0, 0);
+
+			wstring spriteKey = pFlipbook->GetSprite(i)->GetKey();
+			SendMessage(hwndList, LB_ADDSTRING, 0, (LPARAM)spriteKey.c_str());
+		}
+
+		SendMessage(hwndList, LB_SETCURSEL, 0, 0);
 	}
 }
 
@@ -495,9 +608,13 @@ INT_PTR CALLBACK SpriteInfoProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 			int posY = GetDlgItemInt(hDlg, IDC_SPRITE_POS_Y, nullptr, true);
 			int scaleX = GetDlgItemInt(hDlg, IDC_SPRITE_SCALE_X, nullptr, true);
 			int scaleY = GetDlgItemInt(hDlg, IDC_SPRITE_SCALE_Y, nullptr, true);
+			int offsetX = GetDlgItemInt(hDlg, IDC_SPRITE_OFFSET_X, nullptr, true);
+			int offsetY = GetDlgItemInt(hDlg, IDC_SPRITE_OFFSET_Y, nullptr, true);
 
 			pEditorLevel->SetSpritePos({ posX, posY });
 			pEditorLevel->SetSpriteScale({ scaleX, scaleY });
+			pEditorLevel->SetSpriteOffset({ offsetX, offsetY });
+
 			pEditorLevel->SetDrawSprite(true);
 		}
 
@@ -509,7 +626,6 @@ INT_PTR CALLBACK SpriteInfoProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 
 			pEditorLevel->LoadSprite();
 		}
-
 
 		break;
 	}
@@ -536,7 +652,7 @@ INT_PTR CALLBACK	FlipbookInfoProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 			CLevel_Editor_Sprite* pEditorLevel = dynamic_cast<CLevel_Editor_Sprite*>(pLevel);
 			assert(pEditorLevel);
 
-			//pEditorLevel->SaveSprite();
+			pEditorLevel->SaveFlipbook();
 
 			return (INT_PTR)TRUE;
 		}
@@ -552,14 +668,56 @@ INT_PTR CALLBACK	FlipbookInfoProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 			EndDialog(hDlg, LOWORD(wParam));
 		}
 
+		else if (LOWORD(wParam) == ID_LOAD_FLIPBOOK)
+		{
+			CLevel* pLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+			CLevel_Editor_Sprite* pEditorLevel = dynamic_cast<CLevel_Editor_Sprite*>(pLevel);
+			assert(pEditorLevel);
+
+			pEditorLevel->LoadFlipbook();
+		}
+
 		else if (LOWORD(wParam) == ID_APPLY_OFFSET)
 		{
+			float xOffset = GetDlgItemInt(hDlg, IDC_FLIPBOOK_OFFSET_X, nullptr, true);
+			float yOffset = GetDlgItemInt(hDlg, IDC_FLIPBOOK_OFFSET_Y, nullptr, true);
 
+			CLevel* pLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+			CLevel_Editor_Sprite* pEditorLevel = dynamic_cast<CLevel_Editor_Sprite*>(pLevel);
+			assert(pEditorLevel);
+
+			CSprite* pSprite = pEditorLevel->GetCurSprite();
+			pSprite->SetOffset(Vec2(xOffset, yOffset));
+			pEditorLevel->SetDrawSprite(true);
 		}
 
 		else if (LOWORD(wParam) == ID_DELETE_SPRITE)
 		{
+			CLevel* pLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+			CLevel_Editor_Sprite* pEditorLevel = dynamic_cast<CLevel_Editor_Sprite*>(pLevel);
+			assert(pEditorLevel);
 
+			HWND hwndList = GetDlgItem(hDlg, IDC_SPRITE_LIST);
+			int pos = SendMessage(hwndList, LB_GETCURSEL, 0, 0);
+
+			if (-1 != pos)
+			{
+				SendMessage(hwndList, LB_DELETESTRING, pos, 0);
+				pEditorLevel->DeleteIdxSpriteList(pos);
+
+				int count = SendMessage(hwndList, LB_GETCOUNT, 0, 0);
+				if (count > 0)
+				{
+					SendMessage(hwndList, LB_SETCURSEL, 0, 0);
+
+					int index = (int)SendMessage(hwndList, LB_GETCURSEL, 0, 0);
+					wchar_t buffer[50] = {};
+					SendMessage(hwndList, LB_GETTEXT, index, (LPARAM)buffer);
+
+					pEditorLevel->SetCurSprite(CAssetMgr::GetInst()->FindSprite(buffer));
+					pEditorLevel->SetDrawSprite(true);
+				}
+			}
 		}
 
 		else if (LOWORD(wParam) == ID_ADD_SPRITE)
@@ -572,8 +730,62 @@ INT_PTR CALLBACK	FlipbookInfoProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 
 			HWND hwndList = GetDlgItem(hDlg, IDC_SPRITE_LIST);
 			wstring spriteKey = pEditorLevel->GetSpriteList().back()->GetKey();
-			int pos = (int)SendMessage(hwndList, LB_ADDSTRING, 0, (LPARAM)spriteKey.c_str());
+			int pos = SendMessage(hwndList, LB_GETCURSEL, 0, 0);
+			pos = (int)SendMessage(hwndList, LB_INSERTSTRING, pos + 1, (LPARAM)spriteKey.c_str());
+			SendMessage(hwndList, LB_SETCURSEL, pos, 0);
 
+		}
+
+		else if (LOWORD(wParam) == IDC_PREV_BTN)
+		{
+			CLevel* pLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+			CLevel_Editor_Sprite* pEditorLevel = dynamic_cast<CLevel_Editor_Sprite*>(pLevel);
+			assert(pEditorLevel);
+
+			HWND hwndList = GetDlgItem(hDlg, IDC_SPRITE_LIST);
+
+			int pos = SendMessage(hwndList, LB_GETCURSEL, 0, 0);
+			int count = SendMessage(hwndList, LB_GETCOUNT, 0, 0);
+
+			if (pos > 0)
+			{
+				SendMessage(hwndList, LB_SETCURSEL, pos - 1, 0);
+
+				int index = (int)SendMessage(hwndList, LB_GETCURSEL, 0, 0);
+				wchar_t buffer[50] = {};
+				SendMessage(hwndList, LB_GETTEXT, index, (LPARAM)buffer);
+
+				pEditorLevel->SetCurSprite(CAssetMgr::GetInst()->FindSprite(buffer));
+				SetDlgItemInt(hDlg, IDC_FLIPBOOK_OFFSET_X, pEditorLevel->GetCurSprite()->GetOffset().x, FALSE);
+				SetDlgItemInt(hDlg, IDC_FLIPBOOK_OFFSET_Y, pEditorLevel->GetCurSprite()->GetOffset().y, FALSE);
+				pEditorLevel->SetDrawSprite(true);
+			}
+		}
+
+		else if (LOWORD(wParam) == IDC_NEXT_BTN)
+		{
+			CLevel* pLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+			CLevel_Editor_Sprite* pEditorLevel = dynamic_cast<CLevel_Editor_Sprite*>(pLevel);
+			assert(pEditorLevel);
+
+			HWND hwndList = GetDlgItem(hDlg, IDC_SPRITE_LIST);
+
+			int pos = SendMessage(hwndList, LB_GETCURSEL, 0, 0);
+			int count = SendMessage(hwndList, LB_GETCOUNT, 0, 0);
+
+			if (pos < count - 1)
+			{
+				SendMessage(hwndList, LB_SETCURSEL, pos + 1, 0);
+
+				int index = (int)SendMessage(hwndList, LB_GETCURSEL, 0, 0);
+				wchar_t buffer[50] = {};
+				SendMessage(hwndList, LB_GETTEXT, index, (LPARAM)buffer);
+
+				pEditorLevel->SetCurSprite(CAssetMgr::GetInst()->FindSprite(buffer));
+				SetDlgItemInt(hDlg, IDC_FLIPBOOK_OFFSET_X, pEditorLevel->GetCurSprite()->GetOffset().x, FALSE);
+				SetDlgItemInt(hDlg, IDC_FLIPBOOK_OFFSET_Y, pEditorLevel->GetCurSprite()->GetOffset().y, FALSE);
+				pEditorLevel->SetDrawSprite(true);
+			}
 		}
 
 		else if (LOWORD(wParam) == IDC_SPRITE_LIST)
@@ -585,6 +797,7 @@ INT_PTR CALLBACK	FlipbookInfoProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 			switch (HIWORD(wParam))
 			{
 			case LBN_SELCHANGE:
+			case LB_SETCURSEL:
 			{
 				HWND hwndList = GetDlgItem(hDlg, IDC_SPRITE_LIST);
 
@@ -593,6 +806,8 @@ INT_PTR CALLBACK	FlipbookInfoProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 				SendMessage(hwndList, LB_GETTEXT, index, (LPARAM)buffer);
 				
 				pEditorLevel->SetCurSprite(CAssetMgr::GetInst()->FindSprite(buffer));
+				SetDlgItemInt(hDlg, IDC_FLIPBOOK_OFFSET_X, pEditorLevel->GetCurSprite()->GetOffset().x, FALSE);
+				SetDlgItemInt(hDlg, IDC_FLIPBOOK_OFFSET_Y, pEditorLevel->GetCurSprite()->GetOffset().y, FALSE);
 				pEditorLevel->SetDrawSprite(true);
 			}
 			break;
