@@ -19,10 +19,17 @@
 #include "CAssetMgr.h"
 #include "CSound.h"
 
+#include "CSprite.h"
+#include "CTexture.h"
+
+#include "CRoom.h"
+
 CLevel_Editor::CLevel_Editor()
 	: m_MapObj(nullptr)
 	, m_hMenu(nullptr)
+	, m_roomInfo(ROOM_INFO::ROOM)
 {
+	m_wallSprite = CAssetMgr::GetInst()->LoadSprite(L"MAP_WALL", L"Sprite\\MAP_WALL.sprite");
 }
 
 CLevel_Editor::~CLevel_Editor()
@@ -53,52 +60,56 @@ void CLevel_Editor::Begin()
 
 
 	// PanelUI 생성
-	
-	CPanelUI* pPanel = new CPanelUI;
-	pPanel->SetName(L"Panel 1");
-	Vec2 vScale = Vec2(380.f, 500.f);
+	{
+		//CPanelUI* pPanel = new CPanelUI;
+		//pPanel->SetName(L"Panel 1");
+		//Vec2 vScale = Vec2(380.f, 500.f);
 
-	pPanel->SetPos(Vec2(vResolution.x - vScale.x - 10, 10.f));
-	pPanel->SetScale(vScale);
+		//pPanel->SetPos(Vec2(vResolution.x - vScale.x - 10, 10.f));
+		//pPanel->SetScale(vScale);
 
-	// Panel 에 넣을 자식 UI
-	CBtnUI* pBtn = new CBtnUI;
-	pBtn->SetScale(Vec2(150.f, 100.f));
-	pBtn->SetPos(Vec2(10.f, 10.f));
+		//// Panel 에 넣을 자식 UI
+		//CBtnUI* pBtn = new CBtnUI;
+		//pBtn->SetScale(Vec2(150.f, 100.f));
+		//pBtn->SetPos(Vec2(10.f, 10.f));
 
-	void SaveTileMap();
-	//pBtn->AddCallBack(&SaveTileMap);
-	pBtn->AddDelegate(this, (DELEGATE_0)&CLevel_Editor::SaveTileMap);
+		//void SaveTileMap();
+		////pBtn->AddCallBack(&SaveTileMap);
+		//pBtn->AddDelegate(this, (DELEGATE_0)&CLevel_Editor::SaveTileMap);
 
-	pPanel->AddChildUI(pBtn);
-	AddObject(pPanel, LAYER_TYPE::UI);
+		//pPanel->AddChildUI(pBtn);
+		//AddObject(pPanel, LAYER_TYPE::UI);
 
-	// PanelUI 생성
-	pPanel = new CPanelUI;
-	pPanel->SetName(L"Panel 2");
+		//// PanelUI 생성
+		//pPanel = new CPanelUI;
+		//pPanel->SetName(L"Panel 2");
 
-	pPanel->SetPos(Vec2(vResolution.x - vScale.x - 10.f - 500.f, 10.f));
-	pPanel->SetScale(vScale);
+		//pPanel->SetPos(Vec2(vResolution.x - vScale.x - 10.f - 500.f, 10.f));
+		//pPanel->SetScale(vScale);
 
-	// Panel 에 넣을 자식 UI
-	pBtn = new CBtnUI;
-	pBtn->SetScale(Vec2(150.f, 100.f));
-	pBtn->SetPos(Vec2(10.f, 10.f));
+		//// Panel 에 넣을 자식 UI
+		//pBtn = new CBtnUI;
+		//pBtn->SetScale(Vec2(150.f, 100.f));
+		//pBtn->SetPos(Vec2(10.f, 10.f));
 
-	void LoadTileMap();
-	//pBtn->AddCallBack(&LoadTileMap);
-	pBtn->AddDelegate(this, (DELEGATE_0)&CLevel_Editor::LoadTileMap);
+		//void LoadTileMap();
+		////pBtn->AddCallBack(&LoadTileMap);
+		//pBtn->AddDelegate(this, (DELEGATE_0)&CLevel_Editor::LoadTileMap);
 
-	pPanel->AddChildUI(pBtn);
-	AddObject(pPanel, LAYER_TYPE::UI);
-	
+		//pPanel->AddChildUI(pBtn);
+		//AddObject(pPanel, LAYER_TYPE::UI);
+	}
 
 
 	// 샘플용 Map 오브젝트 생성
 	m_MapObj = new CMap;
+	m_MapObj->SetPos(210.f, 180.f);
+	m_MapObj->GetComponent<CTileMap>()->SetRowCol(0, 0);
 	AddObject(m_MapObj, LAYER_TYPE::TILE);
 	
-
+	m_room = new CRoom;
+	m_room->SetPos(210.f, 180.f);
+	AddObject(m_room, LAYER_TYPE::DEFAULT);
 
 
 
@@ -149,7 +160,52 @@ void CLevel_Editor::Tick()
 
 void CLevel_Editor::Render()
 {
+	Vec2 vResolution = CEngine::GetInst()->GetResolution();
+	HDC hBackDC = CEngine::GetInst()->GetSecondDC();
+
+	// 배경 그리기
+	{
+		StretchBlt(hBackDC
+			, 0, 0
+			, vResolution.x / 2, vResolution.y / 2
+			, m_wallSprite->GetAtlas()->GetDC()
+			, m_wallSprite->GetLeftTop().x, m_wallSprite->GetLeftTop().y
+			, m_wallSprite->GetSlice().x, m_wallSprite->GetSlice().y
+			, SRCCOPY);
+
+		StretchBlt(hBackDC
+			, vResolution.x - 1, 0
+			, -1 * (vResolution.x / 2), vResolution.y / 2
+			, m_wallSprite->GetAtlas()->GetDC()
+			, m_wallSprite->GetLeftTop().x, m_wallSprite->GetLeftTop().y
+			, m_wallSprite->GetSlice().x, m_wallSprite->GetSlice().y
+			, SRCCOPY);
+
+		StretchBlt(hBackDC
+			, 0, vResolution.y - 1
+			, vResolution.x / 2, -1 * (vResolution.y / 2)
+			, m_wallSprite->GetAtlas()->GetDC()
+			, m_wallSprite->GetLeftTop().x, m_wallSprite->GetLeftTop().y
+			, m_wallSprite->GetSlice().x, m_wallSprite->GetSlice().y
+			, SRCCOPY);
+
+		StretchBlt(hBackDC
+			, vResolution.x - 1, vResolution.y - 1
+			, -1 * (vResolution.x / 2), -1 * (vResolution.y / 2)
+			, m_wallSprite->GetAtlas()->GetDC()
+			, m_wallSprite->GetLeftTop().x, m_wallSprite->GetLeftTop().y
+			, m_wallSprite->GetSlice().x, m_wallSprite->GetSlice().y
+			, SRCCOPY);
+	}
+
 	CLevel::Render();
+
+
+	Vec2 m_mousePos = CKeyMgr::GetInst()->GetMousePos();
+
+	wchar_t str1[255];
+	swprintf_s(str1, 255, L" x: %d, y: %d", (int)m_mousePos.x, (int)m_mousePos.y);
+	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 30, str1, wcslen(str1));
 
 	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 10, L"Editor Level", wcslen(L"Editor Level"));
 
@@ -242,14 +298,16 @@ bool TileMapEditorMenu(HINSTANCE _inst, HWND _wnd, int wParam)
 {
 	switch (wParam)
 	{
-	case ID_TILEMAP_INFO:
+	case ID_TILE_SELECT:
 	{
-		DialogBox(_inst, MAKEINTRESOURCE(DLG_TILEMAP_INFO), _wnd, &TileMapInfoProc);
+		//DialogBox(_inst, MAKEINTRESOURCE(DLG_TILEMAP_INFO), _wnd, &TileMapInfoProc);
 
-		/* if(nullptr == g_hDlg)
-			g_hDlg = CreateDialog(g_hInst, MAKEINTRESOURCE(DLG_TILEMAP_INFO), hWnd, &TileMapInfoProc);
+		HWND g_hDlg = nullptr;
+		if (nullptr == g_hDlg)
+			g_hDlg = CreateDialog(_inst, MAKEINTRESOURCE(DLG_SPRITE_INFO), _wnd, &TileMapInfoProc);
 
-		ShowWindow(g_hDlg, true);*/
+		ShowWindow(g_hDlg, true);
+
 		return true;
 	}
 	case ID_TILEMAP_SAVE:

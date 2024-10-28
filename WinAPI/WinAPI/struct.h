@@ -93,6 +93,18 @@ struct tTile
 	int ImgIdx;
 };
 
+struct tRoomInfo
+{
+	Vec2			Pos;		// 방의 위치
+	ROOM_INFO		RoomInfo;	// 방의 종류
+};
+
+struct tObjInfo
+{
+	wstring			ObjTypeKey;	// sprite 를 받아서 키값 > 키는 몬스터 종류
+	Vec2			Pos;		// 위치 ( 12 * 7 )	
+};
+
 struct tMonInfo
 {
 	float MaxHP;

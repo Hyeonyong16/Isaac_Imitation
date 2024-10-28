@@ -5,6 +5,7 @@ class CBtnUI :
 {
 private:
     PARAM_0             m_Func;
+    PARAM_1             m_Func1;
 
     // Delegate
     CBase* m_Inst;
@@ -12,6 +13,7 @@ private:
 
 public:
     void AddCallBack(PARAM_0 _Func) { m_Func = _Func; }
+    void AddCallBack(PARAM_1 _Func) { m_Func1 = _Func; }
     void AddDelegate(CBase* _Inst, DELEGATE_0 _memFunc) { m_Inst = _Inst; m_MemFunc = _memFunc; }
 
 

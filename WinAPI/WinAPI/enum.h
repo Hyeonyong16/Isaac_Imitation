@@ -81,3 +81,20 @@ enum class DEBUG_SHAPE
 	CIRCLE,
 	LINE,
 };
+
+enum class ROOM_INFO
+{
+	ROOM,
+	BOSS,
+};
+
+enum class OBJECT_TYPE
+{
+	NOTHING,
+	ROCK,
+	POOP,
+	MONSTER1,
+	MONSTER2,
+	MONSTER3,
+	BOSS,
+};
