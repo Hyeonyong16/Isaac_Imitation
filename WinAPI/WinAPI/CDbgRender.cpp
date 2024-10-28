@@ -21,7 +21,7 @@ CDbgRender::~CDbgRender()
 
 void CDbgRender::Tick()
 {
-	if (KEY_TAP(KEY::NUM9))
+	if (KEY_TAP(KEY::C))
 	{
 		m_Show ? m_Show = false : m_Show = true;
 	}

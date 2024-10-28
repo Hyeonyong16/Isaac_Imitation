@@ -31,15 +31,15 @@ void CTileMap::FinalTick()
 	for (int row = 0; row < m_Row + 1; ++row)
 	{
 		DrawDebugLine(PEN_TYPE::GREEN
-			, OwnerPos + Vec2(0, TILE_SIZE * row)
-			, OwnerPos + Vec2(m_Col * TILE_SIZE, TILE_SIZE * row), 0.f);
+			, OwnerPos + Vec2(0, TILE_SIZE_Y * row)
+			, OwnerPos + Vec2(m_Col * TILE_SIZE_X, TILE_SIZE_Y * row), 0.f);
 	}
 
 	for (int col = 0; col < m_Col + 1; ++col)
 	{
 		DrawDebugLine(PEN_TYPE::GREEN
-			, OwnerPos + Vec2(TILE_SIZE * col, 0)
-			, OwnerPos + Vec2(TILE_SIZE * col, m_Row * TILE_SIZE), 0.f);
+			, OwnerPos + Vec2(TILE_SIZE_X * col, 0)
+			, OwnerPos + Vec2(TILE_SIZE_X * col, m_Row * TILE_SIZE_Y), 0.f);
 	}
 }
 
@@ -60,8 +60,8 @@ void CTileMap::Render()
 	Vec2 vOwnerPos = GetOwner()->GetPos();
 	vCamLeftTop = vCamLeftTop - vOwnerPos;
 
-	int LeftTopCol = vCamLeftTop.x / TILE_SIZE;
-	int LeftTopRow = vCamLeftTop.y / TILE_SIZE;
+	int LeftTopCol = vCamLeftTop.x / TILE_SIZE_X;
+	int LeftTopRow = vCamLeftTop.y / TILE_SIZE_Y;
 
 	if (LeftTopCol < 0)
 		LeftTopCol = 0;
@@ -69,8 +69,8 @@ void CTileMap::Render()
 		LeftTopRow = 0;
 
 	vCamRightBot = vCamRightBot - vOwnerPos;
-	int RightBotCol = (vCamRightBot.x / TILE_SIZE) + 1;
-	int RightBotRow = (vCamRightBot.y / TILE_SIZE) + 1;
+	int RightBotCol = (vCamRightBot.x / TILE_SIZE_X) + 1;
+	int RightBotRow = (vCamRightBot.y / TILE_SIZE_Y) + 1;
 
 	if (m_Col < RightBotCol)
 		RightBotCol = m_Col;
@@ -95,13 +95,22 @@ void CTileMap::Render()
 
 			assert(!(ImgIdx < 0 || m_AtlasTileCol * m_AtlasTileRow <= ImgIdx));
 
-			BitBlt(dc
-				, (int)OwnerRenderPos.x + Col * TILE_SIZE
-				, (int)OwnerRenderPos.y + Row * TILE_SIZE
-				, TILE_SIZE, TILE_SIZE
+			StretchBlt(dc
+				, (int)OwnerRenderPos.x + Col * TILE_SIZE_X
+				, (int)OwnerRenderPos.y + Row * TILE_SIZE_Y
+				, TILE_SIZE_X, TILE_SIZE_Y
 				, m_Atlas->GetDC()
 				, ImgCol * TILE_SIZE, ImgRow * TILE_SIZE
+				, TILE_SIZE, TILE_SIZE
 				, SRCCOPY);
+
+			/*BitBlt(dc
+				, (int)OwnerRenderPos.x + Col * TILE_SIZE_X
+				, (int)OwnerRenderPos.y + Row * TILE_SIZE_Y
+				, TILE_SIZE_X, TILE_SIZE_Y
+				, m_Atlas->GetDC()
+				, ImgCol * TILE_SIZE_X, ImgRow * TILE_SIZE_Y
+				, SRCCOPY);*/
 		}
 	}
 }
@@ -115,7 +124,7 @@ void CTileMap::SetRowCol(int Row, int Col)
 		m_vecTileInfo.resize(m_Row * m_Col);
 
 	for (int i = 0; i < m_vecTileInfo.size(); ++i)
-		m_vecTileInfo[i].ImgIdx = 1;
+		m_vecTileInfo[i].ImgIdx = -1;
 }
 
 void CTileMap::SetAtlasTexture(CTexture* _Atlas)
@@ -140,8 +149,8 @@ tTile* CTileMap::GetTileInfo(Vec2 _MousePos)
 	Vec2 vOffset = _MousePos - GetOwner()->GetPos();
 
 	// 마우스 위치가 타일맵이 보유한 타일 중에서 몇행 몇열 위치인지 알아낸다.
-	int Col = (int)vOffset.x / TILE_SIZE;
-	int Row = (int)vOffset.y / TILE_SIZE;
+	int Col = (int)vOffset.x / TILE_SIZE_X;
+	int Row = (int)vOffset.y / TILE_SIZE_Y;
 
 	if (Col < 0 || Row < 0 || m_Col <= Col || m_Row <= Row)
 		return nullptr;

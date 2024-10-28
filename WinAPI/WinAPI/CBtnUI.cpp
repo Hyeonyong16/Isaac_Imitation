@@ -9,6 +9,7 @@
 
 CBtnUI::CBtnUI()
 	: m_Func(nullptr)
+	, m_Func1(nullptr)
 {
 }
 

@@ -49,14 +49,14 @@ void CCamera::Tick()
 	Vec2 Resolution = CEngine::GetInst()->GetResolution();
 	m_Diff = (m_LookAt + m_Offset) - (Resolution / 2.f);
 
-	if (KEY_PRESSED(KEY::W))
+	/*if (KEY_PRESSED(KEY::W))
 		m_LookAt.y -= DT * 500.f;
 	if (KEY_PRESSED(KEY::S))
 		m_LookAt.y += DT * 500.f;
 	if (KEY_PRESSED(KEY::A))
 		m_LookAt.x -= DT * 500.f;
 	if (KEY_PRESSED(KEY::D))
-		m_LookAt.x += DT * 500.f;
+		m_LookAt.x += DT * 500.f;*/
 
 	if (m_Target)
 	{

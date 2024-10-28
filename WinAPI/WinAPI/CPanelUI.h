@@ -1,6 +1,8 @@
 #pragma once
 #include "CUI.h"
 
+class CSprite;
+
 class CPanelUI :
     public CUI
 {
@@ -12,6 +14,8 @@ private:
     Vec2 m_vDiffTemp;
     Vec2 m_vPosTemp;
 
+    CSprite* m_sprite;
+
 public:
     virtual void Tick_UI() override;
     virtual void Render_UI() override;
@@ -19,6 +23,7 @@ public:
     virtual void MouseLBtnDown() override;
     virtual void MouseLBtnClikced() override;
 
+    void SetSprite(CSprite* _sprite) { m_sprite = _sprite; }
 
 public:
     CPanelUI();

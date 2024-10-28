@@ -57,12 +57,12 @@ CPlayer::CPlayer()
 
 	// RigidBody 컴포넌트 추가
 	m_RigidBody = (CRigidBody*)AddComponent(new CRigidBody);
-	m_RigidBody->SetMode(RIGIDBODY_MODE::BELTSCROLL);
+	m_RigidBody->SetMode(RIGIDBODY_MODE::TOPVIEW);
 	m_RigidBody->SetInitialSpeed(100.f);
 	m_RigidBody->SetMaxSpeed(500.f);
 	m_RigidBody->SetMass(1.f);
 	m_RigidBody->SetFriction(700.f);
-	m_RigidBody->SetJumpVelocity(Vec2(0.f, -500.f));
+	//m_RigidBody->SetJumpVelocity(Vec2(0.f, -500.f));
 }
 
 CPlayer::~CPlayer()
@@ -81,49 +81,56 @@ void CPlayer::Begin()
 
 void CPlayer::Tick()
 {
-	if (KEY_TAP(LEFT))
+
+	// 이동
 	{
-		m_FlipbookPlayer->Play(MOVE_LEFT, 15.f, true);
+		if (KEY_TAP(A))
+		{
+			m_FlipbookPlayer->Play(MOVE_LEFT, 15.f, true);
+		}
+		if (KEY_TAP(D))
+		{
+			m_FlipbookPlayer->Play(MOVE_RIGHT, 15.f, true);
+		}
+		if (KEY_TAP(W))
+		{
+			m_FlipbookPlayer->Play(MOVE_UP, 15.f, true);
+		}
+		if (KEY_TAP(S))
+		{
+			m_FlipbookPlayer->Play(MOVE_DOWN, 15.f, true);
+		}
+
+		if (KEY_RELEASED(A))
+			m_FlipbookPlayer->Play(IDLE_LEFT, 5.f, true);
+		if (KEY_RELEASED(D))
+			m_FlipbookPlayer->Play(IDLE_RIGHT, 5.f, true);
+		if (KEY_RELEASED(W))
+			m_FlipbookPlayer->Play(IDLE_UP, 5.f, true);
+		if (KEY_RELEASED(S))
+			m_FlipbookPlayer->Play(IDLE_DOWN, 5.f, true);
+
+		if (KEY_PRESSED(A))
+			m_RigidBody->AddForce(Vec2(-1000.f, 0.f), true);
+		if (KEY_PRESSED(D))
+			m_RigidBody->AddForce(Vec2(1000.f, 0.f), true);
+		if (KEY_PRESSED(W))
+			m_RigidBody->AddForce(Vec2(0.f, -1000.f), true);
+		if (KEY_PRESSED(S))
+			m_RigidBody->AddForce(Vec2(0.f, 1000.f), true);
 	}
-	if (KEY_TAP(RIGHT))
-	{
-		m_FlipbookPlayer->Play(MOVE_RIGHT, 15.f, true);
-	}
-	//if (KEY_TAP(UP))
+
+
+
+
+	//if (KEY_TAP(SPACE))
 	//{
-	//	m_FlipbookPlayer->Play(MOVE_UP, 15.f, true);		
-	//}	
-	//if (KEY_TAP(DOWN))
-	//{
-	//	m_FlipbookPlayer->Play(MOVE_DOWN, 15.f, true);		
-	//}		
-
-	if (KEY_RELEASED(LEFT))
-		m_FlipbookPlayer->Play(IDLE_LEFT, 5.f, true);
-	if (KEY_RELEASED(RIGHT))
-		m_FlipbookPlayer->Play(IDLE_RIGHT, 5.f, true);
-	/*if (KEY_RELEASED(UP))
-		m_FlipbookPlayer->Play(IDLE_UP, 5.f, true);
-	if (KEY_RELEASED(DOWN))
-		m_FlipbookPlayer->Play(IDLE_DOWN, 5.f, true);*/
-
-	if (KEY_PRESSED(LEFT))
-		m_RigidBody->AddForce(Vec2(-1000.f, 0.f), true);
-	if (KEY_PRESSED(RIGHT))
-		m_RigidBody->AddForce(Vec2(1000.f, 0.f), true);
-	/*if (KEY_PRESSED(UP))
-		m_RigidBody->AddForce(Vec2(0.f, -1000.f));
-	if (KEY_PRESSED(DOWN))
-		m_RigidBody->AddForce(Vec2(0.f, 1000.f));*/
-
-	if (KEY_TAP(SPACE))
-	{
-		CCamera::GetInst()->PostProcessEffect(HEART, 0.2f);
-		m_RigidBody->Jump();
-		//DrawDebugRect(PEN_TYPE::GREEN, GetPos(), GetScale() * 2.f, 3.f);
-		//DrawDebugCircle(PEN_TYPE::GREEN, GetPos(), GetScale() * 2.f, 3.f);
-		//DrawDebugLine(PEN_TYPE::GREEN, GetPos(), GetPos() + GetScale(), 3.f);
-	}
+	//	CCamera::GetInst()->PostProcessEffect(HEART, 0.2f);
+	//	//m_RigidBody->Jump();
+	//	//DrawDebugRect(PEN_TYPE::GREEN, GetPos(), GetScale() * 2.f, 3.f);
+	//	//DrawDebugCircle(PEN_TYPE::GREEN, GetPos(), GetScale() * 2.f, 3.f);
+	//	//DrawDebugLine(PEN_TYPE::GREEN, GetPos(), GetPos() + GetScale(), 3.f);
+	//}
 
 	// 미사일 발사
 	if (KEY_PRESSED(SPACE))

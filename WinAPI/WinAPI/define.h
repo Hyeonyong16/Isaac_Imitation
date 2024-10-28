@@ -32,6 +32,8 @@
 
 #define PI 3.1415926535f
 
+#define TILE_SIZE_X 125
+#define TILE_SIZE_Y 103
 #define TILE_SIZE 64
 
 #endif //__DEFINE_H__

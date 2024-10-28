@@ -3,6 +3,8 @@
 
 #include "resource.h"
 
+#include "CObj.h"
+
 #include "CEngine.h"
 #include "CKeyMgr.h"
 #include "CMap.h"
@@ -135,7 +137,7 @@ void CLevel_Editor_Sprite::Tick()
 	if (KEY_TAP(KEY::M))
 	{
 		Vec2 vMousePos = CKeyMgr::GetInst()->GetMousePos();
-		ChangeLevel(LEVEL_TYPE::START);
+		//ChangeLevel(LEVEL_TYPE::START);
 	}
 
 	// 마우스 클릭으로 CMap 오브젝트의 타일 이미지 인덱스 변경
@@ -179,6 +181,26 @@ void CLevel_Editor_Sprite::Render()
 		UINT Height = m_AtlasTexture->GetHeight();
 		HDC hBackDC = CEngine::GetInst()->GetSecondDC();
 
+		Vec2 vPos = CCamera::GetInst()->GetRenderPos({ 0,0 });
+
+		BLENDFUNCTION blend = {};
+
+		blend.BlendOp = AC_SRC_OVER;
+		blend.BlendFlags = 0;
+		blend.SourceConstantAlpha = 255;
+		blend.AlphaFormat = AC_SRC_ALPHA;
+
+		/*AlphaBlend(hBackDC
+			, vPos.x
+			, vPos.y
+			, m_AtlasTexture->GetWidth()
+			, m_AtlasTexture->GetHeight()
+			, m_AtlasTexture->GetDC()
+			, 0, 0
+			, m_AtlasTexture->GetWidth()
+			, m_AtlasTexture->GetHeight()
+			, blend);*/
+
 		TransparentBlt(hBackDC
 			, 0
 			, 0
@@ -208,6 +230,19 @@ void CLevel_Editor_Sprite::Render()
 
 			SELECT_BRUSH(BRUSH_TYPE::GRAY);
 			Rectangle(m_hDC, -1, -1, (int)(rect.right - rect.left) + 1, (int)(rect.bottom - rect.top) + 1);
+
+			/*AlphaBlend(m_hDC
+				, (((rect.right - rect.left) / 2) - (m_SpriteScale.x / 2) + m_SpriteOffset.x)
+				, (((rect.bottom - rect.top) / 2) - (m_SpriteScale.y / 2) + m_SpriteOffset.y)
+				, m_SpriteScale.x
+				, m_SpriteScale.y
+				, m_AtlasTexture->GetDC()
+				, m_SpritePos.x
+				, m_SpritePos.y
+				, m_SpriteScale.x
+				, m_SpriteScale.y
+				, blend);*/
+
 			BitBlt(m_hDC
 				, (int)(((rect.right - rect.left) / 2) - (m_SpriteScale.x / 2) + m_SpriteOffset.x)
 				, (int)(((rect.bottom - rect.top) / 2) - (m_SpriteScale.y / 2) + m_SpriteOffset.y)
@@ -234,12 +269,25 @@ void CLevel_Editor_Sprite::Render()
 				RECT rect;
 				GetClientRect(findhandle, &rect);
 				Rectangle(m_hDC, -1, -1, (int)(rect.right - rect.left) + 1, (int)(rect.bottom - rect.top) + 1);
-				BitBlt(m_hDC
-					, (int)(((rect.right - rect.left) / 2) - (m_curSprite->GetSlice().x / 2) + m_curSprite->GetOffset().x)
-					, (int)(((rect.bottom - rect.top) / 2) - (m_curSprite->GetSlice().y / 2) + m_curSprite->GetOffset().y)
-					, m_curSprite->GetSlice().x, m_curSprite->GetSlice().y
+
+				AlphaBlend(m_hDC
+					, (((rect.right - rect.left) / 2) - (m_SpriteScale.x / 2) + m_SpriteOffset.x)
+					, (((rect.bottom - rect.top) / 2) - (m_SpriteScale.y / 2) + m_SpriteOffset.y)
+					, m_curSprite->GetSlice().x
+					, m_curSprite->GetSlice().y
 					, m_curSprite->GetAtlas()->GetDC()
-					, m_curSprite->GetLeftTop().x, m_curSprite->GetLeftTop().y, SRCCOPY);
+					, m_curSprite->GetLeftTop().x
+					, m_curSprite->GetLeftTop().y
+					, m_curSprite->GetSlice().x
+					, m_curSprite->GetSlice().y
+					, blend);
+
+				//BitBlt(m_hDC
+				//	, (int)(((rect.right - rect.left) / 2) - (m_curSprite->GetSlice().x / 2) + m_curSprite->GetOffset().x)
+				//	, (int)(((rect.bottom - rect.top) / 2) - (m_curSprite->GetSlice().y / 2) + m_curSprite->GetOffset().y)
+				//	, m_curSprite->GetSlice().x, m_curSprite->GetSlice().y
+				//	, m_curSprite->GetAtlas()->GetDC()
+				//	, m_curSprite->GetLeftTop().x, m_curSprite->GetLeftTop().y, SRCCOPY);
 
 				SELECT_PEN(PEN_TYPE::BLUE);
 				MoveToEx(m_hDC, rect.right / 2, 0.f, nullptr);

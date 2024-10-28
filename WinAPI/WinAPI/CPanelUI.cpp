@@ -5,7 +5,10 @@
 #include "CEngine.h"
 #include "CSelectGDI.h"
 
+#include "CSprite.h"
+
 CPanelUI::CPanelUI()
+	: m_sprite(nullptr)
 {
 }
 
@@ -39,43 +42,47 @@ void CPanelUI::Render_UI()
 	Vec2 vPos = GetFinalPos();
 	Vec2 vScale = GetScale();
 
-	SELECT_PEN(PEN_TYPE::GREEN);
+	if(!m_sprite)
+	{
+		SELECT_PEN(PEN_TYPE::GREEN);
 
-	HBRUSH hBrush = CreateSolidBrush(RGB(143, 90, 145));
-	HDC dc = CEngine::GetInst()->GetSecondDC();
+		HBRUSH hBrush = CreateSolidBrush(RGB(143, 90, 145));
+		HDC dc = CEngine::GetInst()->GetSecondDC();
 
-	HBRUSH hPrevBrush = (HBRUSH)SelectObject(dc, hBrush);
+		HBRUSH hPrevBrush = (HBRUSH)SelectObject(dc, hBrush);
 
-	Rectangle(dc
-		, (int)vPos.x, (int)vPos.y
-		, (int)(vPos.x + vScale.x)
-		, (int)(vPos.y + vScale.y));
+		Rectangle(dc
+			, (int)vPos.x, (int)vPos.y
+			, (int)(vPos.x + vScale.x)
+			, (int)(vPos.y + vScale.y));
 
-	SelectObject(dc, hPrevBrush);
-	DeleteObject(hBrush);
+		SelectObject(dc, hPrevBrush);
+		DeleteObject(hBrush);
+	}
 
+	else
+	{
+		HDC dc = CEngine::GetInst()->GetSecondDC();
 
-	// 임의로 확인을 위해서 넣은 부분
-	wchar_t str[255];
-	wchar_t str1[255];
-	wchar_t str2[255];
-	wchar_t str3[255];
-	swprintf_s(str, 255, L"vMousePos x: %d, y: %d"
-		, (int)m_vMousePosTemp.x, (int)m_vMousePosTemp.y);
+		BLENDFUNCTION blend = {};
 
-	swprintf_s(str1, 255, L"vDiff x: %d, y: %d"
-		, (int)m_vDiffTemp.x, (int)m_vDiffTemp.y);
+		blend.BlendOp = AC_SRC_OVER;
+		blend.BlendFlags = 0;
+		blend.SourceConstantAlpha = 255;
+		blend.AlphaFormat = AC_SRC_ALPHA;
 
-	swprintf_s(str2, 255, L"vPos x: %d, y: %d"
-		, (int)m_vPosTemp.x, (int)m_vPosTemp.y);
+		AlphaBlend(dc
+			, vPos.x
+			, vPos.y
+			, vScale.x
+			, vScale.y
+			, m_sprite->GetAtlas()->GetDC()
+			, 0, 0
+			, m_sprite->GetSlice().x
+			, m_sprite->GetSlice().y
+			, blend);
+	}
 
-	swprintf_s(str3, 255, L"m_DownPos x: %d, y: %d"
-		, (int)m_DownPos.x, (int)m_DownPos.y);
-
-	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 30, str, wcslen(str));
-	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 50, str1, wcslen(str1));
-	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 70, str2, wcslen(str2));
-	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 90, str3, wcslen(str3));
 }
 
 void CPanelUI::MouseLBtnDown()

@@ -4,6 +4,7 @@
 #include "CAssetMgr.h"
 #include "CTexture.h"
 #include "CTileMap.h"
+#include "CRoom.h"
 
 
 CMap::CMap()

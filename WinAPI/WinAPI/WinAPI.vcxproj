@@ -159,6 +159,7 @@
     <ClInclude Include="CLevelMgr.h" />
     <ClInclude Include="CLevel_Editor.h" />
     <ClInclude Include="CLevel_Editor_Sprite.h" />
+    <ClInclude Include="CLevel_MainMenu.h" />
     <ClInclude Include="CLevel_Start.h" />
     <ClInclude Include="CMap.h" />
     <ClInclude Include="CMissile.h" />
@@ -169,6 +170,7 @@
     <ClInclude Include="CPlatform.h" />
     <ClInclude Include="CPlayer.h" />
     <ClInclude Include="CRigidBody.h" />
+    <ClInclude Include="CRoom.h" />
     <ClInclude Include="CSelectGDI.h" />
     <ClInclude Include="CSound.h" />
     <ClInclude Include="CSoundMgr.h" />
@@ -214,6 +216,7 @@
     <ClCompile Include="CLevelMgr.cpp" />
     <ClCompile Include="CLevel_Editor.cpp" />
     <ClCompile Include="CLevel_Editor_Sprite.cpp" />
+    <ClCompile Include="CLevel_MainMenu.cpp" />
     <ClCompile Include="CLevel_Start.cpp" />
     <ClCompile Include="CMap.cpp" />
     <ClCompile Include="CMissile.cpp" />
@@ -224,6 +227,7 @@
     <ClCompile Include="CPlatform.cpp" />
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="CRigidBody.cpp" />
+    <ClCompile Include="CRoom.cpp" />
     <ClCompile Include="CSelectGDI.cpp" />
     <ClCompile Include="CSound.cpp" />
     <ClCompile Include="CSoundMgr.cpp" />

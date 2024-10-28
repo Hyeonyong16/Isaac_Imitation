@@ -139,6 +139,12 @@
     <Filter Include="Game\04. Level\1. Editor\Sprite">
       <UniqueIdentifier>{e566fe19-e58a-4bf1-b6a6-4a15dcbcbf03}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\04. Level\3. MainMenu">
+      <UniqueIdentifier>{d65a4447-4756-4bc4-bbb4-a0355c203fff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\05. Object\Room">
+      <UniqueIdentifier>{0df55079-daba-4cae-8d24-d9a6896db699}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CEngine.h">
@@ -300,6 +306,12 @@
     <ClInclude Include="CLevel_Editor_Sprite.h">
       <Filter>Game\04. Level\1. Editor\Sprite</Filter>
     </ClInclude>
+    <ClInclude Include="CLevel_MainMenu.h">
+      <Filter>Game\04. Level\3. MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="CRoom.h">
+      <Filter>Game\05. Object\Room</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEngine.cpp">
@@ -434,6 +446,12 @@
     </ClCompile>
     <ClCompile Include="CLevel_Editor_Sprite.cpp">
       <Filter>Game\04. Level\1. Editor\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="CLevel_MainMenu.cpp">
+      <Filter>Game\04. Level\3. MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="CRoom.cpp">
+      <Filter>Game\05. Object\Room</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
