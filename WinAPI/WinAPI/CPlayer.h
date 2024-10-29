@@ -15,11 +15,14 @@ private:
     float       m_AccTime;      // 시간 누적
     CCollider*  m_HitBox;
 
-    CTexture*   m_Texture;
+    //CTexture*   m_Texture;
 
     CFlipbookPlayer* m_FlipbookPlayer;
 
     CRigidBody* m_RigidBody;
+
+    bool isAttack[4];   // 왼 오 위 아래 순서
+    list<char> AttackQueue; // 각 방향 키 들어온 순서
 
 public:
     virtual void Begin() override;

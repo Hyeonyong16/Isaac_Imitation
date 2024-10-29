@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 #include <assert.h>
+#include <queue>
 
 #pragma comment(lib, "Msimg32.lib")
 
@@ -16,6 +17,7 @@ using std::map;
 using std::make_pair;
 using std::string;
 using std::wstring;
+using std::queue;
 
 #include "global.h"
 

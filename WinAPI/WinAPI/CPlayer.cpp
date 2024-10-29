@@ -38,12 +38,13 @@ enum PLAYER_ANIM_STATE
 
 CPlayer::CPlayer()
 	: m_Speed(200.f)
-	, m_AttSpeed(10.f)
+	, m_AttSpeed(2.f)
 	, m_AccTime(0.f)
 	, m_HitBox(nullptr)
 	, m_FlipbookPlayer(nullptr)
-	, m_Texture(nullptr)
+	//, m_Texture(nullptr)
 	, m_RigidBody(nullptr)
+	, isAttack{false, false, false, false}
 {
 	m_HitBox = new CCollider;
 	m_HitBox->SetName(L"HitBox_01");
@@ -58,21 +59,26 @@ CPlayer::CPlayer()
 	// RigidBody 컴포넌트 추가
 	m_RigidBody = (CRigidBody*)AddComponent(new CRigidBody);
 	m_RigidBody->SetMode(RIGIDBODY_MODE::TOPVIEW);
-	m_RigidBody->SetInitialSpeed(100.f);
-	m_RigidBody->SetMaxSpeed(500.f);
+	m_RigidBody->SetInitialSpeed(200.f);
+	m_RigidBody->SetMaxSpeed(400.f);
 	m_RigidBody->SetMass(1.f);
-	m_RigidBody->SetFriction(700.f);
+	m_RigidBody->SetFriction(1000.f);
 	//m_RigidBody->SetJumpVelocity(Vec2(0.f, -500.f));
 }
 
 CPlayer::~CPlayer()
 {
-	DELETE(m_Texture);
+	//DELETE(m_Texture);
 }
 
 void CPlayer::Begin()
 {
 	m_AccTime = 1.f / m_AttSpeed;
+
+	// 공격 키입력 관련 초기화
+	AttackQueue.clear();
+	for (int i = 0; i < 4; ++i)
+		isAttack[i] = false;
 
 	m_FlipbookPlayer->Play(IDLE_DOWN, 5.f, true);
 
@@ -110,16 +116,151 @@ void CPlayer::Tick()
 		if (KEY_RELEASED(S))
 			m_FlipbookPlayer->Play(IDLE_DOWN, 5.f, true);
 
+
+		// 키 두개를 동시 입력 시 속도가 더 빨라지는것을 막기 위한 용도
+		if (!KEY_PRESSED(A) && !KEY_PRESSED(D) && !KEY_PRESSED(W) && !KEY_PRESSED(S))
+		{
+			//m_RigidBody->SetVelocity(Vec2(0, 0));
+		}
+
+		Vec2 tempForce(0, 0);
+
 		if (KEY_PRESSED(A))
-			m_RigidBody->AddForce(Vec2(-1000.f, 0.f), true);
+			tempForce += Vec2(-1.f, 0.f);
 		if (KEY_PRESSED(D))
-			m_RigidBody->AddForce(Vec2(1000.f, 0.f), true);
+			tempForce += Vec2(1.f, 0.f);
 		if (KEY_PRESSED(W))
-			m_RigidBody->AddForce(Vec2(0.f, -1000.f), true);
+			tempForce += Vec2(0.f, -1.f);
 		if (KEY_PRESSED(S))
-			m_RigidBody->AddForce(Vec2(0.f, 1000.f), true);
+			tempForce += Vec2(0.f, 1.f);
+
+		// 정규 화 후 해당 방향으로 1000 만큼 곱해서 addforce
+		if (tempForce != Vec2(0.f, 0.f))
+		{
+			tempForce.Normalize();
+			tempForce *= 2000;	// 가속도
+			m_RigidBody->AddForce(tempForce, true);
+		}
 	}
 
+	// 공격
+	{
+
+		// 키 입력 중복 처리
+		{
+			if (KEY_TAP(LEFT) || KEY_PRESSED(LEFT))
+			{
+				if (!isAttack[0])
+				{
+					isAttack[0] = true;
+					AttackQueue.push_back('L');
+				}
+			}
+			if (KEY_TAP(RIGHT) || KEY_PRESSED(RIGHT))
+			{
+				if (!isAttack[1])
+				{
+					isAttack[1] = true;
+					AttackQueue.push_back('R');
+				}
+			}
+			if (KEY_PRESSED(UP) || KEY_PRESSED(UP))
+			{
+				if (!isAttack[2])
+				{
+					isAttack[2] = true;
+					AttackQueue.push_back('U');
+				}
+			}
+			if (KEY_PRESSED(DOWN) || KEY_PRESSED(DOWN))
+			{
+				if (!isAttack[3])
+				{
+					isAttack[3] = true;
+					AttackQueue.push_back('D');
+				}
+			}
+
+			if (KEY_RELEASED(LEFT))
+			{
+				isAttack[0] = false;
+				AttackQueue.remove('L');
+			}
+			if (KEY_RELEASED(RIGHT))
+			{
+				isAttack[1] = false;
+				AttackQueue.remove('R');
+			}
+			if (KEY_RELEASED(UP))
+			{
+				isAttack[2] = false;
+				AttackQueue.remove('U');
+			}
+			if (KEY_RELEASED(DOWN))
+			{
+				isAttack[3] = false;
+				AttackQueue.remove('D');
+			}
+
+
+			if (AttackQueue.size() > 4)
+				int a = 0;
+		}
+
+		if (AttackQueue.size() > 0)
+		{
+			if (!m_AccTime || (1.f / m_AttSpeed <= m_AccTime))
+			{
+				Vec2 shotPos(0,0);
+				Vec2 shotVel(0,0);
+				switch (AttackQueue.front())
+				{
+				case 'L':
+				{
+					shotPos = GetPos() + Vec2(-GetScale().x / 2.f, 0.f);
+					shotVel = Vec2(cosf(PI), sinf(PI)) * 200.f;
+				}
+					break;
+				case 'R':
+				{
+					shotPos = GetPos() + Vec2(GetScale().x / 2.f, 0.f);
+					shotVel = Vec2(-cosf(PI), sinf(PI)) * 200.f;
+				}
+					break;
+				case 'U':
+				{
+					shotPos = GetPos() + Vec2(0.f, -GetScale().y / 2.f);
+					shotVel = Vec2(cosf(PI / 2.f), -sinf(PI / 2.f)) * 200.f;
+				}
+					break;
+				case 'D':
+				{
+					shotPos = GetPos() + Vec2(0.f, GetScale().y / 2.f);
+					shotVel = Vec2(cosf(PI / 2.f), sinf(PI / 2.f)) * 200.f;
+				}
+					break;
+				}
+
+				CMissile* pMissile = new CGuidedMissile;
+				pMissile->SetPos(shotPos);
+				pMissile->SetScale(20.f, 20.f);
+				pMissile->SetVelocity(shotVel);
+				CreateObject(pMissile, LAYER_TYPE::PLAYER_OBJECT);
+
+			}
+
+			m_AccTime += DT;
+		}
+		else
+		{
+			if (m_AccTime != 0.f)
+			{
+				m_AccTime += DT;
+				if (1.f / m_AttSpeed <= m_AccTime)
+					m_AccTime = 0.f;
+			}
+		}
+	}
 
 
 
@@ -133,11 +274,24 @@ void CPlayer::Tick()
 	//}
 
 	// 미사일 발사
-	if (KEY_PRESSED(SPACE))
+	if(KEY_TAP(SPACE))
+	{
+		if(!m_AccTime || (1.f / m_AttSpeed <= m_AccTime))
+		{
+			// 미사일을 생성
+			CMissile* pMissile = new CGuidedMissile;
+			pMissile->SetPos(GetPos() + Vec2(0.f, -GetScale().y / 2.f));
+			pMissile->SetScale(20.f, 20.f);
+			pMissile->SetVelocity(Vec2(cosf(PI / 2.f), -sinf(PI / 2.f)) * 200.f);
+			CreateObject(pMissile, LAYER_TYPE::PLAYER_OBJECT);
+		}
+
+		m_AccTime += DT;
+	}
+	
+	else if (KEY_PRESSED(SPACE))
 	{
 		// 시간 체크
-		m_AccTime += DT;
-
 		if (1.f / m_AttSpeed <= m_AccTime)
 		{
 			m_AccTime -= 1.f / m_AttSpeed;
@@ -149,17 +303,38 @@ void CPlayer::Tick()
 			pMissile->SetVelocity(Vec2(cosf(PI / 2.f), -sinf(PI / 2.f)) * 200.f);
 			CreateObject(pMissile, LAYER_TYPE::PLAYER_OBJECT);
 		}
+
+		m_AccTime += DT;	// 탭 시점에서 발사
 	}
+
 
 	else if (KEY_RELEASED(SPACE))
 	{
-		m_AccTime = 1.f / m_AttSpeed;
+		m_AccTime += DT;
 	}
+
+	else 
+	{
+		if (m_AccTime != 0.f)
+		{
+			m_AccTime += DT;
+			if (1.f / m_AttSpeed <= m_AccTime)
+				m_AccTime = 0.f;
+		}
+	}
+
 }
 
 void CPlayer::Render()
 {
 	m_FlipbookPlayer->Render();
+
+	wchar_t str1[255];
+	wchar_t str2[255];
+	swprintf_s(str1, 255, L"pos x: %d, y: %d", (int)GetPos().x, (int)GetPos().y);
+	swprintf_s(str2, 255, L"AccTime: %f", m_AccTime);
+	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 30, str1, wcslen(str1));
+	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 50, str2, wcslen(str2));
 }
 
 void CPlayer::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)

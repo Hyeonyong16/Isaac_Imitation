@@ -49,7 +49,7 @@ void CLevel_Start::Begin()
     AddObject(pObject, LAYER_TYPE::PLAYER);
 
     // Monster 생성
-    CMonster* pMonster = new CMonster;
+    /*CMonster* pMonster = new CMonster;
     pMonster->SetName(L"Monster");
     pMonster->SetPos(300.f, 120.f);
     pMonster->SetScale(100.f, 100.f);
@@ -63,25 +63,25 @@ void CLevel_Start::Begin()
     pMonster->SetScale(100.f, 100.f);
     pMonster->SetDistance(200.f);
     pMonster->SetSpeed(300.f);
-    AddObject(pMonster, LAYER_TYPE::MONSTER);
+    AddObject(pMonster, LAYER_TYPE::MONSTER);*/
 
     // Platform Object 추가
-    CObj* pPlatform = new CPlatform;
+    /*CObj* pPlatform = new CPlatform;
     pPlatform->SetPos(vResolution.x / 2.f, (vResolution.y * 3.f) / 4.f);
-    AddObject(pPlatform, LAYER_TYPE::TILE);
+    AddObject(pPlatform, LAYER_TYPE::TILE);*/
 
     // TileMap Object 추가
-    CMap* pTileMap = new CMap;
-    pTileMap->SetPos(Vec2(0.f, 0.f));
-    wstring FilePath = CPathMgr::GetContentPath();
-    pTileMap->GetTileMap()->LoadTileMap(FilePath + L"TileMap\\tempMap1.tile");
-    AddObject(pTileMap, LAYER_TYPE::TILE);
+    //CMap* pTileMap = new CMap;
+    //pTileMap->SetPos(Vec2(0.f, 0.f));
+    //wstring FilePath = CPathMgr::GetContentPath();
+    //pTileMap->GetTileMap()->LoadTileMap(FilePath + L"TileMap\\tempMap1.tile");
+    //AddObject(pTileMap, LAYER_TYPE::TILE);
 
-    // TileMap Object 추가
-    pTileMap = new CMap;
-    pTileMap->SetPos(Vec2(1000.f, 1000.f));
-    pTileMap->GetTileMap()->LoadTileMap(FilePath + L"TileMap\\tempMap1.tile");
-    AddObject(pTileMap, LAYER_TYPE::TILE);
+    //// TileMap Object 추가
+    //pTileMap = new CMap;
+    //pTileMap->SetPos(Vec2(1000.f, 1000.f));
+    //pTileMap->GetTileMap()->LoadTileMap(FilePath + L"TileMap\\tempMap1.tile");
+    //AddObject(pTileMap, LAYER_TYPE::TILE);
 
     // 충돌 설정
     CCollisionMgr::GetInst()->CollisionCheckClear();
