@@ -45,6 +45,12 @@ public:
 	void operator /= (Vec2 _Other) { assert(_Other.x && _Other.y); x /= _Other.x; y /= _Other.y; }
 	void operator /= (float _f) { assert(_f); x /= _f; y /= _f; }
 
+	bool operator != (Vec2 _Other)
+	{
+		if (x == _Other.x && y == _Other.y) return false;
+		else return true;
+	}
+
 public:
 	Vec2()
 		: x(0.f)
