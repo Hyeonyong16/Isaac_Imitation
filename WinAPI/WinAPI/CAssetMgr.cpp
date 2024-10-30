@@ -89,7 +89,7 @@ CSprite* CAssetMgr::FindSprite(const wstring& _Key)
 
 CSprite* CAssetMgr::LoadSprite(const wstring& _Key, const wstring& _RelativePath)
 {
-    CAsset* pSprite = FindTexture(_Key);
+    CAsset* pSprite = FindSprite(_Key);
 
     // 이미 로딩한 적이 있는 Texture 일 경우
     if (nullptr != pSprite)

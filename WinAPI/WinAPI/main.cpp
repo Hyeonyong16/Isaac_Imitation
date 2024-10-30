@@ -5,6 +5,14 @@
 
 #define MAX_LOADSTRING 100
 
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
+#ifdef _DEBUG
+#define new new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#endif
+
 // 전역 변수
 HINSTANCE   g_hInst = nullptr;                      // 현재 인스턴스입니다.
 HWND        g_hDlg = nullptr;
@@ -29,6 +37,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE    hInstance,      // 프로세스 주소(I
 {    
     // 메모리 누수 확인
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    //_CrtDumpMemoryLeaks();
     //_CrtSetBreakAlloc(18);
 
     g_hInst = hInstance;    // 프로세스 시작 주소
@@ -113,6 +122,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE    hInstance,      // 프로세스 주소(I
     }
 
     //KillTimer(hWnd, 0);
+
+    //_CrtDumpMemoryLeaks();
+
     return (int) msg.wParam;
 }
 

@@ -44,6 +44,14 @@ CLevel_Editor_Sprite::CLevel_Editor_Sprite()
 
 CLevel_Editor_Sprite::~CLevel_Editor_Sprite()
 {
+	list<CSprite*>::iterator iter = m_SpriteList.begin();
+
+	for (; iter != m_SpriteList.end(); ++iter)
+	{
+		delete *iter;
+	}
+
+	m_SpriteList.clear();
 }
 
 void CLevel_Editor_Sprite::Begin()
@@ -383,6 +391,11 @@ void CLevel_Editor_Sprite::SaveSprite()
 		// 어째서 기존 애를 덮어쓰기 하면 메모리 누수가 생기는가?
 		//=======================================================
 		pSprite->Save(L"Sprite" + tempString);
+		
+
+		pSprite = nullptr;
+		delete pSprite;
+
 	}
 }
 
@@ -414,6 +427,7 @@ void CLevel_Editor_Sprite::LoadSprite()
 		//wchar_t Key[50] = {};
 		//swprintf_s(Key, 50, (tempString).c_str());
 		CSprite* pSprite = CAssetMgr::GetInst()->LoadSprite(tempKey, L"Sprite" + tempString);
+		
 
 		if(m_bSpriteMenu)
 		{
@@ -447,6 +461,9 @@ void CLevel_Editor_Sprite::LoadSprite()
 
 			m_bDrawSprite = true;
 		}
+		//CSprite* ppSprite = new CSprite;
+		//pSprite = nullptr;
+		//delete pSprite;
 	}
 }
 
@@ -490,6 +507,9 @@ void CLevel_Editor_Sprite::SaveFlipbook()
 		// 어째서 기존 애를 덮어쓰기 하면 메모리 누수가 생기는가?
 		//=======================================================
 		pFlipbook->Save(L"Flipbook" + tempString);
+
+		pFlipbook = nullptr;
+		delete pFlipbook;
 	}
 }
 
@@ -737,6 +757,9 @@ INT_PTR CALLBACK	FlipbookInfoProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 			CSprite* pSprite = pEditorLevel->GetCurSprite();
 			pSprite->SetOffset(Vec2(xOffset, yOffset));
 			pEditorLevel->SetDrawSprite(true);
+
+			pSprite = nullptr;
+			delete pSprite;
 		}
 
 		else if (LOWORD(wParam) == ID_DELETE_SPRITE)
