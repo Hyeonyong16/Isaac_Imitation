@@ -17,12 +17,16 @@ private:
 
     //CTexture*   m_Texture;
 
-    CFlipbookPlayer* m_FlipbookPlayer;
+    CFlipbookPlayer* m_FlipbookHead;
+    //CFlipbookPlayer* m_FlipbookBody;
 
     CRigidBody* m_RigidBody;
 
     bool isAttack[4];   // 왼 오 위 아래 순서
     list<char> AttackQueue; // 각 방향 키 들어온 순서
+
+    char m_headDir;     // 머리가 바라볼 방향
+    char m_bodyDir;     // 몸이 바라볼 방향
 
 public:
     virtual void Begin() override;

@@ -145,6 +145,9 @@
     <Filter Include="Game\05. Object\Room">
       <UniqueIdentifier>{0df55079-daba-4cae-8d24-d9a6896db699}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\05. Object\Player\Head">
+      <UniqueIdentifier>{fed50f0c-37cf-49b8-ae0e-e9c02b9bb7e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CEngine.h">
@@ -312,6 +315,9 @@
     <ClInclude Include="CRoom.h">
       <Filter>Game\05. Object\Room</Filter>
     </ClInclude>
+    <ClInclude Include="CPlayerHead.h">
+      <Filter>Game\05. Object\Player\Head</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEngine.cpp">
@@ -452,6 +458,9 @@
     </ClCompile>
     <ClCompile Include="CRoom.cpp">
       <Filter>Game\05. Object\Room</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayerHead.cpp">
+      <Filter>Game\05. Object\Player\Head</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

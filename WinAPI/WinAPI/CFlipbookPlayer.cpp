@@ -16,6 +16,8 @@ CFlipbookPlayer::CFlipbookPlayer()
 	, m_Time(0.f)
 	, m_Repeat(false)
 	, m_Finish(false)
+	, m_renderSize{0, 0}
+	, m_renderOffset{0, 0}
 {
 }
 
@@ -69,20 +71,42 @@ void CFlipbookPlayer::Render()
 	HDC hBackDC = CEngine::GetInst()->GetSecondDC();
 	Vec2 vPos = GetOwner()->GetRenderPos();
 
-	Vec2 LeftTop = Vec2(vPos.x - (Sprite->GetSlice().x / 2) + Sprite->GetOffset().x,
-						vPos.y - (Sprite->GetSlice().y / 2) + Sprite->GetOffset().y);
+	BLENDFUNCTION blend = {};
 
-	TransparentBlt(hBackDC
-		, vPos.x - (Sprite->GetSlice().x / 2) + Sprite->GetOffset().x
-		, vPos.y - (Sprite->GetSlice().y / 2) + Sprite->GetOffset().y
-		, Sprite->GetSlice().x
-		, Sprite->GetSlice().y
-		, Sprite->GetAtlas()->GetDC()
-		, Sprite->GetLeftTop().x
-		, Sprite->GetLeftTop().y
-		, Sprite->GetSlice().x
-		, Sprite->GetSlice().y
-		, RGB(255, 0, 255));
+	blend.BlendOp = AC_SRC_OVER;
+	blend.BlendFlags = 0;
+	blend.SourceConstantAlpha = 255;
+	blend.AlphaFormat = AC_SRC_ALPHA;
+
+	if(m_renderSize == Vec2(0, 0))
+	{
+		AlphaBlend(hBackDC
+			, vPos.x - (Sprite->GetSlice().x / 2) + Sprite->GetOffset().x + m_renderOffset.x
+			, vPos.y - (Sprite->GetSlice().y / 2) + Sprite->GetOffset().y + m_renderOffset.y
+			, Sprite->GetSlice().x
+			, Sprite->GetSlice().y
+			, Sprite->GetAtlas()->GetDC()
+			, Sprite->GetLeftTop().x
+			, Sprite->GetLeftTop().y
+			, Sprite->GetSlice().x
+			, Sprite->GetSlice().y
+			, blend);
+	}
+
+	else
+	{
+		AlphaBlend(hBackDC
+			, vPos.x - (m_renderSize.x / 2) + Sprite->GetOffset().x + m_renderOffset.x
+			, vPos.y - (m_renderSize.y / 2) + Sprite->GetOffset().y + m_renderOffset.y
+			, m_renderSize.x
+			, m_renderSize.y
+			, Sprite->GetAtlas()->GetDC()
+			, Sprite->GetLeftTop().x
+			, Sprite->GetLeftTop().y
+			, Sprite->GetSlice().x
+			, Sprite->GetSlice().y
+			, blend);
+	}
 }
 
 
