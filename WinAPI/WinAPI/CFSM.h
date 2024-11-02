@@ -18,7 +18,7 @@ public:
     void AddState(const wstring& _Key, CState* _State);
     CState* FindState(const wstring& _Key);
     void ChangeState(const wstring& _NextState);
-
+    wstring GetCurState();
 
 public:
     virtual void FinalTick() override;

@@ -23,6 +23,11 @@
 #include "CFlipbookPlayer.h"
 #include "CRigidBody.h"
 
+#include "CFSM.h"
+#include "CPlayerIdleState.h"
+#include "CPlayerMoveState.h"
+#include "CPlayerAttackState.h"
+
 enum PLAYER_ANIM_STATE
 {
 	IDLE_UP,
@@ -36,13 +41,13 @@ enum PLAYER_ANIM_STATE
 	MOVE_RIGHT,
 };
 
-enum PLAYER_HEAD_ANIM_STATE
-{
-	ISAAC_HEAD_UP,
-	ISAAC_HEAD_DOWN,
-	ISAAC_HEAD_LEFT,
-	ISAAC_HEAD_RIGHT,
-};
+//enum PLAYER_HEAD_ANIM_STATE
+//{
+//	ISAAC_HEAD_UP,
+//	ISAAC_HEAD_DOWN,
+//	ISAAC_HEAD_LEFT,
+//	ISAAC_HEAD_RIGHT,
+//};
 
 CPlayer::CPlayer()
 	: m_Speed(200.f)
@@ -56,6 +61,9 @@ CPlayer::CPlayer()
 	, isAttack{false, false, false, false}
 	, m_headDir('D')
 	, m_bodyDir('D')
+	, m_FSM(nullptr)
+	, m_isDamaged(false)
+	, m_isAttacking(false)
 {
 	m_HitBox = new CCollider;
 	m_HitBox->SetName(L"HitBox_01");
@@ -78,6 +86,12 @@ CPlayer::CPlayer()
 	m_RigidBody->SetMass(1.f);
 	m_RigidBody->SetFriction(1000.f);
 	//m_RigidBody->SetJumpVelocity(Vec2(0.f, -500.f));
+
+	m_FSM = (CFSM*)AddComponent(new CFSM);
+
+	m_FSM->AddState(L"Idle", new CPlayerIdleState);
+	m_FSM->AddState(L"Move", new CPlayerMoveState);
+	m_FSM->AddState(L"Attack", new CPlayerAttackState);
 }
 
 CPlayer::~CPlayer()
@@ -94,7 +108,8 @@ void CPlayer::Begin()
 	for (int i = 0; i < 4; ++i)
 		isAttack[i] = false;
 
-	m_FlipbookHead->Play(ISAAC_HEAD_DOWN, 5.f, true);
+	m_FSM->ChangeState(L"Idle");
+	//m_FlipbookHead->Play(ISAAC_HEAD_DOWN, 5.f, true);
 
 	//CCamera::GetInst()->SetTarget(this);
 }
@@ -140,13 +155,25 @@ void CPlayer::Tick()
 		Vec2 tempForce(0, 0);
 
 		if (KEY_PRESSED(A))
+		{
 			tempForce += Vec2(-1.f, 0.f);
+			SetHeadBodyDir('L', 'L');
+		}
 		if (KEY_PRESSED(D))
+		{
 			tempForce += Vec2(1.f, 0.f);
+			SetHeadBodyDir('R', 'R');
+		}
 		if (KEY_PRESSED(W))
+		{
 			tempForce += Vec2(0.f, -1.f);
+			SetHeadBodyDir('U', 'U');
+		}
 		if (KEY_PRESSED(S))
+		{
 			tempForce += Vec2(0.f, 1.f);
+			SetHeadBodyDir('D', 'D');
+		}
 
 		// 정규 화 후 해당 방향으로 1000 만큼 곱해서 addforce
 		if (tempForce != Vec2(0.f, 0.f))
@@ -223,6 +250,7 @@ void CPlayer::Tick()
 	{
 		if (AttackQueue.size() > 0)
 		{
+			m_isAttacking = false;
 			if (!m_AccTime || (1.f / m_AttSpeed <= m_AccTime))
 			{
 				if (1.f / m_AttSpeed <= m_AccTime)
@@ -237,7 +265,7 @@ void CPlayer::Tick()
 					shotPos = GetPos() + Vec2(-GetScale().x / 2.f, 0.f);
 					shotVel = Vec2(cosf(PI), sinf(PI)) * 200.f;
 					m_headDir = 'L';
-					m_FlipbookHead->Play(ISAAC_HEAD_LEFT, 5.f, true);
+					//m_FlipbookHead->Play(ISAAC_HEAD_LEFT, 5.f, true);
 				}
 				break;
 				case 'R':
@@ -245,7 +273,7 @@ void CPlayer::Tick()
 					shotPos = GetPos() + Vec2(GetScale().x / 2.f, 0.f);
 					shotVel = Vec2(-cosf(PI), sinf(PI)) * 200.f;
 					m_headDir = 'R';
-					m_FlipbookHead->Play(ISAAC_HEAD_RIGHT, 5.f, true);
+					//m_FlipbookHead->Play(ISAAC_HEAD_RIGHT, 5.f, true);
 				}
 				break;
 				case 'U':
@@ -253,7 +281,7 @@ void CPlayer::Tick()
 					shotPos = GetPos() + Vec2(0.f, -GetScale().y / 2.f);
 					shotVel = Vec2(cosf(PI / 2.f), -sinf(PI / 2.f)) * 200.f;
 					m_headDir = 'U';
-					m_FlipbookHead->Play(ISAAC_HEAD_UP, 5.f, true);
+					//m_FlipbookHead->Play(ISAAC_HEAD_UP, 5.f, true);
 				}
 				break;
 				case 'D':
@@ -261,7 +289,7 @@ void CPlayer::Tick()
 					shotPos = GetPos() + Vec2(0.f, GetScale().y / 2.f);
 					shotVel = Vec2(cosf(PI / 2.f), sinf(PI / 2.f)) * 200.f;
 					m_headDir = 'D';
-					m_FlipbookHead->Play(ISAAC_HEAD_DOWN, 5.f, true);
+					//m_FlipbookHead->Play(ISAAC_HEAD_DOWN, 5.f, true);
 				}
 				break;
 				}
@@ -271,7 +299,7 @@ void CPlayer::Tick()
 				pMissile->SetScale(20.f, 20.f);
 				pMissile->SetVelocity(shotVel);
 				CreateObject(pMissile, LAYER_TYPE::PLAYER_OBJECT);
-
+				m_isAttacking = true;
 			}
 
 			m_AccTime += DT;
@@ -307,10 +335,12 @@ void CPlayer::Render()
 
 	wchar_t str1[255];
 	wchar_t str2[255];
+	wchar_t str3[255];
 	swprintf_s(str1, 255, L"pos x: %d, y: %d", (int)GetPos().x, (int)GetPos().y);
 	swprintf_s(str2, 255, L"AccTime: %f", m_AccTime);
 	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 30, str1, wcslen(str1));
 	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 50, str2, wcslen(str2));
+	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 70, m_FSM->GetCurState().c_str(), wcslen(m_FSM->GetCurState().c_str()));
 }
 
 void CPlayer::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)
@@ -353,6 +383,11 @@ void CPlayer::CreatePlayerFlipbook()
 	m_FlipbookHead->AddFlipbook(ISAAC_HEAD_RIGHT, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_HEAD_RIGHT", L"Flipbook\\ISAAC_HEAD_RIGHT.flip"));
 	m_FlipbookHead->AddFlipbook(ISAAC_HEAD_UP, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_HEAD_BACK", L"Flipbook\\ISAAC_HEAD_BACK.flip"));
 	m_FlipbookHead->AddFlipbook(ISAAC_HEAD_DOWN, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_HEAD_FRONT", L"Flipbook\\ISAAC_HEAD_FRONT.flip"));
+
+	m_FlipbookHead->AddFlipbook(ISAAC_HEAD_IDLE_LEFT, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_HEAD_IDLE_LEFT", L"Flipbook\\ISAAC_HEAD_IDLE_LEFT.flip"));
+	m_FlipbookHead->AddFlipbook(ISAAC_HEAD_IDLE_RIGHT, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_HEAD_IDLE_RIGHT", L"Flipbook\\ISAAC_HEAD_IDLE_RIGHT.flip"));
+	m_FlipbookHead->AddFlipbook(ISAAC_HEAD_IDLE_UP, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_HEAD_IDLE_BACK", L"Flipbook\\ISAAC_HEAD_IDLE_BACK.flip"));
+	m_FlipbookHead->AddFlipbook(ISAAC_HEAD_IDLE_DOWN, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_HEAD_IDLE_FRONT", L"Flipbook\\ISAAC_HEAD_IDLE_FRONT.flip"));
 
 	// FlipbookPlayer 컴포넌트에 Flipbook 추가
 	//m_FlipbookPlayer->AddFlipbook(IDLE_DOWN,  CAssetMgr::GetInst()->LoadFlipbook(L"LINK_IDLEDOWN",  L"Flipbook\\LINK_IDLEDOWN.flip"));
@@ -411,4 +446,7 @@ void CPlayer::CreateFlipbook(const wstring& _FlipbookName, CTexture* _Atlas, Vec
 	pFlipbook->Save(Path + _FlipbookName);*/
 }
 
-
+Vec2 CPlayer::GetVelocity()
+{
+	return m_RigidBody->GetVelocity();
+}

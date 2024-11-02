@@ -52,6 +52,7 @@ public:
     float GetInitialSpeed() { return m_InitialSpeed; }
     void SetInitialSpeed(float _Init) { m_InitialSpeed = _Init; }
 
+    Vec2 GetVelocity() { return m_Velocity; }
     void SetVelocity(Vec2 _Velocity) { m_Velocity = _Velocity; }
     void AddVelocity(Vec2 _Velocity) { m_Velocity += _Velocity; }
 

@@ -148,6 +148,24 @@
     <Filter Include="Game\05. Object\Player\Head">
       <UniqueIdentifier>{fed50f0c-37cf-49b8-ae0e-e9c02b9bb7e4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\State\Player">
+      <UniqueIdentifier>{5495e226-d632-42a9-85c3-94f74f1f183a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Player\Idle">
+      <UniqueIdentifier>{42a8d3f8-fcfd-4a66-834f-5d2dcc99e200}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Player\Move">
+      <UniqueIdentifier>{7ec70903-7625-4bc2-ba39-388c399d448d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Player\Damaged">
+      <UniqueIdentifier>{b3d7cfb9-da47-4dce-bbd3-c77c85917fef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Player\Death">
+      <UniqueIdentifier>{5a4730ce-160a-43a3-af0b-7433187dc229}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Player\Attack">
+      <UniqueIdentifier>{1087ece6-9d57-4cff-957c-3b3dad532707}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CEngine.h">
@@ -318,6 +336,15 @@
     <ClInclude Include="CPlayerHead.h">
       <Filter>Game\05. Object\Player\Head</Filter>
     </ClInclude>
+    <ClInclude Include="CPlayerIdleState.h">
+      <Filter>Game\State\Player\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayerMoveState.h">
+      <Filter>Game\State\Player\Move</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayerAttackState.h">
+      <Filter>Game\State\Player\Attack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEngine.cpp">
@@ -461,6 +488,15 @@
     </ClCompile>
     <ClCompile Include="CPlayerHead.cpp">
       <Filter>Game\05. Object\Player\Head</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayerIdleState.cpp">
+      <Filter>Game\State\Player\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayerMoveState.cpp">
+      <Filter>Game\State\Player\Move</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayerAttackState.cpp">
+      <Filter>Game\State\Player\Attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
