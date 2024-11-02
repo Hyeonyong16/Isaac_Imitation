@@ -44,14 +44,14 @@ CLevel_Editor_Sprite::CLevel_Editor_Sprite()
 
 CLevel_Editor_Sprite::~CLevel_Editor_Sprite()
 {
-	list<CSprite*>::iterator iter = m_SpriteList.begin();
+	//list<CSprite*>::iterator iter = m_SpriteList.begin();
 
-	for (; iter != m_SpriteList.end(); ++iter)
-	{
-		delete *iter;
-	}
+	//for (; iter != m_SpriteList.end(); ++iter)
+	//{
+	//	delete *iter;
+	//}
 
-	m_SpriteList.clear();
+	//m_SpriteList.clear();
 }
 
 void CLevel_Editor_Sprite::Begin()
@@ -481,7 +481,7 @@ void CLevel_Editor_Sprite::SaveFlipbook()
 	Desc.hwndOwner = nullptr;
 	Desc.lpstrFile = szFilePath;
 	Desc.nMaxFile = 255;
-	Desc.lpstrFilter = L"\FLIP\0.flip\0ALL\0*.*";
+	Desc.lpstrFilter = L"\0FLIP\0.flip\0ALL\0*.*";
 	Desc.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 	Desc.lpstrInitialDir = strContentPath.c_str();
 
@@ -507,9 +507,6 @@ void CLevel_Editor_Sprite::SaveFlipbook()
 		// 어째서 기존 애를 덮어쓰기 하면 메모리 누수가 생기는가?
 		//=======================================================
 		pFlipbook->Save(L"Flipbook" + tempString);
-
-		pFlipbook = nullptr;
-		delete pFlipbook;
 	}
 }
 
@@ -527,7 +524,7 @@ void CLevel_Editor_Sprite::LoadFlipbook()
 	Desc.hwndOwner = nullptr;
 	Desc.lpstrFile = szFilePath;
 	Desc.nMaxFile = 255;
-	Desc.lpstrFilter = L"\FLIP\0.flip\0ALL\0*.*";
+	Desc.lpstrFilter = L"\0FLIP\0.flip\0ALL\0*.*";
 	Desc.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 	Desc.lpstrInitialDir = strContentPath.c_str();
 

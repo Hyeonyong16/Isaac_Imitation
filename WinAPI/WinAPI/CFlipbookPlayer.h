@@ -16,6 +16,9 @@ private:
     bool        m_Repeat;
     bool        m_Finish;
 
+    Vec2        m_renderSize;
+    Vec2        m_renderOffset;
+
 public:
     void AddFlipbook(CFlipbook* _Flipbook) { m_vecFlipbook.push_back(_Flipbook); }
     void AddFlipbook(int _Idx, CFlipbook* _Flipbook)
@@ -45,6 +48,9 @@ public:
         m_Finish = false;
         m_SpriteIdx = 0;
     }
+
+    void SetRenderSize(Vec2 _renderSize) { m_renderSize = _renderSize; }
+    void SetRenderOffset(Vec2 _renderOffset) { m_renderOffset = _renderOffset; }
 
 public:
     virtual void FinalTick() override;

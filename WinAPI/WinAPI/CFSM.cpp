@@ -54,3 +54,14 @@ void CFSM::ChangeState(const wstring& _NextState)
 
 	m_CurState->Enter();
 }
+
+wstring CFSM::GetCurState()
+{
+	map<wstring, CState*>::iterator iter = m_mapState.begin();
+	for (; iter != m_mapState.end(); ++iter)
+	{
+		if (iter->second == m_CurState)
+			return iter->first;
+	}
+	return L"error";
+}
