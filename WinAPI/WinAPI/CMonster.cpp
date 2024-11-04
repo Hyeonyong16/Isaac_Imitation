@@ -18,25 +18,26 @@ CMonster::CMonster()
 	, m_Dist(100.f)
 	, m_Collider(nullptr)
 	, m_FSM(nullptr)
+	, m_RigidBody(nullptr)
 {
-	m_Tex = CAssetMgr::GetInst()->LoadTexture(L"Character", L"Texture\\Character.png");
+	//m_Tex = CAssetMgr::GetInst()->LoadTexture(L"Character", L"Texture\\Character.png");
 
-	m_Collider = (CCollider*)AddComponent(new CCollider);
-	m_Collider->SetScale(Vec2(100.f, 100.f));
+	//m_Collider = (CCollider*)AddComponent(new CCollider);
+	//m_Collider->SetScale(Vec2(100.f, 100.f));
 
 	// 몬스터 스탯
-	m_Info.MaxHP = 100.f;
-	m_Info.CurHP = 100.f;
-	m_Info.AttRange = 100.f;
-	m_Info.DetectRange = 200.f;
-	m_Info.Speed = 100.f;
+	//m_Info.MaxHP = 100.f;
+	//m_Info.CurHP = 100.f;
+	//m_Info.AttRange = 100.f;
+	//m_Info.DetectRange = 200.f;
+	//m_Info.Speed = 100.f;
 
 	// FSM 컴포넌트 추가
-	m_FSM = (CFSM*)AddComponent(new CFSM);
+	//m_FSM = (CFSM*)AddComponent(new CFSM);
 
 	// FSM 에 상태 추가
-	m_FSM->AddState(L"Idle", new CIdleState);
-	m_FSM->AddState(L"Trace", new CTraceState);
+	//m_FSM->AddState(L"Idle", new CIdleState);
+	//m_FSM->AddState(L"Trace", new CTraceState);
 }
 
 CMonster::~CMonster()
@@ -45,7 +46,7 @@ CMonster::~CMonster()
 
 void CMonster::Begin()
 {
-	m_FSM->ChangeState(L"Idle");
+	//m_FSM->ChangeState(L"Idle");
 
 	// 레벨이 시작할때 초기 위치값 기록
 	m_InitPos = GetPos();
@@ -84,7 +85,7 @@ void CMonster::Render()
 	blend.SourceConstantAlpha = 127;
 	blend.AlphaFormat = AC_SRC_ALPHA;
 
-	AlphaBlend(dc
+	/*AlphaBlend(dc
 		, vPos.x - m_Tex->GetWidth() / 2.f
 		, vPos.y - m_Tex->GetHeight() / 2.f
 		, m_Tex->GetWidth()
@@ -93,7 +94,7 @@ void CMonster::Render()
 		, 0, 0
 		, m_Tex->GetWidth()
 		, m_Tex->GetHeight()
-		, blend);
+		, blend);*/
 
 	/*Ellipse(dc, vPos.x - vScale.x / 2.f, vPos.y - vScale.y / 2.f
 		, vPos.x + vScale.x / 2.f, vPos.y + vScale.y / 2.f);*/
@@ -104,7 +105,7 @@ void CMonster::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider*
 	if (_OtherObject->GetName() == L"Player")
 	{
 		// 플레이어랑 부딪히면 다음 스테이지로 넘어간다.
-		ChangeLevel(LEVEL_TYPE::EDITOR_TILE);
+		//ChangeLevel(LEVEL_TYPE::EDITOR_TILE);
 	}
 }
 

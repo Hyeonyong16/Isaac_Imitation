@@ -144,6 +144,9 @@
     <ClInclude Include="CBase.h" />
     <ClInclude Include="CBtnUI.h" />
     <ClInclude Include="CCamera.h" />
+    <ClInclude Include="CCharger.h" />
+    <ClInclude Include="CChargerAttackState.h" />
+    <ClInclude Include="CChargerIdleState.h" />
     <ClInclude Include="CCollider.h" />
     <ClInclude Include="CCollisionMgr.h" />
     <ClInclude Include="CComponent.h" />
@@ -205,6 +208,9 @@
     <ClCompile Include="CBase.cpp" />
     <ClCompile Include="CBtnUI.cpp" />
     <ClCompile Include="CCamera.cpp" />
+    <ClCompile Include="CCharger.cpp" />
+    <ClCompile Include="CChargerAttackState.cpp" />
+    <ClCompile Include="CChargerIdleState.cpp" />
     <ClCompile Include="CCollider.cpp" />
     <ClCompile Include="CCollisionMgr.cpp" />
     <ClCompile Include="CComponent.cpp" />

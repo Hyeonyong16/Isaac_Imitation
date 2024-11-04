@@ -166,6 +166,30 @@
     <Filter Include="Game\State\Player\Attack">
       <UniqueIdentifier>{1087ece6-9d57-4cff-957c-3b3dad532707}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\05. Object\Monster\Charger">
+      <UniqueIdentifier>{99e99c74-31ea-4985-aa13-315aa7c8a25c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\05. Object\Monster\Pooter">
+      <UniqueIdentifier>{013c3ded-cf32-4198-a280-98d8fd6e3062}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\05. Object\Monster\Trite">
+      <UniqueIdentifier>{4bb4e955-6e90-44a8-8d4e-d29147aceeed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\05. Object\Monster\Rock">
+      <UniqueIdentifier>{01900e4b-d0cb-4a87-b4e3-f4e0a88cdb18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Charger">
+      <UniqueIdentifier>{b842682a-0b36-4c3a-baa3-0272cdb241b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Charger\Idle">
+      <UniqueIdentifier>{a0429649-fb21-4f41-8778-93e35cbb77d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Charger\Attack">
+      <UniqueIdentifier>{a438e44a-f9fe-4791-a6d2-976e28ae28bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Charger\Death">
+      <UniqueIdentifier>{99b0aaf4-e201-4d7e-beaa-ba03fd9881cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CEngine.h">
@@ -345,6 +369,15 @@
     <ClInclude Include="CPlayerAttackState.h">
       <Filter>Game\State\Player\Attack</Filter>
     </ClInclude>
+    <ClInclude Include="CCharger.h">
+      <Filter>Game\05. Object\Monster\Charger</Filter>
+    </ClInclude>
+    <ClInclude Include="CChargerIdleState.h">
+      <Filter>Game\State\Charger\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="CChargerAttackState.h">
+      <Filter>Game\State\Charger\Attack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEngine.cpp">
@@ -497,6 +530,15 @@
     </ClCompile>
     <ClCompile Include="CPlayerAttackState.cpp">
       <Filter>Game\State\Player\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="CCharger.cpp">
+      <Filter>Game\05. Object\Monster\Charger</Filter>
+    </ClCompile>
+    <ClCompile Include="CChargerIdleState.cpp">
+      <Filter>Game\State\Charger\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="CChargerAttackState.cpp">
+      <Filter>Game\State\Charger\Attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

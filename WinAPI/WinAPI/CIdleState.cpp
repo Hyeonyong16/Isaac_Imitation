@@ -42,24 +42,24 @@ void CIdleState::FinalTick()
 	assert(pMon);
 	const tMonInfo& info = pMon->GetMonInfo();
 
-	// 플레이어가 몬스터의 인지범위 내에 있는지 확인한다.
-	if (m_TargetObject)
-	{
-		Vec2 vTargetPos = m_TargetObject->GetPos();
-		Vec2 vPos = pMon->GetPos();
-		float fDist = (vTargetPos - vPos).Length();
+	//// 플레이어가 몬스터의 인지범위 내에 있는지 확인한다.
+	//if (m_TargetObject)
+	//{
+	//	Vec2 vTargetPos = m_TargetObject->GetPos();
+	//	Vec2 vPos = pMon->GetPos();
+	//	float fDist = (vTargetPos - vPos).Length();
 
-		// 범위 안에 있으면 자신의 상태를 TraceState
-		if (fDist < info.DetectRange)
-		{
-			GetFSM()->ChangeState(L"Trace");
-		}
-	}
+	//	// 범위 안에 있으면 자신의 상태를 TraceState
+	//	if (fDist < info.DetectRange)
+	//	{
+	//		GetFSM()->ChangeState(L"Trace");
+	//	}
+	//}
 
 	// 인지범위 시각화
 
 	Vec2 vRenderPos = CCamera::GetInst()->GetRenderPos(pMon->GetPos());
-	DrawDebugCircle(PEN_TYPE::BLUE, vRenderPos, Vec2(info.DetectRange * 2.f, info.DetectRange * 2.f), 0.f);
+	//DrawDebugCircle(PEN_TYPE::BLUE, vRenderPos, Vec2(info.DetectRange * 2.f, info.DetectRange * 2.f), 0.f);
 }
 
 void CIdleState::Exit()

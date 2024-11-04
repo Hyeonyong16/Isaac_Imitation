@@ -17,4 +17,8 @@ void DrawDebugRect(PEN_TYPE _Pen, Vec2 _Pos, Vec2 _Scale, float _Duration);
 void DrawDebugCircle(PEN_TYPE _Pen, Vec2 _Pos, Vec2 _Scale, float _Duration);
 void DrawDebugLine(PEN_TYPE _Pen, Vec2 _Start, Vec2 _End, float _Duration);
 
+class CRigidBody;
+void SetGroundInRigidBody(Vec2 _mainScale, Vec2 _objScale, Vec2 _mainPos, Vec2 _objPos, CRigidBody* _rigidBody);
+void releaseGroundInRigidBody(Vec2 _mainScale, Vec2 _objScale, Vec2 _mainPos, Vec2 _objPos, CRigidBody* _rigidBody);
+
 float Saturate(float _Ratio);
