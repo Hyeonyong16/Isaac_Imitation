@@ -21,11 +21,28 @@ void CPlayerIdleState::Enter()
 	// 머리, 몸통 Flipbook 가져오기
 	CFlipbookPlayer* pFPHead = dynamic_cast<CFlipbookPlayer*>(GetOwnerObj()->GetComponent(L"Player_Flipbook_Head"));
 	assert(pFPHead);
-	//CFlipbookPlayer* pFPHead = dynamic_cast<CFlipbookPlayer*>(GetOwnerObj()->GetComponent(L"Player_Flipbook_Head"));
-	//assert(pFPHead);
+	CFlipbookPlayer* pFPBody = dynamic_cast<CFlipbookPlayer*>(GetOwnerObj()->GetComponent(L"Player_Flipbook_Body"));
+	assert(pFPBody);
 
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(GetOwnerObj());
 	assert(pPlayer);
+
+	if (pFPBody)
+	{
+		switch (pPlayer->GetBodyDir())
+		{
+		case'L':
+			pFPBody->Play(ISAAC_BODY_IDLE_RIGHT, 1.f, false, true);
+			break;
+		case'R':
+			pFPBody->Play(ISAAC_BODY_IDLE_RIGHT, 1.f, false, false);
+			break;
+		case'U':
+		case'D':
+			pFPBody->Play(ISAAC_BODY_IDLE_DOWN, 1.f, true);
+			break;
+		}
+	}
 
 	if (pFPHead)
 	{
@@ -52,6 +69,8 @@ void CPlayerIdleState::FinalTick()
 	// 머리, 몸통 Flipbook 가져오기
 	CFlipbookPlayer* pFPHead = dynamic_cast<CFlipbookPlayer*>(GetOwnerObj()->GetComponent(L"Player_Flipbook_Head"));
 	assert(pFPHead);
+	CFlipbookPlayer* pFPBody = dynamic_cast<CFlipbookPlayer*>(GetOwnerObj()->GetComponent(L"Player_Flipbook_Body"));
+	assert(pFPBody);
 
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(GetOwnerObj());
 	assert(pPlayer);
@@ -78,6 +97,23 @@ void CPlayerIdleState::FinalTick()
 	// 상태 전환이 안된다면
 	else
 	{
+		if (pFPBody)
+		{
+			switch (pPlayer->GetBodyDir())
+			{
+			case'L':
+				pFPBody->Play(ISAAC_BODY_IDLE_RIGHT, 1.f, false, true);
+				break;
+			case'R':
+				pFPBody->Play(ISAAC_BODY_IDLE_RIGHT, 1.f, false, false);
+				break;
+			case'U':
+			case'D':
+				pFPBody->Play(ISAAC_BODY_IDLE_DOWN, 1.f, true);
+				break;
+			}
+		}
+
 		if (pFPHead)
 		{
 			switch (pPlayer->GetHeadDir())

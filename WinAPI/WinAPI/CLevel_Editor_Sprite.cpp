@@ -313,8 +313,8 @@ void CLevel_Editor_Sprite::Render()
 	wchar_t str2[255];
 	swprintf_s(str1, 255, L"SpritePos x: %d, y: %d", (int)m_SpritePos.x, (int)m_SpritePos.y);
 	swprintf_s(str2, 255, L"SpriteScale x: %d, y: %d", (int)m_SpriteScale.x, (int)m_SpriteScale.y);
-	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 30, str1, wcslen(str1));
-	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 50, str2, wcslen(str2));
+	//TextOut(CEngine::GetInst()->GetSecondDC(), 10, 30, str1, wcslen(str1));
+	//TextOut(CEngine::GetInst()->GetSecondDC(), 10, 50, str2, wcslen(str2));
 }
 
 void CLevel_Editor_Sprite::LoadAtlasTexture()

@@ -20,6 +20,18 @@ enum PLAYER_HEAD_ANIM_STATE
     ISAAC_HEAD_IDLE_RIGHT,
 };
 
+enum PLAYER_BODY_ANIM_STATE
+{
+    ISAAC_BODY_MOVE_DOWN,
+    ISAAC_BODY_MOVE_RIGHT,
+    ISAAC_BODY_MOVE_LEFT,
+
+    ISAAC_BODY_IDLE_DOWN,
+    ISAAC_BODY_IDLE_RIGHT,
+    ISAAC_BODY_IDLE_LEFT,
+};
+
+
 class CPlayer :
     public CObj
 {
@@ -34,7 +46,7 @@ private:
     CFSM* m_FSM;
 
     CFlipbookPlayer* m_FlipbookHead;
-    //CFlipbookPlayer* m_FlipbookBody;
+    CFlipbookPlayer* m_FlipbookBody;
 
     CRigidBody* m_RigidBody;
 

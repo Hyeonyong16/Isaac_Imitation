@@ -54,7 +54,7 @@ CPlayer::CPlayer()
 	, m_AttSpeed(2.f)
 	, m_AccTime(0.f)
 	, m_HitBox(nullptr)
-	//, m_FlipbookBody(nullptr)
+	, m_FlipbookBody(nullptr)
 	, m_FlipbookHead(nullptr)
 	//, m_Texture(nullptr)
 	, m_RigidBody(nullptr)
@@ -76,7 +76,11 @@ CPlayer::CPlayer()
 	CreatePlayerFlipbook();
 	m_FlipbookHead->SetName(L"Player_Flipbook_Head");
 	m_FlipbookHead->SetRenderSize(Vec2(60.f, 60.f));
-	m_FlipbookHead->SetRenderOffset(Vec2(0.f, -60.f));
+	m_FlipbookHead->SetRenderOffset(Vec2(0.f, -47.f));
+
+	m_FlipbookBody->SetName(L"Player_Flipbook_Body");
+	m_FlipbookBody->SetRenderSize(Vec2(30.f, 30.f));
+	m_FlipbookBody->SetRenderOffset(Vec2(0.f, -15.f));
 
 	// RigidBody 컴포넌트 추가
 	m_RigidBody = (CRigidBody*)AddComponent(new CRigidBody);
@@ -331,7 +335,13 @@ void CPlayer::Tick()
 void CPlayer::Render()
 {
 	//m_FlipbookPlayer->Render();
+	m_FlipbookBody->Render();
 	m_FlipbookHead->Render();
+
+
+	DrawDebugRect(PEN_TYPE::GREEN, Vec2(0.f, -60.f), Vec2(60.f, 60.f), 0.f);
+	DrawDebugRect(PEN_TYPE::GREEN, Vec2(0.f, 0.f), Vec2(60.f, 60.f), 0.f);
+
 
 	wchar_t str1[255];
 	wchar_t str2[255];
@@ -377,7 +387,7 @@ void CPlayer::CreatePlayerFlipbook()
 	// FlipbookPlayer 컴포넌트 추가하기
 	//m_FlipbookPlayer = (CFlipbookPlayer*)AddComponent(new CFlipbookPlayer);
 	m_FlipbookHead = (CFlipbookPlayer*)AddComponent(new CFlipbookPlayer);
-	//m_FlipbookBody = (CFlipbookPlayer*)AddComponent(new CFlipbookPlayer);
+	m_FlipbookBody = (CFlipbookPlayer*)AddComponent(new CFlipbookPlayer);
 
 	m_FlipbookHead->AddFlipbook(ISAAC_HEAD_LEFT, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_HEAD_LEFT", L"Flipbook\\ISAAC_HEAD_LEFT.flip"));
 	m_FlipbookHead->AddFlipbook(ISAAC_HEAD_RIGHT, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_HEAD_RIGHT", L"Flipbook\\ISAAC_HEAD_RIGHT.flip"));
@@ -388,6 +398,14 @@ void CPlayer::CreatePlayerFlipbook()
 	m_FlipbookHead->AddFlipbook(ISAAC_HEAD_IDLE_RIGHT, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_HEAD_IDLE_RIGHT", L"Flipbook\\ISAAC_HEAD_IDLE_RIGHT.flip"));
 	m_FlipbookHead->AddFlipbook(ISAAC_HEAD_IDLE_UP, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_HEAD_IDLE_BACK", L"Flipbook\\ISAAC_HEAD_IDLE_BACK.flip"));
 	m_FlipbookHead->AddFlipbook(ISAAC_HEAD_IDLE_DOWN, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_HEAD_IDLE_FRONT", L"Flipbook\\ISAAC_HEAD_IDLE_FRONT.flip"));
+
+	m_FlipbookBody->AddFlipbook(ISAAC_BODY_MOVE_DOWN, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_BODY_MOVE_FRONT", L"Flipbook\\ISAAC_BODY_MOVE_FRONT.flip"));
+	m_FlipbookBody->AddFlipbook(ISAAC_BODY_MOVE_RIGHT, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_BODY_MOVE_RIGHT", L"Flipbook\\ISAAC_BODY_MOVE_RIGHT.flip"));
+	m_FlipbookBody->AddFlipbook(ISAAC_BODY_MOVE_LEFT, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_BODY_MOVE_LEFT", L"Flipbook\\ISAAC_BODY_MOVE_RIGHT.flip"));
+
+	m_FlipbookBody->AddFlipbook(ISAAC_BODY_IDLE_DOWN, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_BODY_IDLE_FRONT", L"Flipbook\\ISAAC_BODY_IDLE_FRONT.flip"));
+	m_FlipbookBody->AddFlipbook(ISAAC_BODY_IDLE_RIGHT, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_BODY_IDLE_RIGHT", L"Flipbook\\ISAAC_BODY_IDLE_RIGHT.flip"));
+	m_FlipbookBody->AddFlipbook(ISAAC_BODY_IDLE_LEFT, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_BODY_IDLE_LEFT", L"Flipbook\\ISAAC_BODY_IDLE_RIGHT.flip"));
 
 	// FlipbookPlayer 컴포넌트에 Flipbook 추가
 	//m_FlipbookPlayer->AddFlipbook(IDLE_DOWN,  CAssetMgr::GetInst()->LoadFlipbook(L"LINK_IDLEDOWN",  L"Flipbook\\LINK_IDLEDOWN.flip"));
