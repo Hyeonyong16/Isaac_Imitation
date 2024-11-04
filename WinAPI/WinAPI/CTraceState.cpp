@@ -49,7 +49,7 @@ void CTraceState::FinalTick()
 	// 인지범위 시각화
 
 	Vec2 vRenderPos = CCamera::GetInst()->GetRenderPos(pMon->GetPos());
-	DrawDebugCircle(PEN_TYPE::BLUE, vRenderPos, Vec2(info.DetectRange * 2.f, info.DetectRange * 2.f), 0.f);
+	//DrawDebugCircle(PEN_TYPE::BLUE, vRenderPos, Vec2(info.DetectRange * 2.f, info.DetectRange * 2.f), 0.f);
 }
 
 void CTraceState::Exit()

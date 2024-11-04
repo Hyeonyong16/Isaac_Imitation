@@ -5,6 +5,7 @@
 
 #include "CPlayer.h"
 #include "CMonster.h"
+#include "CCharger.h"
 #include "CMissile.h"
 #include "CPlatform.h"
 #include "CMap.h"
@@ -49,15 +50,13 @@ void CLevel_Start::Begin()
     AddObject(pObject, LAYER_TYPE::PLAYER);
 
     // Monster 생성
-    /*CMonster* pMonster = new CMonster;
-    pMonster->SetName(L"Monster");
+    CCharger* pMonster = new CCharger;
+    pMonster->SetName(L"CCharger");
     pMonster->SetPos(300.f, 120.f);
-    pMonster->SetScale(100.f, 100.f);
-    pMonster->SetDistance(200.f);
-    pMonster->SetSpeed(300.f);
+    pMonster->SetScale(30.f, 30.f);
     AddObject(pMonster, LAYER_TYPE::MONSTER);
 
-    pMonster = new CMonster;
+    /*pMonster = new CMonster;
     pMonster->SetName(L"Monster");
     pMonster->SetPos(1000.f, 500.f);
     pMonster->SetScale(100.f, 100.f);
@@ -66,9 +65,26 @@ void CLevel_Start::Begin()
     AddObject(pMonster, LAYER_TYPE::MONSTER);*/
 
     // Platform Object 추가
-    /*CObj* pPlatform = new CPlatform;
-    pPlatform->SetPos(vResolution.x / 2.f, (vResolution.y * 3.f) / 4.f);
-    AddObject(pPlatform, LAYER_TYPE::TILE);*/
+    CPlatform* pPlatform = new CPlatform;
+    pPlatform->SetPos(vResolution.x / 2.f, 0.f);
+    pPlatform->SetColliderScale(Vec2(vResolution.x, 30.f));
+    AddObject(pPlatform, LAYER_TYPE::TILE);
+
+    pPlatform = new CPlatform;
+    pPlatform->SetPos(vResolution.x / 2.f, vResolution.y);
+    pPlatform->SetColliderScale(Vec2(vResolution.x, 30.f));
+
+    AddObject(pPlatform, LAYER_TYPE::TILE);
+
+    pPlatform = new CPlatform;
+    pPlatform->SetPos(0, vResolution.y / 2.f);
+    pPlatform->SetColliderScale(Vec2(30.f, vResolution.y));
+    AddObject(pPlatform, LAYER_TYPE::TILE);
+
+    pPlatform = new CPlatform;
+    pPlatform->SetPos(vResolution.x, vResolution.y / 2.f);
+    pPlatform->SetColliderScale(Vec2(30.f, vResolution.y));
+    AddObject(pPlatform, LAYER_TYPE::TILE);
 
     // TileMap Object 추가
     //CMap* pTileMap = new CMap;
@@ -88,6 +104,7 @@ void CLevel_Start::Begin()
     CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::PLAYER_OBJECT, LAYER_TYPE::MONSTER);
     CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::PLAYER, LAYER_TYPE::MONSTER);
     CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::PLAYER, LAYER_TYPE::TILE);
+    CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::MONSTER, LAYER_TYPE::TILE);
 
     // Camera 효과
     CCamera::GetInst()->PostProcessEffect(HEART, 0.5f);

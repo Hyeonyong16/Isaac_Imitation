@@ -4,6 +4,7 @@
 class CTexture;
 class CCollider;
 class CFSM;
+class CRigidBody;
 
 class CMonster :
     public CObj
@@ -16,16 +17,24 @@ private:
     Vec2        m_InitPos;
     float       m_Dist;
 
-    CTexture*   m_Tex;
+    //CTexture*   m_Tex;
 
+protected:
     CCollider*  m_Collider;
     CFSM*       m_FSM;
+    CRigidBody* m_RigidBody;
 
 public:
     void SetSpeed(float _Speed) { m_Speed = _Speed; }
     void SetDistance(float _Dist) { m_Dist = _Dist; }
 
     const tMonInfo& GetMonInfo() { return m_Info; }
+    void SetMonInfo(tMonInfo& _info) { m_Info = _info; }
+
+    void SetInitPos(Vec2 _pos) { m_InitPos = _pos; }
+
+    CFSM* GetFSM() { return m_FSM; }
+    void SetFSM(CFSM* _fsm) { m_FSM = _fsm; }
 
 public:
     virtual void Begin() override;

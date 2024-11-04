@@ -8,7 +8,7 @@ CRigidBody::CRigidBody()
 	, m_Mass(1.f)
 	, m_InitialSpeed(0.f)
 	, m_MaxSpeed(1000.f)
-	//, m_bGround(false)
+	, m_bGround(false)
 	, m_Friction(100.f)
 	, m_bPrevMove(false)
 	, m_bMove(false)
@@ -58,6 +58,9 @@ void CRigidBody::FinalTick_TopView()
 	// 최대속력 제한
 	CalcMaxSpeed_TopView();
 
+	if (0 != m_bGroundX) m_Velocity.x = 0.f;
+	if (0 != m_bGroundY) m_Velocity.y = 0.f;
+
 	// 속도에 따른 이동
 	Vec2 vPos = pObject->GetPos();
 	vPos += m_Velocity * DT;
@@ -100,6 +103,8 @@ void CRigidBody::FinalTick_BeltScroll()
 	//{
 	//	m_VelocityY.y = 0.f;
 	//}
+	if (m_bGroundX) m_VelocityX.x = -0.1f;
+	if (m_bGroundY) m_VelocityY.y = -0.1f;
 
 	// 분해된 속도를 합쳐서 최종 속도를 계산한다.
 	m_Velocity = m_VelocityX + m_VelocityY;

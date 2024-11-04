@@ -182,6 +182,57 @@ void DrawDebugLine(PEN_TYPE _Pen, Vec2 _Start, Vec2 _End, float _Duration)
 	CDbgRender::GetInst()->AddDbgInfo(info);
 }
 
+#include "CRigidBody.h"
+void SetGroundInRigidBody(Vec2 _mainScale, Vec2 _objScale, Vec2 _mainPos, Vec2 _objPos, CRigidBody* _rigidBody)
+{
+	Vec2 mainScale = _mainScale;
+	Vec2 objScale = _objScale;
+
+	Vec2 scaleSum = (mainScale / 2) + (objScale / 2);
+	Vec2 dist = _mainPos - _objPos;
+	if (dist.x < 0) dist.x *= -1;
+	if (dist.y < 0) dist.y *= -1;
+
+	scaleSum -= dist;
+	if (scaleSum.x > scaleSum.y)	// 겹친 부분의 x축 길이가 더 길다
+	{
+		if (_mainPos.y < _objPos.y)
+			_rigidBody->SetGroundY(1);
+		else
+			_rigidBody->SetGroundY(-1);
+	}
+
+	else							// 겹친 부분의 y축 길이가 더 길다
+	{
+		if (_mainPos.x < _objPos.x)
+			_rigidBody->SetGroundX(1);
+		else
+			_rigidBody->SetGroundX(-1);
+	}
+}
+
+void releaseGroundInRigidBody(Vec2 _mainScale, Vec2 _objScale, Vec2 _mainPos, Vec2 _objPos, CRigidBody* _rigidBody)
+{
+	Vec2 mainScale = _mainScale;
+	Vec2 objScale = _objScale;
+
+	Vec2 scaleSum = (mainScale / 2) + (objScale / 2);
+	Vec2 dist = _mainPos - _objPos;
+	if (dist.x < 0) dist.x *= -1;
+	if (dist.y < 0) dist.y *= -1;
+
+	scaleSum -= dist;
+	if (scaleSum.x > scaleSum.y)	// 겹친 부분의 x축 길이가 더 길다
+	{
+		_rigidBody->SetGroundY(0);
+	}
+
+	else							// 겹친 부분의 y축 길이가 더 길다
+	{
+		_rigidBody->SetGroundX(0);
+	}
+}
+
 // 0.f ~ 1.f 범위 제한 함수
 float Saturate(float _Ratio)
 {

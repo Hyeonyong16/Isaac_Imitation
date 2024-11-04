@@ -28,7 +28,9 @@ private:
     Vec2            m_VelocityY;    // 위,아래 방향 속도
     float           m_MaxGravitySpeed;  // 중력에 의한 최대속도 제한
     //Vec2            m_GravityAccel; // 중력 가속도
-    //bool            m_bGround;      // 땅위에 서있는지
+    bool            m_bGround;      // 땅위에 서있는지
+    int            m_bGroundX;     // X 축 벽에 닿았는지 // -1: 왼쪽면이 닿음 0: 안 닿음  1: 오른쪽면이 닿음
+    int            m_bGroundY;     // Y 축 벽에 닿았는지 // -1: 위쪽면이 닿음 0: 안 닿음  1: 아래쪽면이 닿음
 
     int             m_JumpStack;
     int             m_MaxJumpStack;
@@ -59,15 +61,20 @@ public:
     //void SetGravityAccel(Vec2 _GravityAccel) { m_GravityAccel = _GravityAccel; }
     //Vec2 GetGravityAccel() { return m_GravityAccel; }
 
-    //bool IsGround() { return m_bGround; }
-    //void SetGround(bool _Ground) {
-    //    m_bGround = _Ground;
+    bool IsGround() { return m_bGround; }
+    void SetGround(bool _Ground) {
+        m_bGround = _Ground;
 
-    //    if (m_bGround)
-    //    {
-    //        m_JumpStack = m_MaxJumpStack;
-    //    }
-    //}
+        if (m_bGround)
+        {
+            m_JumpStack = m_MaxJumpStack;
+        }
+    }
+
+    int GetGroundX() { return m_bGroundX; }
+    int GetGroundY() { return m_bGroundY; }
+    void SetGroundX(int _Ground) { m_bGroundX = _Ground; }
+    void SetGroundY(int _Ground) { m_bGroundY = _Ground; }
 
     //void SetJumpVelocity(Vec2 _Veloticy) { m_JumpVelocity = _Veloticy; }
 

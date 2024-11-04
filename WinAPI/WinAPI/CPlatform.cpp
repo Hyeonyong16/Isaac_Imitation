@@ -30,6 +30,13 @@ void CPlatform::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider
 		//pBody->SetGround(true);
 		//CCamera::GetInst()->Oscillation(0.15f, 5.f, 10.f);
 	}
+
+	if (_OtherObject->GetLayerType() == LAYER_TYPE::MONSTER)
+	{
+		CRigidBody* pBody = _OtherObject->GetComponent<CRigidBody>();
+		pBody->SetGround(true);
+		//CCamera::GetInst()->Oscillation(0.15f, 5.f, 10.f);
+	}
 }
 
 void CPlatform::Overlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)
@@ -43,4 +50,9 @@ void CPlatform::EndOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* 
 		CRigidBody* pBody = _OtherObject->GetComponent<CRigidBody>();
 		//pBody->SetGround(false);
 	}
+}
+
+void CPlatform::SetColliderScale(Vec2 _scale)
+{
+	m_Collider->SetScale(_scale);
 }

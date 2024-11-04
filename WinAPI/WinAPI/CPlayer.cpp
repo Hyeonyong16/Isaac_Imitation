@@ -184,6 +184,25 @@ void CPlayer::Tick()
 		{
 			tempForce.Normalize();
 			tempForce *= 2000;	// °¡¼Óµµ
+
+			if(m_RigidBody->GetGroundX() == -1 && tempForce.x > 0.f)
+			{
+				m_RigidBody->SetGroundX(0);
+			}
+			else if(m_RigidBody->GetGroundX() == 1 && tempForce.x < 0.f)
+			{
+				m_RigidBody->SetGroundX(0);
+			}
+
+			if (m_RigidBody->GetGroundY() == -1 && tempForce.y > 0.f)
+			{
+				m_RigidBody->SetGroundY(0);
+			}
+			else if (m_RigidBody->GetGroundY() == 1 && tempForce.y < 0.f)
+			{
+				m_RigidBody->SetGroundY(0);
+			}
+
 			m_RigidBody->AddForce(tempForce, true);
 		}
 	}
@@ -339,8 +358,8 @@ void CPlayer::Render()
 	m_FlipbookHead->Render();
 
 
-	DrawDebugRect(PEN_TYPE::GREEN, Vec2(0.f, -60.f), Vec2(60.f, 60.f), 0.f);
-	DrawDebugRect(PEN_TYPE::GREEN, Vec2(0.f, 0.f), Vec2(60.f, 60.f), 0.f);
+	//DrawDebugRect(PEN_TYPE::GREEN, GetPos() + Vec2(0.f, -60.f), Vec2(60.f, 60.f), 0.f);
+	//DrawDebugRect(PEN_TYPE::GREEN, GetPos(), Vec2(60.f, 60.f), 0.f);
 
 
 	wchar_t str1[255];
@@ -359,6 +378,15 @@ void CPlayer::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* 
 	{
 		//DeleteObject(_OtherObject);
 	}
+
+	if (_OtherObject->GetLayerType() == LAYER_TYPE::TILE)
+	{
+		SetGroundInRigidBody(m_HitBox->GetScale()
+			, _OtherCollider->GetScale()
+			, GetPos()
+			, _OtherObject->GetPos()
+			, m_RigidBody);
+	}
 }
 
 void CPlayer::Overlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)
@@ -367,6 +395,14 @@ void CPlayer::Overlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _Othe
 
 void CPlayer::EndOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)
 {
+	if (_OtherObject->GetLayerType() == LAYER_TYPE::TILE)
+	{
+		releaseGroundInRigidBody(m_HitBox->GetScale()
+			, _OtherCollider->GetScale()
+			, GetPos()
+			, _OtherObject->GetPos()
+			, m_RigidBody);
+	}
 }
 
 void CPlayer::CreatePlayerFlipbook()
