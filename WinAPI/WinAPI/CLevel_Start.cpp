@@ -53,7 +53,7 @@ void CLevel_Start::Begin()
     CCharger* pMonster = new CCharger;
     pMonster->SetName(L"CCharger");
     pMonster->SetPos(300.f, 120.f);
-    pMonster->SetScale(30.f, 30.f);
+    pMonster->SetScale(50.f, 50.f);
     AddObject(pMonster, LAYER_TYPE::MONSTER);
 
     /*pMonster = new CMonster;
@@ -102,6 +102,7 @@ void CLevel_Start::Begin()
     // 충돌 설정
     CCollisionMgr::GetInst()->CollisionCheckClear();
     CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::PLAYER_OBJECT, LAYER_TYPE::MONSTER);
+    CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::PLAYER_OBJECT, LAYER_TYPE::TILE);
     CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::PLAYER, LAYER_TYPE::MONSTER);
     CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::PLAYER, LAYER_TYPE::TILE);
     CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::MONSTER, LAYER_TYPE::TILE);

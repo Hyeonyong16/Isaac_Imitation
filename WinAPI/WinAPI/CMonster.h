@@ -31,6 +31,8 @@ public:
     const tMonInfo& GetMonInfo() { return m_Info; }
     void SetMonInfo(tMonInfo& _info) { m_Info = _info; }
 
+    void DecreaseHP(float _dmg) { m_Info.SetCurHP(m_Info.CurHP - _dmg); }
+
     void SetInitPos(Vec2 _pos) { m_InitPos = _pos; }
 
     CFSM* GetFSM() { return m_FSM; }

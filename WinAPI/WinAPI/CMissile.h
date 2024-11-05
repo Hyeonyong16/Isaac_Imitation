@@ -13,6 +13,11 @@ private:
 
     Vec2        m_Force;    // 크기, 방향
 
+    float       m_curTime;      // 현재 생존 시간
+    float       m_existTime;    // 최대 생존 시간
+
+    bool        m_isDamaged;    // 데미지를 입혔는가?
+
 public:
     void SetVelocity(Vec2 _Velocity) { m_Velocity = _Velocity; }
     Vec2 GetVelocity() { return m_Velocity; }
@@ -32,6 +37,11 @@ public:
 public:
     virtual void Tick() override;
     virtual void Render() override;
+
+public:
+    virtual void BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider);
+    virtual void Overlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider);
+    virtual void EndOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider);
 
 public:
     CMissile();
