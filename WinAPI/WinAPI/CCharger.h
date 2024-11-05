@@ -27,7 +27,6 @@ private:
     bool                m_isAttacking;      // 현재 공격중인가(돌진중)
     bool                m_isTurn;           // 다른 콜라이더에 부딪쳐서 방향 전환여부
 
-
     CFlipbookPlayer*    m_monsterFlipbook;
 
 
@@ -53,6 +52,7 @@ public:
     void SetIsTurn(bool _isTurn) { m_isTurn = _isTurn; }
     void SetMoveDir(char _moveDir) { m_moveDir = _moveDir; }
 
+    void SetMaxSpeed(float _speed);
 
 public:
     CCharger();

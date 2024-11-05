@@ -44,6 +44,7 @@ CMonster::~CMonster()
 {
 }
 
+
 void CMonster::Begin()
 {
 	//m_FSM->ChangeState(L"Idle");

@@ -178,17 +178,35 @@
     <Filter Include="Game\05. Object\Monster\Rock">
       <UniqueIdentifier>{01900e4b-d0cb-4a87-b4e3-f4e0a88cdb18}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\State\Charger">
+    <Filter Include="Game\State\Monster">
+      <UniqueIdentifier>{13210b99-5d62-4817-b35d-572983813bd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Monster\Charger">
       <UniqueIdentifier>{b842682a-0b36-4c3a-baa3-0272cdb241b9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\State\Charger\Idle">
+    <Filter Include="Game\State\Monster\Charger\Idle">
       <UniqueIdentifier>{a0429649-fb21-4f41-8778-93e35cbb77d1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\State\Charger\Attack">
+    <Filter Include="Game\State\Monster\Charger\Attack">
       <UniqueIdentifier>{a438e44a-f9fe-4791-a6d2-976e28ae28bc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\State\Charger\Death">
+    <Filter Include="Game\State\Monster\Charger\Death">
       <UniqueIdentifier>{99b0aaf4-e201-4d7e-beaa-ba03fd9881cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Monster\Pooter">
+      <UniqueIdentifier>{15b3b02d-5906-4154-8f60-2709b4bc4bf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Monster\Pooter\Idle">
+      <UniqueIdentifier>{27a9d747-0282-4f4f-890b-8c48985e908e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Monster\Pooter\Trace">
+      <UniqueIdentifier>{5b42cddf-f5e6-444a-bcd5-3254d504453c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Monster\Pooter\Attack">
+      <UniqueIdentifier>{28ed3db3-1c43-45c8-8688-c878ec9a565f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Monster\Pooter\Death">
+      <UniqueIdentifier>{3ca4e268-fb78-4f3e-881b-a5300f4dc5c1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -373,10 +391,28 @@
       <Filter>Game\05. Object\Monster\Charger</Filter>
     </ClInclude>
     <ClInclude Include="CChargerIdleState.h">
-      <Filter>Game\State\Charger\Idle</Filter>
+      <Filter>Game\State\Monster\Charger\Idle</Filter>
     </ClInclude>
     <ClInclude Include="CChargerAttackState.h">
-      <Filter>Game\State\Charger\Attack</Filter>
+      <Filter>Game\State\Monster\Charger\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="CChargerDeathState.h">
+      <Filter>Game\State\Monster\Charger\Death</Filter>
+    </ClInclude>
+    <ClInclude Include="CPooter.h">
+      <Filter>Game\05. Object\Monster\Pooter</Filter>
+    </ClInclude>
+    <ClInclude Include="CPooterIdleState.h">
+      <Filter>Game\State\Monster\Pooter\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="CPooterAttackState.h">
+      <Filter>Game\State\Monster\Pooter\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="CPooterDeathState.h">
+      <Filter>Game\State\Monster\Pooter\Death</Filter>
+    </ClInclude>
+    <ClInclude Include="CPooterTraceState.h">
+      <Filter>Game\State\Monster\Pooter\Trace</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -535,10 +571,28 @@
       <Filter>Game\05. Object\Monster\Charger</Filter>
     </ClCompile>
     <ClCompile Include="CChargerIdleState.cpp">
-      <Filter>Game\State\Charger\Idle</Filter>
+      <Filter>Game\State\Monster\Charger\Idle</Filter>
     </ClCompile>
     <ClCompile Include="CChargerAttackState.cpp">
-      <Filter>Game\State\Charger\Attack</Filter>
+      <Filter>Game\State\Monster\Charger\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="CChargerDeathState.cpp">
+      <Filter>Game\State\Monster\Charger\Death</Filter>
+    </ClCompile>
+    <ClCompile Include="CPooter.cpp">
+      <Filter>Game\05. Object\Monster\Pooter</Filter>
+    </ClCompile>
+    <ClCompile Include="CPooterIdleState.cpp">
+      <Filter>Game\State\Monster\Pooter\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="CPooterAttackState.cpp">
+      <Filter>Game\State\Monster\Pooter\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="CPooterDeathState.cpp">
+      <Filter>Game\State\Monster\Pooter\Death</Filter>
+    </ClCompile>
+    <ClCompile Include="CPooterTraceState.cpp">
+      <Filter>Game\State\Monster\Pooter\Trace</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

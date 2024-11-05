@@ -6,6 +6,7 @@
 #include "CPlayer.h"
 #include "CMonster.h"
 #include "CCharger.h"
+#include "CPooter.h"
 #include "CMissile.h"
 #include "CPlatform.h"
 #include "CMap.h"
@@ -50,19 +51,19 @@ void CLevel_Start::Begin()
     AddObject(pObject, LAYER_TYPE::PLAYER);
 
     // Monster 생성
-    CCharger* pMonster = new CCharger;
+    // Charger
+    CMonster* pMonster = new CCharger;
     pMonster->SetName(L"CCharger");
     pMonster->SetPos(300.f, 120.f);
     pMonster->SetScale(50.f, 50.f);
     AddObject(pMonster, LAYER_TYPE::MONSTER);
 
-    /*pMonster = new CMonster;
-    pMonster->SetName(L"Monster");
-    pMonster->SetPos(1000.f, 500.f);
-    pMonster->SetScale(100.f, 100.f);
-    pMonster->SetDistance(200.f);
-    pMonster->SetSpeed(300.f);
-    AddObject(pMonster, LAYER_TYPE::MONSTER);*/
+    // Pooter
+    pMonster = new CPooter;
+    pMonster->SetName(L"CPooter");
+    pMonster->SetPos(500.f, 500.f);
+    pMonster->SetScale(50.f, 50.f);
+    AddObject(pMonster, LAYER_TYPE::MONSTER);
 
     // Platform Object 추가
     CPlatform* pPlatform = new CPlatform;
@@ -102,6 +103,7 @@ void CLevel_Start::Begin()
     // 충돌 설정
     CCollisionMgr::GetInst()->CollisionCheckClear();
     CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::PLAYER_OBJECT, LAYER_TYPE::MONSTER);
+    CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::MONSTER_OBJECT, LAYER_TYPE::PLAYER);
     CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::PLAYER_OBJECT, LAYER_TYPE::TILE);
     CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::PLAYER, LAYER_TYPE::MONSTER);
     CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::PLAYER, LAYER_TYPE::TILE);

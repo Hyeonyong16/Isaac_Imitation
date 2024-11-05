@@ -74,16 +74,27 @@ void CMissile::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider*
 		DeleteObject(this);
 	}
 
-	if (_OtherObject->GetLayerType() == LAYER_TYPE::MONSTER)
+	if(GetLayerType() == LAYER_TYPE::PLAYER_OBJECT)
 	{
-		if(!m_isDamaged)
+		if (_OtherObject->GetLayerType() == LAYER_TYPE::MONSTER)
 		{
-			CMonster* pMonster = dynamic_cast<CMonster*>(_OtherObject);
-			assert(pMonster);
-			pMonster->DecreaseHP(1.f);
-			m_isDamaged = true;
-		}
+			if (!m_isDamaged)
+			{
+				CMonster* pMonster = dynamic_cast<CMonster*>(_OtherObject);
+				assert(pMonster);
+				pMonster->DecreaseHP(1.f);
+				m_isDamaged = true;
+			}
 
+		}
+	}
+
+	else if (GetLayerType() == LAYER_TYPE::MONSTER_OBJECT)
+	{
+		if (_OtherObject->GetLayerType() == LAYER_TYPE::PLAYER)
+		{
+			DeleteObject(this);
+		}
 	}
 }
 

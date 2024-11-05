@@ -11,6 +11,9 @@
 #include "CDbgRender.h"
 #include "CChargerIdleState.h"
 #include "CChargerAttackState.h"
+#include "CChargerDeathState.h"
+
+
 
 CCharger::CCharger()
 	: m_moveDir('D')
@@ -38,6 +41,7 @@ CCharger::CCharger()
 
 	m_FSM->AddState(L"Idle", new CChargerIdleState);
 	m_FSM->AddState(L"Attack", new CChargerAttackState);
+	m_FSM->AddState(L"Death", new CChargerDeathState);
 
 	// RigidBody 컴포넌트 추가
 	m_RigidBody = (CRigidBody*)AddComponent(new CRigidBody);
@@ -62,6 +66,12 @@ void CCharger::Begin()
 
 void CCharger::Tick()
 {
+	if (GetMonInfo().CurHP == 0)
+	{
+		m_RigidBody->SetVelocity(Vec2(0.f, 0.f));
+		return;
+	}
+
 	if (m_prevDir != m_moveDir)
 	{
 		m_RigidBody->SetVelocity(Vec2(0.f, 0.f));
@@ -193,4 +203,10 @@ void CCharger::CreateChargerFlipbook()
 	//m_monsterFlipbook = (CFlipbookPlayer*)AddComponent(new CFlipbookPlayer);
 	
 	//m_FlipbookHead->AddFlipbook(ISAAC_HEAD_LEFT, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_HEAD_LEFT", L"Flipbook\\ISAAC_HEAD_LEFT.flip"));
+}
+
+
+void CCharger::SetMaxSpeed(float _speed)
+{
+	m_RigidBody->SetMaxSpeed(_speed);
 }

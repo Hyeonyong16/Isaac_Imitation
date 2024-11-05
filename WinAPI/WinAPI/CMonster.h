@@ -38,6 +38,8 @@ public:
     CFSM* GetFSM() { return m_FSM; }
     void SetFSM(CFSM* _fsm) { m_FSM = _fsm; }
 
+    CRigidBody* GetRigidBody() { return m_RigidBody; }
+
 public:
     virtual void Begin() override;
     virtual void Tick() override;
