@@ -19,17 +19,18 @@ CChargerIdleState::~CChargerIdleState()
 
 void CChargerIdleState::Enter()
 {
+	CCharger* pCharger = dynamic_cast<CCharger*>(GetOwnerObj());
+	pCharger->SetMaxSpeed(400.f);
 
-}
-
-void CChargerIdleState::FinalTick()
-{
 	// Level 안에 있는 플레이어를 찾는다.
 	if (nullptr == m_TargetObject)
 	{
 		m_TargetObject = CLevelMgr::GetInst()->FindObjectByName(LAYER_TYPE::PLAYER, L"Player");
 	}
+}
 
+void CChargerIdleState::FinalTick()
+{
 	CCharger* pCharger = dynamic_cast<CCharger*>(GetOwnerObj());
 	assert(pCharger);
 
@@ -63,7 +64,12 @@ void CChargerIdleState::FinalTick()
 		}
 	}
 
-	if (pCharger->GetIsAttacking())
+	if(pCharger->GetMonInfo().CurHP <= 0)
+	{ 
+		GetFSM()->ChangeState(L"Death");
+	}
+
+	else if (pCharger->GetIsAttacking())
 	{
 		GetFSM()->ChangeState(L"Attack");
 	}

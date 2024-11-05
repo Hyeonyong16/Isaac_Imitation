@@ -11,6 +11,9 @@
 #include "CDbgRender.h"
 #include "CChargerIdleState.h"
 #include "CChargerAttackState.h"
+#include "CChargerDeathState.h"
+
+
 
 CCharger::CCharger()
 	: m_moveDir('D')
@@ -22,7 +25,7 @@ CCharger::CCharger()
 {
 	m_Collider = new CCollider;
 	m_Collider->SetName(L"Charger_HitBox_01");
-	m_Collider->SetScale(Vec2(30.f, 30.f));
+	m_Collider->SetScale(Vec2(50.f, 50.f));
 	m_Collider->SetOffset(Vec2(0.f, 0.f));
 	
 	AddComponent(m_Collider);
@@ -38,6 +41,7 @@ CCharger::CCharger()
 
 	m_FSM->AddState(L"Idle", new CChargerIdleState);
 	m_FSM->AddState(L"Attack", new CChargerAttackState);
+	m_FSM->AddState(L"Death", new CChargerDeathState);
 
 	// RigidBody 컴포넌트 추가
 	m_RigidBody = (CRigidBody*)AddComponent(new CRigidBody);
@@ -62,6 +66,12 @@ void CCharger::Begin()
 
 void CCharger::Tick()
 {
+	if (GetMonInfo().CurHP == 0)
+	{
+		m_RigidBody->SetVelocity(Vec2(0.f, 0.f));
+		return;
+	}
+
 	if (m_prevDir != m_moveDir)
 	{
 		m_RigidBody->SetVelocity(Vec2(0.f, 0.f));
@@ -142,12 +152,17 @@ void CCharger::Tick()
 void CCharger::Render()
 {
 	//m_monsterFlipbook->Render();
-	DrawDebugRect(PEN_TYPE::GREEN, GetPos(), Vec2(30.f, 30.f), 0.f);
+	//DrawDebugRect(PEN_TYPE::GREEN, GetPos(), Vec2(30.f, 30.f), 0.f);
 
 	wchar_t str1[255];
 	swprintf_s(str1, 255, L"MoveDir: %c", m_moveDir);
 	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 90, m_FSM->GetCurState().c_str(), wcslen(m_FSM->GetCurState().c_str()));
 	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 110, str1, wcslen(str1));
+
+
+	wchar_t str2[255];
+	swprintf_s(str2, 255, L"curHP: %d", (int)GetMonInfo().CurHP);
+	TextOut(CEngine::GetInst()->GetSecondDC(), GetPos().x, GetPos().y, str2, wcslen(str2));
 
 }
 
@@ -188,4 +203,10 @@ void CCharger::CreateChargerFlipbook()
 	//m_monsterFlipbook = (CFlipbookPlayer*)AddComponent(new CFlipbookPlayer);
 	
 	//m_FlipbookHead->AddFlipbook(ISAAC_HEAD_LEFT, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_HEAD_LEFT", L"Flipbook\\ISAAC_HEAD_LEFT.flip"));
+}
+
+
+void CCharger::SetMaxSpeed(float _speed)
+{
+	m_RigidBody->SetMaxSpeed(_speed);
 }

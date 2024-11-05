@@ -123,4 +123,8 @@ struct tMonInfo
 	float CurHP;
 
 	float Speed;
+
+public:
+	float GetCurHP() { return CurHP; }
+	void SetCurHP(float _curHP) { CurHP = _curHP; }
 };

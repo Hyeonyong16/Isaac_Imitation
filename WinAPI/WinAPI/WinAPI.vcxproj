@@ -146,6 +146,7 @@
     <ClInclude Include="CCamera.h" />
     <ClInclude Include="CCharger.h" />
     <ClInclude Include="CChargerAttackState.h" />
+    <ClInclude Include="CChargerDeathState.h" />
     <ClInclude Include="CChargerIdleState.h" />
     <ClInclude Include="CCollider.h" />
     <ClInclude Include="CCollisionMgr.h" />
@@ -176,6 +177,11 @@
     <ClInclude Include="CPlayerHead.h" />
     <ClInclude Include="CPlayerIdleState.h" />
     <ClInclude Include="CPlayerMoveState.h" />
+    <ClInclude Include="CPooter.h" />
+    <ClInclude Include="CPooterAttackState.h" />
+    <ClInclude Include="CPooterDeathState.h" />
+    <ClInclude Include="CPooterIdleState.h" />
+    <ClInclude Include="CPooterTraceState.h" />
     <ClInclude Include="CRigidBody.h" />
     <ClInclude Include="CRoom.h" />
     <ClInclude Include="CSelectGDI.h" />
@@ -210,6 +216,7 @@
     <ClCompile Include="CCamera.cpp" />
     <ClCompile Include="CCharger.cpp" />
     <ClCompile Include="CChargerAttackState.cpp" />
+    <ClCompile Include="CChargerDeathState.cpp" />
     <ClCompile Include="CChargerIdleState.cpp" />
     <ClCompile Include="CCollider.cpp" />
     <ClCompile Include="CCollisionMgr.cpp" />
@@ -240,6 +247,11 @@
     <ClCompile Include="CPlayerHead.cpp" />
     <ClCompile Include="CPlayerIdleState.cpp" />
     <ClCompile Include="CPlayerMoveState.cpp" />
+    <ClCompile Include="CPooter.cpp" />
+    <ClCompile Include="CPooterAttackState.cpp" />
+    <ClCompile Include="CPooterDeathState.cpp" />
+    <ClCompile Include="CPooterIdleState.cpp" />
+    <ClCompile Include="CPooterTraceState.cpp" />
     <ClCompile Include="CRigidBody.cpp" />
     <ClCompile Include="CRoom.cpp" />
     <ClCompile Include="CSelectGDI.cpp" />

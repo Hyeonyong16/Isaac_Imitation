@@ -18,6 +18,8 @@ CChargerAttackState::~CChargerAttackState()
 
 void CChargerAttackState::Enter()
 {
+	CCharger* pCharger = dynamic_cast<CCharger*>(GetOwnerObj());
+	pCharger->SetMaxSpeed(1000.f);
 }
 
 void CChargerAttackState::FinalTick()
@@ -31,7 +33,12 @@ void CChargerAttackState::FinalTick()
 		pCharger->SetIsTurn(false);
 	}
 
-	if (!pCharger->GetIsAttacking())
+	if (pCharger->GetMonInfo().CurHP <= 0)
+	{
+		GetFSM()->ChangeState(L"Death");
+	}
+
+	else if (!pCharger->GetIsAttacking())
 	{
 		GetFSM()->ChangeState(L"Idle");
 	}

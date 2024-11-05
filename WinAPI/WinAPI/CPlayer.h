@@ -39,6 +39,9 @@ private:
     float       m_Speed;        // 플레이어 속도
     float       m_AttSpeed;     // 초당 발사 속도
     float       m_AccTime;      // 시간 누적
+
+    float       m_curHP;
+
     CCollider*  m_HitBox;
 
     //CTexture*   m_Texture;

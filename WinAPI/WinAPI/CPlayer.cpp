@@ -317,7 +317,7 @@ void CPlayer::Tick()
 				break;
 				}
 
-				CMissile* pMissile = new CGuidedMissile;
+				CMissile* pMissile = new CMissile;
 				pMissile->SetPos(shotPos);
 				pMissile->SetScale(20.f, 20.f);
 				pMissile->SetVelocity(shotVel);

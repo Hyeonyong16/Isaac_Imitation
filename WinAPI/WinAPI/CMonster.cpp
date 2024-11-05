@@ -44,6 +44,7 @@ CMonster::~CMonster()
 {
 }
 
+
 void CMonster::Begin()
 {
 	//m_FSM->ChangeState(L"Idle");
@@ -98,6 +99,8 @@ void CMonster::Render()
 
 	/*Ellipse(dc, vPos.x - vScale.x / 2.f, vPos.y - vScale.y / 2.f
 		, vPos.x + vScale.x / 2.f, vPos.y + vScale.y / 2.f);*/
+
+
 }
 
 void CMonster::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)
