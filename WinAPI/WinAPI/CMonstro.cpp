@@ -33,8 +33,8 @@ CMonstro::CMonstro()
 	AddComponent(m_Collider);
 
 	tMonInfo temp;
-	temp.MaxHP = 60;
-	temp.CurHP = 60;
+	temp.MaxHP = 60.f;
+	temp.CurHP = 60.f;
 	temp.Speed = 200.f;
 
 	SetMonInfo(temp);
@@ -79,11 +79,16 @@ void CMonstro::Render()
 {
 	m_monsterFlipbook->Render();
 
+	wchar_t str[255];
+	swprintf_s(str, 255, L"HP: %d", (int)GetMonInfo().CurHP);
+	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 170, str, wcslen(str));
+
 	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 70, m_FSM->GetCurState().c_str(), wcslen(m_FSM->GetCurState().c_str()));
 }
 
 void CMonstro::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)
 {
+
 }
 
 void CMonstro::Overlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)

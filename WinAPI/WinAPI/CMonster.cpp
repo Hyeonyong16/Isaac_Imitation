@@ -19,6 +19,8 @@ CMonster::CMonster()
 	, m_Collider(nullptr)
 	, m_FSM(nullptr)
 	, m_RigidBody(nullptr)
+	, m_isActive(false)
+	, m_CanHit(true)
 {
 	//m_Tex = CAssetMgr::GetInst()->LoadTexture(L"Character", L"Texture\\Character.png");
 

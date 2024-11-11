@@ -82,8 +82,12 @@ void CMissile::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider*
 			{
 				CMonster* pMonster = dynamic_cast<CMonster*>(_OtherObject);
 				assert(pMonster);
-				pMonster->DecreaseHP(1.f);
-				m_isDamaged = true;
+				if(pMonster->GetCanHit())
+				{
+					pMonster->DecreaseHP(1.f);
+					m_isDamaged = true;
+					DeleteObject(this);
+				}
 			}
 
 		}

@@ -17,6 +17,9 @@ private:
     Vec2        m_InitPos;
     float       m_Dist;
 
+    bool        m_isActive; // 활성화 여부
+    bool        m_CanHit;   // 피격 여부
+
     //CTexture*   m_Tex;
 
 protected:
@@ -37,6 +40,9 @@ public:
 
     CFSM* GetFSM() { return m_FSM; }
     void SetFSM(CFSM* _fsm) { m_FSM = _fsm; }
+
+    bool GetCanHit() { return m_CanHit; }
+    void SetCanHit(bool _CanHit) { m_CanHit = _CanHit; }
 
     CRigidBody* GetRigidBody() { return m_RigidBody; }
 
