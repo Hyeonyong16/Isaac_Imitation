@@ -7,6 +7,7 @@
 #include "CMonster.h"
 #include "CCharger.h"
 #include "CPooter.h"
+#include "CMonstro.h"
 #include "CMissile.h"
 #include "CPlatform.h"
 #include "CMap.h"
@@ -50,19 +51,28 @@ void CLevel_Start::Begin()
 
     AddObject(pObject, LAYER_TYPE::PLAYER);
 
+    /*
     // Monster 생성
     // Charger
     CMonster* pMonster = new CCharger;
     pMonster->SetName(L"CCharger");
-    pMonster->SetPos(300.f, 120.f);
+    pMonster->SetPos(300.f, 420.f);
     pMonster->SetScale(50.f, 50.f);
     AddObject(pMonster, LAYER_TYPE::MONSTER);
 
     // Pooter
-    pMonster = new CPooter;
+    CMonster* pMonster = new CPooter;
     pMonster->SetName(L"CPooter");
     pMonster->SetPos(500.f, 500.f);
     pMonster->SetScale(50.f, 50.f);
+    AddObject(pMonster, LAYER_TYPE::MONSTER);
+    */
+
+    // Monstro
+    CMonster* pMonster = new CMonstro;
+    pMonster->SetName(L"CMonstro");
+    pMonster->SetPos(500.f, 500.f);
+    pMonster->SetScale(150.f, 150.f);
     AddObject(pMonster, LAYER_TYPE::MONSTER);
 
     // Platform Object 추가

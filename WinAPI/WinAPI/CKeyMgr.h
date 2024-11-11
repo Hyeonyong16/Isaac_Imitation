@@ -13,6 +13,7 @@ enum KEY	// 자주 쓸 키를 enum으로 생성
 	Q, W, E, R, T, Y,
 	A, S, D, F, G, H,
 	Z, X, C, V, B, N, M,
+	U, J, K,
 
 	ENTER,
 	ESC,

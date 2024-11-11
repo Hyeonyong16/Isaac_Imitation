@@ -7,7 +7,8 @@ UINT KeyValue[KEY::KEY_END] =
 {
 	'Q', 'W', 'E', 'R', 'T', 'Y',
 	'A', 'S', 'D', 'F', 'G', 'H',
-	'Z', 'X', 'C',  'V',  'B',  'N', 'M',
+	'Z', 'X', 'C', 'V', 'B', 'N', 'M',
+	'U', 'J', 'K',
 
 	VK_RETURN,
 	VK_ESCAPE,

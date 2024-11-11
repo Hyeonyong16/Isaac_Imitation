@@ -208,6 +208,27 @@
     <Filter Include="Game\State\Monster\Pooter\Death">
       <UniqueIdentifier>{3ca4e268-fb78-4f3e-881b-a5300f4dc5c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\05. Object\Monster\Boss">
+      <UniqueIdentifier>{9d13d653-6a94-4cd3-b5d8-6970507786fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Monster\Monstro">
+      <UniqueIdentifier>{4c67394e-a2d5-4658-b6a4-3bbf7203402b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Monster\Monstro\Idle">
+      <UniqueIdentifier>{a38f7c2e-a5a2-4392-8cec-4f0074829a20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Monster\Monstro\Jump">
+      <UniqueIdentifier>{22368937-b714-4ad3-8e7c-28bcc79cea30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Monster\Monstro\Chase">
+      <UniqueIdentifier>{6dcd7c7c-e8c0-463b-9649-4e758c556f4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Monster\Monstro\Attack">
+      <UniqueIdentifier>{14ee7b1d-c276-4d61-b905-5f95bf9fdbfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\Monster\Monstro\Death">
+      <UniqueIdentifier>{1c00c96d-0ccc-46c1-8ba0-571d3f2664a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CEngine.h">
@@ -414,6 +435,24 @@
     <ClInclude Include="CPooterTraceState.h">
       <Filter>Game\State\Monster\Pooter\Trace</Filter>
     </ClInclude>
+    <ClInclude Include="CMonstro.h">
+      <Filter>Game\05. Object\Monster\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonstroIdleState.h">
+      <Filter>Game\State\Monster\Monstro\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonstroJumpState.h">
+      <Filter>Game\State\Monster\Monstro\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonstroChaseState.h">
+      <Filter>Game\State\Monster\Monstro\Chase</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonstroAttackState.h">
+      <Filter>Game\State\Monster\Monstro\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonstroDeathState.h">
+      <Filter>Game\State\Monster\Monstro\Death</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEngine.cpp">
@@ -593,6 +632,24 @@
     </ClCompile>
     <ClCompile Include="CPooterTraceState.cpp">
       <Filter>Game\State\Monster\Pooter\Trace</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonstro.cpp">
+      <Filter>Game\05. Object\Monster\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonstroIdleState.cpp">
+      <Filter>Game\State\Monster\Monstro\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonstroJumpState.cpp">
+      <Filter>Game\State\Monster\Monstro\Jump</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonstroChaseState.cpp">
+      <Filter>Game\State\Monster\Monstro\Chase</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonstroAttackState.cpp">
+      <Filter>Game\State\Monster\Monstro\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonstroDeathState.cpp">
+      <Filter>Game\State\Monster\Monstro\Death</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

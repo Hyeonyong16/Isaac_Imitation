@@ -4,6 +4,7 @@
 #include "CLevelMgr.h"
 #include "CObj.h"
 #include "CFlipbookPlayer.h"
+#include "CCamera.h"
 
 #include "CObj.h"
 #include "CCharger.h"
@@ -73,6 +74,10 @@ void CChargerIdleState::FinalTick()
 	{
 		GetFSM()->ChangeState(L"Attack");
 	}
+
+	Vec2 vRenderPos = CCamera::GetInst()->GetRenderPos(pCharger->GetPos());
+	DrawDebugRect(PEN_TYPE::BLUE, vRenderPos, Vec2(6000.f, pCharger->GetScale().y), 0);
+	DrawDebugRect(PEN_TYPE::BLUE, vRenderPos, Vec2(pCharger->GetScale().x, 6000.f), 0);
 }
 
 void CChargerIdleState::Exit()

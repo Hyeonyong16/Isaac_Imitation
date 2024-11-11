@@ -84,6 +84,9 @@ public:
     void SetRenderSize(Vec2 _renderSize) { m_renderSize = _renderSize; }
     void SetRenderOffset(Vec2 _renderOffset) { m_renderOffset = _renderOffset; }
 
+    int GetCurSpriteIdx() { return m_SpriteIdx; }
+    CFlipbook* GetCurFlipbook() { return m_CurFlipbook; }
+
 public:
     virtual void FinalTick() override;
     void Render();
