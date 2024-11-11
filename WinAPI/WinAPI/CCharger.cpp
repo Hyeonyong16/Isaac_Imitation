@@ -46,8 +46,8 @@ CCharger::CCharger()
 	// RigidBody 컴포넌트 추가
 	m_RigidBody = (CRigidBody*)AddComponent(new CRigidBody);
 	m_RigidBody->SetMode(RIGIDBODY_MODE::TOPVIEW);
-	m_RigidBody->SetInitialSpeed(400.f);
-	m_RigidBody->SetMaxSpeed(400.f);
+	m_RigidBody->SetInitialSpeed(250.f);
+	m_RigidBody->SetMaxSpeed(250.f);
 	m_RigidBody->SetMass(1.f);
 	m_RigidBody->SetFriction(1000.f);
 }

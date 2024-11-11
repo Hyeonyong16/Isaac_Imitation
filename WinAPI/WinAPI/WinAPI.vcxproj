@@ -168,6 +168,12 @@
     <ClInclude Include="CMap.h" />
     <ClInclude Include="CMissile.h" />
     <ClInclude Include="CMonster.h" />
+    <ClInclude Include="CMonstro.h" />
+    <ClInclude Include="CMonstroAttackState.h" />
+    <ClInclude Include="CMonstroChaseState.h" />
+    <ClInclude Include="CMonstroDeathState.h" />
+    <ClInclude Include="CMonstroIdleState.h" />
+    <ClInclude Include="CMonstroJumpState.h" />
     <ClInclude Include="CObj.h" />
     <ClInclude Include="CPanelUI.h" />
     <ClInclude Include="CPathMgr.h" />
@@ -238,6 +244,12 @@
     <ClCompile Include="CMap.cpp" />
     <ClCompile Include="CMissile.cpp" />
     <ClCompile Include="CMonster.cpp" />
+    <ClCompile Include="CMonstro.cpp" />
+    <ClCompile Include="CMonstroAttackState.cpp" />
+    <ClCompile Include="CMonstroChaseState.cpp" />
+    <ClCompile Include="CMonstroDeathState.cpp" />
+    <ClCompile Include="CMonstroIdleState.cpp" />
+    <ClCompile Include="CMonstroJumpState.cpp" />
     <ClCompile Include="CObj.cpp" />
     <ClCompile Include="CPanelUI.cpp" />
     <ClCompile Include="CPathMgr.cpp" />
