@@ -379,7 +379,7 @@ void CPlayer::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* 
 		//DeleteObject(_OtherObject);
 	}
 
-	if (_OtherObject->GetLayerType() == LAYER_TYPE::TILE)
+	if (_OtherObject->GetLayerType() == LAYER_TYPE::TILE || _OtherObject->GetLayerType() == LAYER_TYPE::ROCK)
 	{
 		SetGroundInRigidBody(m_HitBox->GetScale()
 			, _OtherCollider->GetScale()
@@ -395,7 +395,7 @@ void CPlayer::Overlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _Othe
 
 void CPlayer::EndOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)
 {
-	if (_OtherObject->GetLayerType() == LAYER_TYPE::TILE)
+	if (_OtherObject->GetLayerType() == LAYER_TYPE::TILE || _OtherObject->GetLayerType() == LAYER_TYPE::ROCK)
 	{
 		releaseGroundInRigidBody(m_HitBox->GetScale()
 			, _OtherCollider->GetScale()

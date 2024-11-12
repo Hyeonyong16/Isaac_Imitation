@@ -189,6 +189,7 @@
     <ClInclude Include="CPooterIdleState.h" />
     <ClInclude Include="CPooterTraceState.h" />
     <ClInclude Include="CRigidBody.h" />
+    <ClInclude Include="CRock.h" />
     <ClInclude Include="CRoom.h" />
     <ClInclude Include="CSelectGDI.h" />
     <ClInclude Include="CSound.h" />
@@ -265,6 +266,7 @@
     <ClCompile Include="CPooterIdleState.cpp" />
     <ClCompile Include="CPooterTraceState.cpp" />
     <ClCompile Include="CRigidBody.cpp" />
+    <ClCompile Include="CRock.cpp" />
     <ClCompile Include="CRoom.cpp" />
     <ClCompile Include="CSelectGDI.cpp" />
     <ClCompile Include="CSound.cpp" />

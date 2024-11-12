@@ -8,6 +8,7 @@
 #include "CCharger.h"
 #include "CPooter.h"
 #include "CMonstro.h"
+#include "CRock.h"
 #include "CMissile.h"
 #include "CPlatform.h"
 #include "CMap.h"
@@ -51,7 +52,6 @@ void CLevel_Start::Begin()
 
     AddObject(pObject, LAYER_TYPE::PLAYER);
 
-    /*
     // Monster 생성
     // Charger
     CMonster* pMonster = new CCharger;
@@ -59,23 +59,27 @@ void CLevel_Start::Begin()
     pMonster->SetPos(300.f, 420.f);
     pMonster->SetScale(50.f, 50.f);
     AddObject(pMonster, LAYER_TYPE::MONSTER);
-    */
     
     // Pooter
-    CMonster* pMonster = new CPooter;
+    pMonster = new CPooter;
     pMonster->SetName(L"CPooter");
     pMonster->SetPos(500.f, 500.f);
     pMonster->SetScale(50.f, 50.f);
     AddObject(pMonster, LAYER_TYPE::MONSTER);
     
-    /*
     // Monstro
-    CMonster* pMonster = new CMonstro;
+    pMonster = new CMonstro;
     pMonster->SetName(L"CMonstro");
     pMonster->SetPos(500.f, 500.f);
     pMonster->SetScale(150.f, 150.f);
     AddObject(pMonster, LAYER_TYPE::MONSTER);
-    */
+    
+    // Rock
+    pMonster = new CRock;
+    pMonster->SetName(L"CRock");
+    pMonster->SetPos(210.f + (TILE_SIZE_X / 2), 180.f + (TILE_SIZE_Y / 2));
+    pMonster->SetScale(125.f, 103.f);
+    AddObject(pMonster, LAYER_TYPE::ROCK);
 
     // Platform Object 추가
     CPlatform* pPlatform = new CPlatform;
@@ -120,6 +124,8 @@ void CLevel_Start::Begin()
     CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::PLAYER, LAYER_TYPE::MONSTER);
     CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::PLAYER, LAYER_TYPE::TILE);
     CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::MONSTER, LAYER_TYPE::TILE);
+    CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::PLAYER, LAYER_TYPE::ROCK);
+    CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::MONSTER, LAYER_TYPE::ROCK);
 
     // Camera 효과
     CCamera::GetInst()->PostProcessEffect(HEART, 0.5f);
