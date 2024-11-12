@@ -21,8 +21,10 @@ CFlipbookPlayer::CFlipbookPlayer()
 	, m_Inversion(false)
 	, m_renderSize{0, 0}
 	, m_renderOffset{0, 0}
-	, m_inverseBuffer(nullptr)
+	, m_isHitted(false)
 {
+	m_heartEffect.Time = 0.f;
+	m_heartEffect.Duration = .3f;
 }
 
 CFlipbookPlayer::~CFlipbookPlayer()
@@ -73,24 +75,38 @@ void CFlipbookPlayer::Render()
 
 	// Sprite 를 화면에 그린다.
 	HDC hBackDC = CEngine::GetInst()->GetSecondDC();
+	HDC hInverseDC = CEngine::GetInst()->GetInverseDC();
 	Vec2 vPos = GetOwner()->GetRenderPos();
+
+	float NormalizedAge = Saturate(m_heartEffect.Time / m_heartEffect.Duration);
+	int Alpha = 255;
+	if (m_isHitted)
+	{
+		NormalizedAge *= 2.f;
+
+		if (NormalizedAge <= 1.f)
+		{
+			Alpha = (int)(255.f * NormalizedAge);
+		}
+		else
+		{
+			NormalizedAge -= 1.f;
+			Alpha = (int)(255.f * (1.f - NormalizedAge));
+		}
+	}
 
 	BLENDFUNCTION blend = {};
 
 	blend.BlendOp = AC_SRC_OVER;
 	blend.BlendFlags = 0;
-	blend.SourceConstantAlpha = 255;
+	blend.SourceConstantAlpha = Alpha;
 	blend.AlphaFormat = AC_SRC_ALPHA;
 
 	if(m_renderSize == Vec2(0, 0))
 	{
 		if(m_Inversion)
 		{
-			if (!m_inverseBuffer)
-			{
-				m_inverseBuffer = CAssetMgr::GetInst()->CreateTexture(L"InverseBackBuffer", (int)Sprite->GetSlice().x, (int)Sprite->GetSlice().y);
-			}
-			StretchBlt(m_inverseBuffer->GetDC()
+			StretchBlt(hInverseDC
 				, Sprite->GetSlice().x - 1
 				, 0
 				, -1 * Sprite->GetSlice().x
@@ -107,12 +123,14 @@ void CFlipbookPlayer::Render()
 				, vPos.y - (Sprite->GetSlice().y / 2) + Sprite->GetOffset().y + m_renderOffset.y
 				, Sprite->GetSlice().x
 				, Sprite->GetSlice().y
-				, m_inverseBuffer->GetDC()
+				, hInverseDC
 				, 0
 				, 0
 				, Sprite->GetSlice().x
 				, Sprite->GetSlice().y
 				, blend);
+
+			CEngine::GetInst()->ClearInverseBuffer();
 		}
 		else
 		{
@@ -134,11 +152,7 @@ void CFlipbookPlayer::Render()
 	{
 		if (m_Inversion)
 		{
-			if (!m_inverseBuffer)
-			{
-				m_inverseBuffer = CAssetMgr::GetInst()->CreateTexture(L"InverseBackBuffer", (int)Sprite->GetSlice().x, (int)Sprite->GetSlice().y);
-			}
-			StretchBlt(m_inverseBuffer->GetDC()
+			StretchBlt(hInverseDC
 				, Sprite->GetSlice().x - 1
 				, 0
 				, -1 * Sprite->GetSlice().x
@@ -155,12 +169,13 @@ void CFlipbookPlayer::Render()
 				, vPos.y - (m_renderSize.y / 2) + Sprite->GetOffset().y + m_renderOffset.y
 				, m_renderSize.x
 				, m_renderSize.y
-				, m_inverseBuffer->GetDC()
+				, hInverseDC
 				, 0
 				, 0
 				, Sprite->GetSlice().x
 				, Sprite->GetSlice().y
 				, blend);
+			CEngine::GetInst()->ClearInverseBuffer();
 		}
 		else
 		{
@@ -176,6 +191,13 @@ void CFlipbookPlayer::Render()
 				, Sprite->GetSlice().y
 				, blend);
 		}
+	}
+
+	// 후처리 효과시간이 만료되면 기능을 Off 한다.
+	m_heartEffect.Time += DT;
+	if (m_heartEffect.Duration <= m_heartEffect.Time)
+	{
+		m_isHitted = false;
 	}
 }
 

@@ -13,6 +13,8 @@
 #include "CChargerAttackState.h"
 #include "CChargerDeathState.h"
 
+#include "CAssetMgr.h"
+
 
 
 CCharger::CCharger()
@@ -36,6 +38,12 @@ CCharger::CCharger()
 	temp.Speed = 100.f;
 
 	SetMonInfo(temp);
+
+	// Flipbook 생성 및 등록
+	CreateChargerFlipbook();
+	m_monsterFlipbook->SetName(L"Charger_Flipbook");
+	m_monsterFlipbook->SetRenderSize(Vec2(50.f, 50.f));
+	m_monsterFlipbook->SetRenderOffset(Vec2(0.f, -25.f));
 
 	m_FSM = (CFSM*)AddComponent(new CFSM);
 
@@ -151,7 +159,7 @@ void CCharger::Tick()
 
 void CCharger::Render()
 {
-	//m_monsterFlipbook->Render();
+	m_monsterFlipbook->Render();
 	//DrawDebugRect(PEN_TYPE::GREEN, GetPos(), Vec2(30.f, 30.f), 0.f);
 
 	wchar_t str1[255];
@@ -199,10 +207,17 @@ void CCharger::EndOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _
 
 void CCharger::CreateChargerFlipbook()
 {
-
-	//m_monsterFlipbook = (CFlipbookPlayer*)AddComponent(new CFlipbookPlayer);
+	m_monsterFlipbook = (CFlipbookPlayer*)AddComponent(new CFlipbookPlayer);
 	
-	//m_FlipbookHead->AddFlipbook(ISAAC_HEAD_LEFT, CAssetMgr::GetInst()->LoadFlipbook(L"ISAAC_HEAD_LEFT", L"Flipbook\\ISAAC_HEAD_LEFT.flip"));
+	m_monsterFlipbook->AddFlipbook(CHARGER_MOVE_UP, CAssetMgr::GetInst()->LoadFlipbook(L"CHARGER_MOVE_UP", L"Flipbook\\CHARGER_UP_MOVE.flip"));
+	m_monsterFlipbook->AddFlipbook(CHARGER_MOVE_DOWN, CAssetMgr::GetInst()->LoadFlipbook(L"CHARGER_MOVE_DOWN", L"Flipbook\\CHARGER_DOWN_MOVE.flip"));
+	m_monsterFlipbook->AddFlipbook(CHARGER_MOVE_RIGHT, CAssetMgr::GetInst()->LoadFlipbook(L"CHARGER_MOVE_RIGHT", L"Flipbook\\CHARGER_RIGHT_MOVE.flip"));
+	m_monsterFlipbook->AddFlipbook(CHARGER_MOVE_LEFT, CAssetMgr::GetInst()->LoadFlipbook(L"CHARGER_MOVE_LEFT", L"Flipbook\\CHARGER_RIGHT_MOVE.flip"));
+
+	m_monsterFlipbook->AddFlipbook(CHARGER_ATTACK_UP, CAssetMgr::GetInst()->LoadFlipbook(L"CHARGER_ATTACK_UP", L"Flipbook\\CHARGER_UP_ATTACK.flip"));
+	m_monsterFlipbook->AddFlipbook(CHARGER_ATTACK_DOWN, CAssetMgr::GetInst()->LoadFlipbook(L"CHARGER_ATTACK_DOWN", L"Flipbook\\CHARGER_DOWN_ATTACK.flip"));
+	m_monsterFlipbook->AddFlipbook(CHARGER_ATTACK_RIGHT, CAssetMgr::GetInst()->LoadFlipbook(L"CHARGER_ATTACK_RIGHT", L"Flipbook\\CHARGER_RIGHT_ATTACK.flip"));
+	m_monsterFlipbook->AddFlipbook(CHARGER_ATTACK_LEFT, CAssetMgr::GetInst()->LoadFlipbook(L"CHARGER_ATTACK_LEFT", L"Flipbook\\CHARGER_RIGHT_ATTACK.flip"));
 }
 
 

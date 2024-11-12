@@ -100,7 +100,7 @@ void CMonstroJumpState::FinalTick()
 					if (!m_isAttack)
 					{
 						srand(time(NULL));
-						float bulletNum = rand() % 10 + 10;
+						int bulletNum = rand() % 10 + 10;
 
 						for (int i = 0; i < bulletNum; ++i)
 						{

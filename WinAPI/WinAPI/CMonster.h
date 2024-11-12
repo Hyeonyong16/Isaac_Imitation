@@ -5,7 +5,6 @@ class CTexture;
 class CCollider;
 class CFSM;
 class CRigidBody;
-
 class CMonster :
     public CObj
 {
@@ -19,6 +18,8 @@ private:
 
     bool        m_isActive; // 활성화 여부
     bool        m_CanHit;   // 피격 여부
+
+    //bool        m_isHitted; // 피격 당한 후 포스트프로세싱 진행 여부
 
     //CTexture*   m_Tex;
 

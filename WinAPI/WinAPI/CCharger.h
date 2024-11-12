@@ -3,15 +3,15 @@
 
 enum CHARGER_ANIM_STATE
 {
-    CHARGER_IDLE_UP,
-    CHARGER_IDLE_DOWN,
-    CHARGER_IDLE_LEFT,
-    CHARGER_IDLE_RIGHT,
+    CHARGER_MOVE_UP,
+    CHARGER_MOVE_DOWN,
+    CHARGER_MOVE_RIGHT,
+    CHARGER_MOVE_LEFT,
 
     CHARGER_ATTACK_UP,
     CHARGER_ATTACK_DOWN,
-    CHARGER_ATTACK_LEFT,
     CHARGER_ATTACK_RIGHT,
+    CHARGER_ATTACK_LEFT,
 };
 
 class CFlipbookPlayer;
@@ -51,6 +51,8 @@ public:
     void SetIsAttacking(bool _isAttacking) { m_isAttacking = _isAttacking; }
     void SetIsTurn(bool _isTurn) { m_isTurn = _isTurn; }
     void SetMoveDir(char _moveDir) { m_moveDir = _moveDir; }
+
+    char GetMoveDir() { return m_moveDir; }
 
     void SetMaxSpeed(float _speed);
 

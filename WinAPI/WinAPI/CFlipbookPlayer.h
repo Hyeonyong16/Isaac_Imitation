@@ -4,6 +4,12 @@
 class CFlipbook;
 class CTexture;
 
+struct tHeartEffect
+{
+    float			Time;		// 효과 진행시간 계산
+    float			Duration;	// 효과 최대 진행 시간
+};
+
 class CFlipbookPlayer :
     public CComponent
 {
@@ -22,7 +28,8 @@ private:
     Vec2        m_renderSize;
     Vec2        m_renderOffset;
 
-    CTexture*   m_inverseBuffer;
+    tHeartEffect m_heartEffect;
+    bool         m_isHitted;
 
 public:
     void AddFlipbook(CFlipbook* _Flipbook) { m_vecFlipbook.push_back(_Flipbook); }
@@ -86,6 +93,8 @@ public:
 
     int GetCurSpriteIdx() { return m_SpriteIdx; }
     CFlipbook* GetCurFlipbook() { return m_CurFlipbook; }
+
+    void SetIsHitted(bool _isHitted) { m_heartEffect.Time = 0.f; m_isHitted = _isHitted; }
 
 public:
     virtual void FinalTick() override;

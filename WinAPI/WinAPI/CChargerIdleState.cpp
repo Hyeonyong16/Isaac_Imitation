@@ -35,6 +35,9 @@ void CChargerIdleState::FinalTick()
 	CCharger* pCharger = dynamic_cast<CCharger*>(GetOwnerObj());
 	assert(pCharger);
 
+	CFlipbookPlayer* pFPCharger = dynamic_cast<CFlipbookPlayer*>(GetOwnerObj()->GetComponent(COMPONENT_TYPE::FLIPBOOKPLAYER));
+	assert(pFPCharger);
+
 	// 플레이어가 x, y 축 범위 내에 있는지 확인
 	if (m_TargetObject)
 	{
@@ -62,6 +65,29 @@ void CChargerIdleState::FinalTick()
 			// 목표 방향으로 이동방향 설정
 			if (vTargetPos.x > vPos.x) pCharger->SetMoveDir('R');
 			else pCharger->SetMoveDir('L');
+		}
+	}
+
+	if (pFPCharger)
+	{
+		switch (pCharger->GetMoveDir())
+		{
+		case'L':
+			if(pFPCharger->GetPlayFlipbookIdx() != CHARGER_MOVE_LEFT)
+				pFPCharger->Play(CHARGER_MOVE_LEFT, 15.f, true, true);
+			break;
+		case'R':
+			if (pFPCharger->GetPlayFlipbookIdx() != CHARGER_MOVE_RIGHT)
+				pFPCharger->Play(CHARGER_MOVE_RIGHT, 15.f, true, false);
+			break;
+		case'U':
+			if (pFPCharger->GetPlayFlipbookIdx() != CHARGER_MOVE_UP)
+				pFPCharger->Play(CHARGER_MOVE_UP, 15.f, true, false);
+			break;
+		case'D':
+			if (pFPCharger->GetPlayFlipbookIdx() != CHARGER_MOVE_DOWN)
+				pFPCharger->Play(CHARGER_MOVE_DOWN, 15.f, true, false);
+			break;
 		}
 	}
 

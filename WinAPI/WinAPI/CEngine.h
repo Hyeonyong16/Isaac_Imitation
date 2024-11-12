@@ -15,6 +15,7 @@ private:
 	HDC			m_hDC;			// Main DC(Device Context) 그리기 관련 관리자, like 그리기 도구 집합체
 
 	CTexture*	m_BackBuffer;	// 백버퍼 용도 텍스쳐
+	CTexture*	m_inverseBuffer;// 반전용 백버퍼
 
 	HPEN		m_Pen[(UINT)PEN_TYPE::END];
 	HBRUSH		m_Brush[(UINT)BRUSH_TYPE::END];
@@ -26,8 +27,10 @@ public:
 	HBRUSH GetBrush(BRUSH_TYPE _Type) { return m_Brush[(UINT)_Type]; }
 	HDC GetMainDC() { return m_hDC; }
 	HDC GetSecondDC() { return m_BackBuffer->GetDC(); }
+	HDC GetInverseDC() { return m_inverseBuffer->GetDC(); }
 
 	void ChangeWindowSize(Vec2 _vResolution);
+	void ClearInverseBuffer();
 
 public:
 	int Init(HINSTANCE _hInst, POINT _Resolution);
@@ -36,6 +39,7 @@ public:
 private:
 	void CreateGDIObject();
 	void CreateSecondBuffer();
+	void CreateInverseBuffer();
 	
 };
 

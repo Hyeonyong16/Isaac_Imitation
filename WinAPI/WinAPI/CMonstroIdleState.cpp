@@ -52,10 +52,10 @@ void CMonstroIdleState::FinalTick()
 
 	else
 	{
-		if (m_curTime >= .5f)
+		if (m_curTime >= 1.f)
 		{
 			srand(time(NULL));
-			int pattern = rand() % 2;
+			int pattern = rand() % 3;
 
 			wchar_t str[255];
 			swprintf_s(str, 255, L"pattern : %d", pattern);
@@ -73,7 +73,7 @@ void CMonstroIdleState::FinalTick()
 
 			else
 			{
-				//GetFSM()->ChangeState(L"Trace");
+				GetFSM()->ChangeState(L"Attack");
 			}
 		}
 	}

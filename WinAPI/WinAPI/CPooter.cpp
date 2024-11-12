@@ -117,6 +117,11 @@ void CPooter::EndOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _O
 			, _OtherObject->GetPos()
 			, m_RigidBody);
 	}
+
+	if(_OtherObject->GetLayerType() == LAYER_TYPE::PLAYER_OBJECT)
+	{
+		m_monsterFlipbook->SetIsHitted(true);
+	}
 }
 
 
