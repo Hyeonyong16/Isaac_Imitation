@@ -301,8 +301,6 @@ void CLevel_Editor::Render()
 					, m_tempSprite->GetLeftTop().x, m_tempSprite->GetLeftTop().y
 					, m_tempSprite->GetSlice().x, m_tempSprite->GetSlice().y
 					, blend);
-				
-				delete m_tempSprite;
 			}
 		}
 	}
