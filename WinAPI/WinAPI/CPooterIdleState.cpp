@@ -9,6 +9,8 @@
 #include "CCamera.h"
 #include "CPooter.h"
 
+#include "CFlipbookPlayer.h"
+
 #include <time.h>
 
 CPooterIdleState::CPooterIdleState()
@@ -45,9 +47,11 @@ void CPooterIdleState::FinalTick()
 		m_turnTime = rand() % 3 + 2;
 	}
 
-
 	CPooter* pPooter = dynamic_cast<CPooter*>(GetOwnerObj());
 	assert(pPooter);
+
+	CFlipbookPlayer* pFPPooter = dynamic_cast<CFlipbookPlayer*>(GetOwnerObj()->GetComponent(COMPONENT_TYPE::FLIPBOOKPLAYER));
+	assert(pFPPooter);
 
 	Vec2 curDir = pPooter->GetMoveDir();
 	curDir.Normalize();
@@ -93,6 +97,17 @@ void CPooterIdleState::FinalTick()
 			}
 
 			pPooter->GetRigidBody()->SetVelocity(vRotate * 200.f);
+
+			if (pPooter->GetRigidBody()->GetVelocity().x >= 0)
+			{
+				if (pFPPooter->GetPlayFlipbookIdx() != POOTER_IDLE_RIGHT)
+					pFPPooter->Play(POOTER_IDLE_RIGHT, 5.f, true, false);
+			}
+			else
+			{
+				if (pFPPooter->GetPlayFlipbookIdx() != POOTER_IDLE_LEFT)
+					pFPPooter->Play(POOTER_IDLE_LEFT, 5.f, true, true);
+			}
 		}
 	}
 

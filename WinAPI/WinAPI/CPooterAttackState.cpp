@@ -11,8 +11,11 @@
 #include "CCamera.h"
 #include "CPooter.h"
 
+#include "CFlipbookPlayer.h"
+
 CPooterAttackState::CPooterAttackState()
 	: m_TargetObject(nullptr)
+	, m_isPlay(false)
 {
 }
 
@@ -22,18 +25,21 @@ CPooterAttackState::~CPooterAttackState()
 
 void CPooterAttackState::Enter()
 {
+	m_isPlay = false;
 	// Level 에서 추적대상 플레이어를 찾는다.
 	if (nullptr == m_TargetObject)
 	{
 		m_TargetObject = CLevelMgr::GetInst()->FindObjectByName(LAYER_TYPE::PLAYER, L"Player");
 	}
-	
 }
 
 void CPooterAttackState::FinalTick()
 {
 	CPooter* pPooter = dynamic_cast<CPooter*>(GetOwnerObj());
 	assert(pPooter);
+
+	CFlipbookPlayer* pFPPooter = dynamic_cast<CFlipbookPlayer*>(GetOwnerObj()->GetComponent(COMPONENT_TYPE::FLIPBOOKPLAYER));
+	assert(pFPPooter);
 
 	if (m_TargetObject)
 	{
@@ -55,6 +61,19 @@ void CPooterAttackState::FinalTick()
 
 			if (!pPooter->GetAccTime() || (1.f / pPooter->GetAttSpeed() <= pPooter->GetAccTime()))
 			{
+				if (!m_isPlay)
+				{
+					if (vMoveDir.x >= 0)
+						pFPPooter->Play(POOTER_ATTACK_RIGHT, 10.f, false, false);
+					else
+						pFPPooter->Play(POOTER_ATTACK_LEFT, 10.f, false, true);
+
+					m_isPlay = true;
+				}
+			}
+
+			if (m_isPlay && pFPPooter->isFinish())
+			{
 				if ((1.f / pPooter->GetAttSpeed() <= pPooter->GetAccTime()))
 					pPooter->SetAccTime(pPooter->GetAccTime() - 1.f / pPooter->GetAttSpeed());
 
@@ -63,6 +82,12 @@ void CPooterAttackState::FinalTick()
 				pMissile->SetScale(20.f, 20.f);
 				pMissile->SetVelocity(vMoveDir * 200.f);
 				CreateObject(pMissile, LAYER_TYPE::MONSTER_OBJECT);
+
+				m_isPlay = false;
+				if (vMoveDir.x >= 0)
+					pFPPooter->Play(POOTER_IDLE_RIGHT, 5.f, true, false);
+				else
+					pFPPooter->Play(POOTER_IDLE_LEFT, 5.f, true, true);
 			}
 
 			pPooter->SetAccTime(pPooter->GetAccTime() + DT);

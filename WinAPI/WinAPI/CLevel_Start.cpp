@@ -51,7 +51,7 @@ void CLevel_Start::Begin()
 
     AddObject(pObject, LAYER_TYPE::PLAYER);
 
-    
+    /*
     // Monster »ý¼º
     // Charger
     CMonster* pMonster = new CCharger;
@@ -59,8 +59,8 @@ void CLevel_Start::Begin()
     pMonster->SetPos(300.f, 420.f);
     pMonster->SetScale(50.f, 50.f);
     AddObject(pMonster, LAYER_TYPE::MONSTER);
-
-    /*
+    */
+    
     // Pooter
     CMonster* pMonster = new CPooter;
     pMonster->SetName(L"CPooter");
@@ -68,7 +68,7 @@ void CLevel_Start::Begin()
     pMonster->SetScale(50.f, 50.f);
     AddObject(pMonster, LAYER_TYPE::MONSTER);
     
-
+    /*
     // Monstro
     CMonster* pMonster = new CMonstro;
     pMonster->SetName(L"CMonstro");

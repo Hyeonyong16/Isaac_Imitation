@@ -9,6 +9,8 @@
 #include "CCamera.h"
 #include "CPooter.h"
 
+#include "CFlipbookPlayer.h"
+
 CPooterTraceState::CPooterTraceState()
 	: m_TargetObject(nullptr)
 {
@@ -31,6 +33,9 @@ void CPooterTraceState::FinalTick()
 {
 	CPooter* pPooter = dynamic_cast<CPooter*>(GetOwnerObj());
 	assert(pPooter);
+
+	CFlipbookPlayer* pFPPooter = dynamic_cast<CFlipbookPlayer*>(GetOwnerObj()->GetComponent(COMPONENT_TYPE::FLIPBOOKPLAYER));
+	assert(pFPPooter);
 
 	if (m_TargetObject)
 	{
@@ -55,6 +60,17 @@ void CPooterTraceState::FinalTick()
 			vMoveDir.Normalize();
 
 			pPooter->GetRigidBody()->SetVelocity(vMoveDir * 200.f);
+		}
+
+		if (pPooter->GetRigidBody()->GetVelocity().x >= 0)
+		{
+			if (pFPPooter->GetPlayFlipbookIdx() != POOTER_IDLE_RIGHT)
+				pFPPooter->Play(POOTER_IDLE_RIGHT, 5.f, true, false);
+		}
+		else
+		{
+			if (pFPPooter->GetPlayFlipbookIdx() != POOTER_IDLE_LEFT)
+				pFPPooter->Play(POOTER_IDLE_LEFT, 5.f, true, true);
 		}
 	}
 

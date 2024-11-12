@@ -27,6 +27,8 @@ private:
 
     Vec2    m_moveDir;     // 진행 방향
 
+    bool    m_isAttack;       // 공격 여부
+
     CFlipbookPlayer* m_monsterFlipbook;
 
 public:
@@ -57,6 +59,9 @@ public:
 
     void SetAttSpeed(float _speed) { m_AttSpeed = _speed; }
     void SetAccTime(float _time) { m_AccTime = _time; }
+
+    bool GetIsAttack() { return m_isAttack; }
+    void SetIsAttack(bool _isAttack) { m_isAttack = _isAttack; }
 
 public:
     CPooter();

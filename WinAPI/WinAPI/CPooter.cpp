@@ -14,6 +14,8 @@
 #include "CPooterTraceState.h"
 #include "CPooterAttackState.h"
 
+#include "CAssetMgr.h"
+
 
 
 CPooter::CPooter()
@@ -24,6 +26,7 @@ CPooter::CPooter()
 	, m_AccTime(0.f)
 	, m_monsterFlipbook(nullptr)
 	, m_moveDir{1.f, 0.f}
+	, m_isAttack(false)
 {
 	m_Collider = new CCollider;
 	m_Collider->SetName(L"Pooter_HitBox_01");
@@ -38,6 +41,12 @@ CPooter::CPooter()
 	temp.Speed = 100.f;
 
 	SetMonInfo(temp);
+
+	// Flipbook 생성 및 등록
+	CreatePooterFlipbook();
+	m_monsterFlipbook->SetName(L"Pooter_Flipbook");
+	m_monsterFlipbook->SetRenderSize(Vec2(50.f, 50.f));
+	m_monsterFlipbook->SetRenderOffset(Vec2(0.f, -25.f));
 
 	m_FSM = (CFSM*)AddComponent(new CFSM);
 
@@ -83,6 +92,8 @@ void CPooter::Tick()
 
 void CPooter::Render()
 {
+	m_monsterFlipbook->Render();
+
 	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 130, m_FSM->GetCurState().c_str(), wcslen(m_FSM->GetCurState().c_str()));
 
 	wchar_t str[255];
@@ -127,6 +138,13 @@ void CPooter::EndOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _O
 
 void CPooter::CreatePooterFlipbook()
 {
+	m_monsterFlipbook = (CFlipbookPlayer*)AddComponent(new CFlipbookPlayer);
+
+	m_monsterFlipbook->AddFlipbook(POOTER_IDLE_LEFT, CAssetMgr::GetInst()->LoadFlipbook(L"POOTER_IDLE_LEFT", L"Flipbook\\POOTER_IDLE_RIGHT.flip"));
+	m_monsterFlipbook->AddFlipbook(POOTER_IDLE_RIGHT, CAssetMgr::GetInst()->LoadFlipbook(L"POOTER_IDLE_RIGHT", L"Flipbook\\POOTER_IDLE_RIGHT.flip"));
+	
+	m_monsterFlipbook->AddFlipbook(POOTER_ATTACK_LEFT, CAssetMgr::GetInst()->LoadFlipbook(L"POOTER_ATTACK_LEFT", L"Flipbook\\POOTER_ATTACK_RIGHT.flip"));
+	m_monsterFlipbook->AddFlipbook(POOTER_ATTACK_RIGHT, CAssetMgr::GetInst()->LoadFlipbook(L"POOTER_ATTACK_RIGHT", L"Flipbook\\POOTER_ATTACK_RIGHT.flip"));
 }
 
 void CPooter::SetMaxSpeed(float _speed)
