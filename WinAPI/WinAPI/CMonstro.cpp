@@ -33,8 +33,8 @@ CMonstro::CMonstro()
 	AddComponent(m_Collider);
 
 	tMonInfo temp;
-	temp.MaxHP = 60;
-	temp.CurHP = 60;
+	temp.MaxHP = 60.f;
+	temp.CurHP = 60.f;
 	temp.Speed = 200.f;
 
 	SetMonInfo(temp);
@@ -50,6 +50,7 @@ CMonstro::CMonstro()
 	m_FSM->AddState(L"Idle", new CMonstroIdleState);
 	m_FSM->AddState(L"Jump", new CMonstroJumpState);
 	m_FSM->AddState(L"Chase", new CMonstroChaseState);
+	m_FSM->AddState(L"Attack", new CMonstroAttackState);
 
 	// RigidBody 컴포넌트 추가
 	m_RigidBody = (CRigidBody*)AddComponent(new CRigidBody);
@@ -79,11 +80,19 @@ void CMonstro::Render()
 {
 	m_monsterFlipbook->Render();
 
+	wchar_t str[255];
+	swprintf_s(str, 255, L"HP: %d", (int)GetMonInfo().CurHP);
+	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 170, str, wcslen(str));
+
 	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 70, m_FSM->GetCurState().c_str(), wcslen(m_FSM->GetCurState().c_str()));
 }
 
 void CMonstro::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)
 {
+	if (_OtherObject->GetLayerType() == LAYER_TYPE::PLAYER_OBJECT)
+	{
+		m_monsterFlipbook->SetIsHitted(true);
+	}
 }
 
 void CMonstro::Overlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)
@@ -102,4 +111,5 @@ void CMonstro::CreateMonstroFlipbook()
 	m_monsterFlipbook->AddFlipbook(MONSTRO_JUMP, CAssetMgr::GetInst()->LoadFlipbook(L"MONSTRO_JUMP", L"Flipbook\\MONSTRO_JUMP.flip"));
 	m_monsterFlipbook->AddFlipbook(MONSTRO_DOWN, CAssetMgr::GetInst()->LoadFlipbook(L"MONSTRO_DOWN", L"Flipbook\\MONSTRO_DOWN.flip"));
 	m_monsterFlipbook->AddFlipbook(MONSTRO_CHASE, CAssetMgr::GetInst()->LoadFlipbook(L"MONSTRO_CHASE", L"Flipbook\\MONSTRO_CHASE.flip"));
+	m_monsterFlipbook->AddFlipbook(MONSTRO_ATTACK, CAssetMgr::GetInst()->LoadFlipbook(L"MONSTRO_ATTACK", L"Flipbook\\MONSTRO_ATTACK.flip"));
 }

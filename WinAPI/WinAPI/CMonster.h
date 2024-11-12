@@ -5,7 +5,6 @@ class CTexture;
 class CCollider;
 class CFSM;
 class CRigidBody;
-
 class CMonster :
     public CObj
 {
@@ -16,6 +15,11 @@ private:
     float       m_Speed;
     Vec2        m_InitPos;
     float       m_Dist;
+
+    bool        m_isActive; // 활성화 여부
+    bool        m_CanHit;   // 피격 여부
+
+    //bool        m_isHitted; // 피격 당한 후 포스트프로세싱 진행 여부
 
     //CTexture*   m_Tex;
 
@@ -37,6 +41,9 @@ public:
 
     CFSM* GetFSM() { return m_FSM; }
     void SetFSM(CFSM* _fsm) { m_FSM = _fsm; }
+
+    bool GetCanHit() { return m_CanHit; }
+    void SetCanHit(bool _CanHit) { m_CanHit = _CanHit; }
 
     CRigidBody* GetRigidBody() { return m_RigidBody; }
 

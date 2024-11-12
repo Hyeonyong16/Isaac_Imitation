@@ -19,6 +19,8 @@ CMonster::CMonster()
 	, m_Collider(nullptr)
 	, m_FSM(nullptr)
 	, m_RigidBody(nullptr)
+	, m_isActive(false)
+	, m_CanHit(true)
 {
 	//m_Tex = CAssetMgr::GetInst()->LoadTexture(L"Character", L"Texture\\Character.png");
 
@@ -86,21 +88,18 @@ void CMonster::Render()
 	blend.SourceConstantAlpha = 127;
 	blend.AlphaFormat = AC_SRC_ALPHA;
 
-	/*AlphaBlend(dc
-		, vPos.x - m_Tex->GetWidth() / 2.f
-		, vPos.y - m_Tex->GetHeight() / 2.f
-		, m_Tex->GetWidth()
-		, m_Tex->GetHeight()
-		, m_Tex->GetDC()
-		, 0, 0
-		, m_Tex->GetWidth()
-		, m_Tex->GetHeight()
-		, blend);*/
-
+		/*AlphaBlend(dc
+			, vPos.x - m_Tex->GetWidth() / 2.f
+			, vPos.y - m_Tex->GetHeight() / 2.f
+			, m_Tex->GetWidth()
+			, m_Tex->GetHeight()
+			, m_Tex->GetDC()
+			, 0, 0
+			, m_Tex->GetWidth()
+			, m_Tex->GetHeight()
+			, blend);*/
 	/*Ellipse(dc, vPos.x - vScale.x / 2.f, vPos.y - vScale.y / 2.f
 		, vPos.x + vScale.x / 2.f, vPos.y + vScale.y / 2.f);*/
-
-
 }
 
 void CMonster::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)

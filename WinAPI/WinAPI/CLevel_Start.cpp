@@ -51,7 +51,7 @@ void CLevel_Start::Begin()
 
     AddObject(pObject, LAYER_TYPE::PLAYER);
 
-    /*
+    
     // Monster 생성
     // Charger
     CMonster* pMonster = new CCharger;
@@ -60,13 +60,14 @@ void CLevel_Start::Begin()
     pMonster->SetScale(50.f, 50.f);
     AddObject(pMonster, LAYER_TYPE::MONSTER);
 
+    /*
     // Pooter
     CMonster* pMonster = new CPooter;
     pMonster->SetName(L"CPooter");
     pMonster->SetPos(500.f, 500.f);
     pMonster->SetScale(50.f, 50.f);
     AddObject(pMonster, LAYER_TYPE::MONSTER);
-    */
+    
 
     // Monstro
     CMonster* pMonster = new CMonstro;
@@ -74,6 +75,7 @@ void CLevel_Start::Begin()
     pMonster->SetPos(500.f, 500.f);
     pMonster->SetScale(150.f, 150.f);
     AddObject(pMonster, LAYER_TYPE::MONSTER);
+    */
 
     // Platform Object 추가
     CPlatform* pPlatform = new CPlatform;

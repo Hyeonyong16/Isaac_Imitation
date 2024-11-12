@@ -88,6 +88,7 @@ int CEngine::Init(HINSTANCE _hInst, POINT _Resolution)
 
     // 더블 버퍼링을 위한 추가 버퍼 생성
     CreateSecondBuffer();
+    CreateInverseBuffer();
 
 	return S_OK;
 }
@@ -154,6 +155,11 @@ void CEngine::CreateSecondBuffer()
     m_BackBuffer = CAssetMgr::GetInst()->CreateTexture(L"BackBuffer", (int)m_Resolution.x, (int)m_Resolution.y);
 }
 
+void CEngine::CreateInverseBuffer()
+{
+    m_inverseBuffer = CAssetMgr::GetInst()->CreateTexture(L"InverseBackBuffer", (int)m_Resolution.x, (int)m_Resolution.y);
+}
+
 
 void CEngine::ChangeWindowSize(Vec2 _vResolution)
 {
@@ -167,4 +173,10 @@ void CEngine::ChangeWindowSize(Vec2 _vResolution)
     AdjustWindowRect(&rt, WS_OVERLAPPEDWINDOW, !!hMenu);
 
     SetWindowPos(m_hWnd, nullptr, 0, 0, rt.right - rt.left, rt.bottom - rt.top, 0);
+}
+
+void CEngine::ClearInverseBuffer()
+{
+    SELECT_BRUSH(BRUSH_TYPE::GRAY);
+    Rectangle(m_inverseBuffer->GetDC(), -1, -1, (int)m_Resolution.x + 1, (int)m_Resolution.y + 1);
 }

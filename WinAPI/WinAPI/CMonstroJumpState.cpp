@@ -61,6 +61,8 @@ void CMonstroJumpState::FinalTick()
 			{
 				pMonstro->SetIsGround(false);
 				pMonstroFlipbook->Play(MONSTRO_JUMP, 10.f, false, false);	//а║га ╬ж╢т
+
+				pMonstro->SetCanHit(false);
 			}
 			else if (!pMonstro->GetIsGround() && !pMonstroFlipbook->isFinish())
 			{
@@ -98,7 +100,7 @@ void CMonstroJumpState::FinalTick()
 					if (!m_isAttack)
 					{
 						srand(time(NULL));
-						float bulletNum = rand() % 10 + 10;
+						int bulletNum = rand() % 10 + 10;
 
 						for (int i = 0; i < bulletNum; ++i)
 						{
@@ -112,6 +114,7 @@ void CMonstroJumpState::FinalTick()
 							CreateObject(pMissile, LAYER_TYPE::MONSTER_OBJECT);
 						}
 
+						pMonstro->SetCanHit(true);
 						m_isAttack = true;
 					}
 				}
