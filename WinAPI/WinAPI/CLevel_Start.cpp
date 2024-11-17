@@ -54,32 +54,32 @@ void CLevel_Start::Begin()
 
     // Monster 생성
     // Charger
-    CMonster* pMonster = new CCharger;
+    /*CMonster* pMonster = new CCharger;
     pMonster->SetName(L"CCharger");
     pMonster->SetPos(300.f, 420.f);
     pMonster->SetScale(50.f, 50.f);
-    AddObject(pMonster, LAYER_TYPE::MONSTER);
+    AddObject(pMonster, LAYER_TYPE::MONSTER);*/
     
     // Pooter
-    pMonster = new CPooter;
+    /*CMonster* pMonster = new CPooter;
     pMonster->SetName(L"CPooter");
     pMonster->SetPos(500.f, 500.f);
     pMonster->SetScale(50.f, 50.f);
-    AddObject(pMonster, LAYER_TYPE::MONSTER);
+    AddObject(pMonster, LAYER_TYPE::MONSTER);*/
     
     // Monstro
-    pMonster = new CMonstro;
+    CMonster* pMonster = new CMonstro;
     pMonster->SetName(L"CMonstro");
     pMonster->SetPos(500.f, 500.f);
     pMonster->SetScale(150.f, 150.f);
     AddObject(pMonster, LAYER_TYPE::MONSTER);
     
     // Rock
-    pMonster = new CRock;
+    /*pMonster = new CRock;
     pMonster->SetName(L"CRock");
     pMonster->SetPos(210.f + (TILE_SIZE_X / 2), 180.f + (TILE_SIZE_Y / 2));
     pMonster->SetScale(125.f, 103.f);
-    AddObject(pMonster, LAYER_TYPE::ROCK);
+    AddObject(pMonster, LAYER_TYPE::ROCK);*/
 
     // Platform Object 추가
     CPlatform* pPlatform = new CPlatform;
