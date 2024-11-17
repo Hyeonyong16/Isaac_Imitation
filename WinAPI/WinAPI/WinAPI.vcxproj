@@ -152,6 +152,7 @@
     <ClInclude Include="CCollisionMgr.h" />
     <ClInclude Include="CComponent.h" />
     <ClInclude Include="CDbgRender.h" />
+    <ClInclude Include="CDoor.h" />
     <ClInclude Include="CEngine.h" />
     <ClInclude Include="CFlipbook.h" />
     <ClInclude Include="CFlipbookPlayer.h" />
@@ -229,6 +230,7 @@
     <ClCompile Include="CCollisionMgr.cpp" />
     <ClCompile Include="CComponent.cpp" />
     <ClCompile Include="CDbgRender.cpp" />
+    <ClCompile Include="CDoor.cpp" />
     <ClCompile Include="CEngine.cpp" />
     <ClCompile Include="CFlipbook.cpp" />
     <ClCompile Include="CFlipbookPlayer.cpp" />

@@ -8,7 +8,7 @@ class CSprite;
 struct roomInfo
 {
 public:
-    Vec2 RoomPos;
+    int RoomPos;
     bool IsClear;
     bool IsActive;
     int monCount;
@@ -20,7 +20,7 @@ class CLevel_Start :
     // 벽 표시할 sprite
     CSprite* m_wallSprite;
 
-    Vec2 m_PlayerRoomLocation;
+    int m_PlayerRoomLocation;
     
     vector<roomInfo*> m_levelRoomInfo;
     bool m_roomMap[4];
@@ -32,6 +32,12 @@ public:
     virtual void Tick() override;
     virtual void Render() override;
     virtual void End() override;
+
+public:
+    int monCountInRoom(int _roomPos)
+    {
+        return m_levelRoomInfo[_roomPos]->monCount;
+    }
 
 public:
     CLevel_Start();

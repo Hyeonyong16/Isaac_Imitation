@@ -52,6 +52,8 @@ enum class LAYER_TYPE
 	PLAYER_OBJECT,
 	MONSTER,
 	MONSTER_OBJECT,
+	DOOR,
+
 
 	// 7 ~ 30
 

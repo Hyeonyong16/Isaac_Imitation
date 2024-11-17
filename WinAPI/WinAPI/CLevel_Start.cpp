@@ -25,9 +25,10 @@
 #include "CSound.h"
 
 #include "CRoom.h"
+#include "CDoor.h"
 
 CLevel_Start::CLevel_Start()
-    : m_PlayerRoomLocation{0, 0}
+    : m_PlayerRoomLocation(0)
 {
     m_wallSprite = CAssetMgr::GetInst()->LoadSprite(L"MAP_WALL", L"Sprite\\MAP_WALL.sprite");
 
@@ -68,48 +69,68 @@ void CLevel_Start::Begin()
 
         roomInfo* pRoom = new roomInfo;
 
-        pRoom->RoomPos = Vec2(0, 0);
-        pRoom->IsClear = true;
-        pRoom->IsActive = true;
-        pRoom->monCount = 0;
-        m_levelRoomInfo.push_back(pRoom);
+        Vec2 tempMonPos = Vec2(210.f, 180.f + (pRoom->RoomPos * (vResolution.y)));
+        //0 锅 规
+        {
+            pRoom->RoomPos = 0;
+            pRoom->IsClear = true;
+            pRoom->IsActive = true;
 
-        pRoom = new roomInfo;
-        pRoom->RoomPos = Vec2(1, 0);
-        pRoom->IsClear = true;
-        pRoom->IsActive = false;
+            CDoor* pDoor = new CDoor;
+            pDoor->SetCurRoomPos(0);
+            pDoor->SetDoorPos('d');
+            AddObject(pDoor, LAYER_TYPE::DOOR);
 
-        
+            // Charger
+            /*tempMonPos = Vec2(210.f, 180.f + (pRoom->RoomPos * (vResolution.y)));
+            CMonster* pMonster = new CCharger;
+            pMonster->SetName(L"CCharger");
+            pMonster->SetPos(tempMonPos.x + 323.f, tempMonPos.y + 257.f);
+            pMonster->SetScale(100.f, 100.f);
+            pMonster->SetIsActive(pRoom->IsActive);
+            AddObject(pMonster, LAYER_TYPE::MONSTER);*/
 
-        // Monster 积己
-        // Charger
-        Vec2 tempMonPos = Vec2(210.f + (pRoom->RoomPos.y * (vResolution.y))
-            , 180.f + (pRoom->RoomPos.x * (vResolution.x)));
-        CMonster* pMonster = new CCharger;
-        pMonster->SetName(L"CCharger");
-        pMonster->SetPos(tempMonPos.x + 323.f, tempMonPos.y + 257.f);
-        pMonster->SetScale(100.f, 100.f);
-        pMonster->SetIsActive(pRoom->IsActive);
-        AddObject(pMonster, LAYER_TYPE::MONSTER);
+            pRoom->monCount = 1;
 
-        pMonster = new CCharger;
-        pMonster->SetName(L"CCharger");
-        pMonster->SetPos(tempMonPos.x + 573.f, tempMonPos.y + 360.f);
-        pMonster->SetScale(100.f, 100.f);
-        pMonster->SetIsActive(pRoom->IsActive);
-        AddObject(pMonster, LAYER_TYPE::MONSTER);
+            m_levelRoomInfo.push_back(pRoom);
+        }
 
-        pMonster = new CCharger;
-        pMonster->SetName(L"CCharger");
-        pMonster->SetPos(tempMonPos.x + 823.f, tempMonPos.y + 772.f);
-        pMonster->SetScale(100.f, 100.f);
-        pMonster->SetIsActive(pRoom->IsActive);
-        AddObject(pMonster, LAYER_TYPE::MONSTER);
+        // 1锅规
+        {
+            pRoom = new roomInfo;
+            pRoom->RoomPos = 1;
+            pRoom->IsClear = true;
+            pRoom->IsActive = false;
 
-        pRoom->monCount = 3;
+            // Monster 积己
+            // Charger
+            tempMonPos = Vec2(210.f, 180.f + (pRoom->RoomPos * (vResolution.y)));
 
-        m_levelRoomInfo.push_back(pRoom);
+            CMonster* pMonster = new CCharger;
+            pMonster->SetName(L"CCharger");
+            pMonster->SetPos(tempMonPos.x + 323.f, tempMonPos.y + 257.f);
+            pMonster->SetScale(100.f, 100.f);
+            pMonster->SetIsActive(pRoom->IsActive);
+            AddObject(pMonster, LAYER_TYPE::MONSTER);
 
+            pMonster = new CCharger;
+            pMonster->SetName(L"CCharger");
+            pMonster->SetPos(tempMonPos.x + 573.f, tempMonPos.y + 360.f);
+            pMonster->SetScale(100.f, 100.f);
+            pMonster->SetIsActive(pRoom->IsActive);
+            AddObject(pMonster, LAYER_TYPE::MONSTER);
+
+            pMonster = new CCharger;
+            pMonster->SetName(L"CCharger");
+            pMonster->SetPos(tempMonPos.x + 823.f, tempMonPos.y + 772.f);
+            pMonster->SetScale(100.f, 100.f);
+            pMonster->SetIsActive(pRoom->IsActive);
+            AddObject(pMonster, LAYER_TYPE::MONSTER);
+
+            pRoom->monCount = 3;
+
+            m_levelRoomInfo.push_back(pRoom);
+        }
 
 
         // Pooter
@@ -224,8 +245,8 @@ void CLevel_Start::Render()
     // 硅版 弊府扁
     {
         StretchBlt(hBackDC
-            , m_PlayerRoomLocation.y * (vResolution.x)
-            , m_PlayerRoomLocation.x * (vResolution.y)
+            , 0
+            , m_PlayerRoomLocation * (vResolution.y)
             , vResolution.x / 2, vResolution.y / 2
             , m_wallSprite->GetAtlas()->GetDC()
             , m_wallSprite->GetLeftTop().x, m_wallSprite->GetLeftTop().y
@@ -233,8 +254,8 @@ void CLevel_Start::Render()
             , SRCCOPY);
 
         StretchBlt(hBackDC
-            , (m_PlayerRoomLocation.y + 1) * (vResolution.x) - 1
-            , m_PlayerRoomLocation.x * (vResolution.y)
+            , (vResolution.x) - 1
+            , m_PlayerRoomLocation * (vResolution.y)
             , -1 * (vResolution.x / 2), vResolution.y / 2
             , m_wallSprite->GetAtlas()->GetDC()
             , m_wallSprite->GetLeftTop().x, m_wallSprite->GetLeftTop().y
@@ -242,8 +263,8 @@ void CLevel_Start::Render()
             , SRCCOPY);
 
         StretchBlt(hBackDC
-            , m_PlayerRoomLocation.y * (vResolution.x)
-            , (m_PlayerRoomLocation.x + 1) * (vResolution.y) - 1
+            , 0
+            , (m_PlayerRoomLocation + 1) * (vResolution.y) - 1
             , vResolution.x / 2, -1 * (vResolution.y / 2)
             , m_wallSprite->GetAtlas()->GetDC()
             , m_wallSprite->GetLeftTop().x, m_wallSprite->GetLeftTop().y
@@ -251,8 +272,8 @@ void CLevel_Start::Render()
             , SRCCOPY);
 
         StretchBlt(hBackDC
-            , (m_PlayerRoomLocation.y + 1) * (vResolution.x) - 1
-            , (m_PlayerRoomLocation.x + 1) * (vResolution.y) - 1
+            , (vResolution.x) - 1
+            , (m_PlayerRoomLocation + 1) * (vResolution.y) - 1
             , -1 * (vResolution.x / 2), -1 * (vResolution.y / 2)
             , m_wallSprite->GetAtlas()->GetDC()
             , m_wallSprite->GetLeftTop().x, m_wallSprite->GetLeftTop().y
