@@ -17,6 +17,7 @@ CRoom::CRoom()
 	: m_Col(12)
 	, m_Row(7)
 {
+
 }
 
 CRoom::~CRoom()

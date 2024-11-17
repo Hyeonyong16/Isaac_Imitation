@@ -47,6 +47,9 @@ public:
 
     CRigidBody* GetRigidBody() { return m_RigidBody; }
 
+    bool GetIsActive() { return m_isActive; }
+    void SetIsActive(bool _isActive) { m_isActive = _isActive; }
+
 public:
     virtual void Begin() override;
     virtual void Tick() override;

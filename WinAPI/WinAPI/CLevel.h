@@ -33,6 +33,8 @@ public:
 
     CObj* FindObjectByName(LAYER_TYPE _Layer, const wstring& _Name);
 
+    int GetObjectCount(LAYER_TYPE _layerType) { return m_vecObjects[(UINT)_layerType].size(); }
+
 
 protected:
     void DeleteObject(int _LayerIdx);

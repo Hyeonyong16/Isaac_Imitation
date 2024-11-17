@@ -27,7 +27,7 @@ CCharger::CCharger()
 {
 	m_Collider = new CCollider;
 	m_Collider->SetName(L"Charger_HitBox_01");
-	m_Collider->SetScale(Vec2(50.f, 50.f));
+	m_Collider->SetScale(Vec2(80.f, 80.f));
 	m_Collider->SetOffset(Vec2(0.f, 0.f));
 	
 	AddComponent(m_Collider);
@@ -42,7 +42,7 @@ CCharger::CCharger()
 	// Flipbook 생성 및 등록
 	CreateChargerFlipbook();
 	m_monsterFlipbook->SetName(L"Charger_Flipbook");
-	m_monsterFlipbook->SetRenderSize(Vec2(50.f, 50.f));
+	m_monsterFlipbook->SetRenderSize(Vec2(100.f, 100.f));
 	m_monsterFlipbook->SetRenderOffset(Vec2(0.f, -25.f));
 
 	m_FSM = (CFSM*)AddComponent(new CFSM);
@@ -74,87 +74,90 @@ void CCharger::Begin()
 
 void CCharger::Tick()
 {
-	if (GetMonInfo().CurHP == 0)
+	if(GetIsActive())
 	{
-		m_RigidBody->SetVelocity(Vec2(0.f, 0.f));
-		return;
-	}
-
-	if (m_prevDir != m_moveDir)
-	{
-		m_RigidBody->SetVelocity(Vec2(0.f, 0.f));
-	}
-
-	if (m_isTurn)
-	{
-
-		if(m_moveDir == 'L')
+		if (GetMonInfo().CurHP == 0)
 		{
-			if (m_TurnDir == 'L') m_moveDir = 'D';
-			else m_moveDir = 'U';
-		}
-		else if(m_moveDir == 'R')
-		{
-			if (m_TurnDir == 'L') m_moveDir = 'U';
-			else m_moveDir = 'D';
-		}
-		else if (m_moveDir == 'U')
-		{
-			if (m_TurnDir == 'L') m_moveDir = 'L';
-			else m_moveDir = 'R';
-		}
-		else
-		{
-			if (m_TurnDir == 'L') m_moveDir = 'R';
-			else m_moveDir = 'L';
+			m_RigidBody->SetVelocity(Vec2(0.f, 0.f));
+			return;
 		}
 
-		if (!m_isAttacking)
-			m_isTurn = false;
-	}
+		if (m_prevDir != m_moveDir)
+		{
+			m_RigidBody->SetVelocity(Vec2(0.f, 0.f));
+		}
 
-	Vec2 tempForce(0, 0);
+		if (m_isTurn)
+		{
 
-	switch (m_moveDir)
-	{
-	case 'L':
-		tempForce += Vec2(-1.f, 0.f);
-		break;
-	case 'R':
-		tempForce += Vec2(1.f, 0.f);
-		break;
-	case 'U':
-		tempForce += Vec2(0.f, -1.f);
-		break;
-	case 'D':
-		tempForce += Vec2(0.f, 1.f);
-		break;
-	}
+			if (m_moveDir == 'L')
+			{
+				if (m_TurnDir == 'L') m_moveDir = 'D';
+				else m_moveDir = 'U';
+			}
+			else if (m_moveDir == 'R')
+			{
+				if (m_TurnDir == 'L') m_moveDir = 'U';
+				else m_moveDir = 'D';
+			}
+			else if (m_moveDir == 'U')
+			{
+				if (m_TurnDir == 'L') m_moveDir = 'L';
+				else m_moveDir = 'R';
+			}
+			else
+			{
+				if (m_TurnDir == 'L') m_moveDir = 'R';
+				else m_moveDir = 'L';
+			}
 
-	tempForce.Normalize();
-	tempForce *= 2000;
-	if (m_RigidBody->GetGroundX() == -1 && tempForce.x > 0.f)
-	{
-		m_RigidBody->SetGroundX(0);
-	}
-	else if (m_RigidBody->GetGroundX() == 1 && tempForce.x < 0.f)
-	{
-		m_RigidBody->SetGroundX(0);
-	}
+			if (!m_isAttacking)
+				m_isTurn = false;
+		}
 
-	if (m_RigidBody->GetGroundY() == -1 && tempForce.y > 0.f)
-	{
-		m_RigidBody->SetGroundY(0);
-	}
-	else if (m_RigidBody->GetGroundY() == 1 && tempForce.y < 0.f)
-	{
-		m_RigidBody->SetGroundY(0);
-	}
+		Vec2 tempForce(0, 0);
 
-	m_RigidBody->AddForce(m_RigidBody->GetForce() * -1, true);
-	m_RigidBody->AddForce(tempForce, true);
+		switch (m_moveDir)
+		{
+		case 'L':
+			tempForce += Vec2(-1.f, 0.f);
+			break;
+		case 'R':
+			tempForce += Vec2(1.f, 0.f);
+			break;
+		case 'U':
+			tempForce += Vec2(0.f, -1.f);
+			break;
+		case 'D':
+			tempForce += Vec2(0.f, 1.f);
+			break;
+		}
 
-	m_prevDir = m_moveDir;
+		tempForce.Normalize();
+		tempForce *= 2000;
+		if (m_RigidBody->GetGroundX() == -1 && tempForce.x > 0.f)
+		{
+			m_RigidBody->SetGroundX(0);
+		}
+		else if (m_RigidBody->GetGroundX() == 1 && tempForce.x < 0.f)
+		{
+			m_RigidBody->SetGroundX(0);
+		}
+
+		if (m_RigidBody->GetGroundY() == -1 && tempForce.y > 0.f)
+		{
+			m_RigidBody->SetGroundY(0);
+		}
+		else if (m_RigidBody->GetGroundY() == 1 && tempForce.y < 0.f)
+		{
+			m_RigidBody->SetGroundY(0);
+		}
+
+		m_RigidBody->AddForce(m_RigidBody->GetForce() * -1, true);
+		m_RigidBody->AddForce(tempForce, true);
+
+		m_prevDir = m_moveDir;
+	}
 }
 
 void CCharger::Render()

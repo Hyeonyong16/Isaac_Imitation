@@ -40,81 +40,84 @@ void CPooterIdleState::Enter()
 
 void CPooterIdleState::FinalTick()
 {
-	if (m_curTime >= m_turnTime)
-	{
-		m_IsTurnRight = !m_IsTurnRight;
-		m_curTime -= m_turnTime;
-		m_turnTime = rand() % 3 + 2;
-	}
-
 	CPooter* pPooter = dynamic_cast<CPooter*>(GetOwnerObj());
 	assert(pPooter);
 
-	CFlipbookPlayer* pFPPooter = dynamic_cast<CFlipbookPlayer*>(GetOwnerObj()->GetComponent(COMPONENT_TYPE::FLIPBOOKPLAYER));
-	assert(pFPPooter);
-
-	Vec2 curDir = pPooter->GetMoveDir();
-	curDir.Normalize();
-
-	if (m_TargetObject)
+	if(pPooter->GetIsActive())
 	{
-		Vec2 vTargetPos = m_TargetObject->GetPos();
-		Vec2 vPos = pPooter->GetPos();
-		float fDist = (vTargetPos - vPos).Length();
-
-		// 범위 안에 있으면 자신의 상태를 TraceState
-		if (fDist < pPooter->GetDetectRange())
+		if (m_curTime >= m_turnTime)
 		{
-			GetFSM()->ChangeState(L"Trace");
+			m_IsTurnRight = !m_IsTurnRight;
+			m_curTime -= m_turnTime;
+			m_turnTime = rand() % 3 + 2;
 		}
 
-		// 범위 안이 아니면 이동
-		else
+		CFlipbookPlayer* pFPPooter = dynamic_cast<CFlipbookPlayer*>(GetOwnerObj()->GetComponent(COMPONENT_TYPE::FLIPBOOKPLAYER));
+		assert(pFPPooter);
+
+		Vec2 curDir = pPooter->GetMoveDir();
+		curDir.Normalize();
+
+		if (m_TargetObject)
 		{
-			float RotateDir = 0.f;
-			if (m_IsTurnRight) RotateDir = 1.f;
-			else RotateDir = -1.f;
+			Vec2 vTargetPos = m_TargetObject->GetPos();
+			Vec2 vPos = pPooter->GetPos();
+			float fDist = (vTargetPos - vPos).Length();
 
-			Vec2 vRotate = Rotate(curDir, RotateDir * PI * DT);
-			pPooter->SetMoveDir(vRotate);
-
-			if (pPooter->GetRigidBody()->GetGroundX() == -1 && vRotate.x > 0.f)
+			// 범위 안에 있으면 자신의 상태를 TraceState
+			if (fDist < pPooter->GetDetectRange())
 			{
-				pPooter->GetRigidBody()->SetGroundX(0);
-			}
-			else if (pPooter->GetRigidBody()->GetGroundX() == 1 && vRotate.x < 0.f)
-			{
-				pPooter->GetRigidBody()->SetGroundX(0);
+				GetFSM()->ChangeState(L"Trace");
 			}
 
-			if (pPooter->GetRigidBody()->GetGroundY() == -1 && vRotate.y > 0.f)
-			{
-				pPooter->GetRigidBody()->SetGroundY(0);
-			}
-			else if (pPooter->GetRigidBody()->GetGroundY() == 1 && vRotate.y < 0.f)
-			{
-				pPooter->GetRigidBody()->SetGroundY(0);
-			}
-
-			pPooter->GetRigidBody()->SetVelocity(vRotate * 200.f);
-
-			if (pPooter->GetRigidBody()->GetVelocity().x >= 0)
-			{
-				if (pFPPooter->GetPlayFlipbookIdx() != POOTER_IDLE_RIGHT)
-					pFPPooter->Play(POOTER_IDLE_RIGHT, 5.f, true, false);
-			}
+			// 범위 안이 아니면 이동
 			else
 			{
-				if (pFPPooter->GetPlayFlipbookIdx() != POOTER_IDLE_LEFT)
-					pFPPooter->Play(POOTER_IDLE_LEFT, 5.f, true, true);
+				float RotateDir = 0.f;
+				if (m_IsTurnRight) RotateDir = 1.f;
+				else RotateDir = -1.f;
+
+				Vec2 vRotate = Rotate(curDir, RotateDir * PI * DT);
+				pPooter->SetMoveDir(vRotate);
+
+				if (pPooter->GetRigidBody()->GetGroundX() == -1 && vRotate.x > 0.f)
+				{
+					pPooter->GetRigidBody()->SetGroundX(0);
+				}
+				else if (pPooter->GetRigidBody()->GetGroundX() == 1 && vRotate.x < 0.f)
+				{
+					pPooter->GetRigidBody()->SetGroundX(0);
+				}
+
+				if (pPooter->GetRigidBody()->GetGroundY() == -1 && vRotate.y > 0.f)
+				{
+					pPooter->GetRigidBody()->SetGroundY(0);
+				}
+				else if (pPooter->GetRigidBody()->GetGroundY() == 1 && vRotate.y < 0.f)
+				{
+					pPooter->GetRigidBody()->SetGroundY(0);
+				}
+
+				pPooter->GetRigidBody()->SetVelocity(vRotate * 200.f);
+
+				if (pPooter->GetRigidBody()->GetVelocity().x >= 0)
+				{
+					if (pFPPooter->GetPlayFlipbookIdx() != POOTER_IDLE_RIGHT)
+						pFPPooter->Play(POOTER_IDLE_RIGHT, 5.f, true, false);
+				}
+				else
+				{
+					if (pFPPooter->GetPlayFlipbookIdx() != POOTER_IDLE_LEFT)
+						pFPPooter->Play(POOTER_IDLE_LEFT, 5.f, true, true);
+				}
 			}
 		}
+
+		m_curTime += DT;
+
+		Vec2 vRenderPos = CCamera::GetInst()->GetRenderPos(pPooter->GetPos());
+		DrawDebugCircle(PEN_TYPE::BLUE, vRenderPos, Vec2(pPooter->GetDetectRange() * 2.f, pPooter->GetDetectRange() * 2.f), 0.f);
 	}
-
-	m_curTime += DT;
-
-	Vec2 vRenderPos = CCamera::GetInst()->GetRenderPos(pPooter->GetPos());
-	DrawDebugCircle(PEN_TYPE::BLUE, vRenderPos, Vec2(pPooter->GetDetectRange() * 2.f, pPooter->GetDetectRange() * 2.f), 0.f);
 }
 
 void CPooterIdleState::Exit()
