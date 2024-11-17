@@ -453,6 +453,9 @@
     <ClInclude Include="CMonstroDeathState.h">
       <Filter>Game\State\Monster\Monstro\Death</Filter>
     </ClInclude>
+    <ClInclude Include="CRock.h">
+      <Filter>Game\05. Object\Monster\Rock</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEngine.cpp">
@@ -650,6 +653,9 @@
     </ClCompile>
     <ClCompile Include="CMonstroDeathState.cpp">
       <Filter>Game\State\Monster\Monstro\Death</Filter>
+    </ClCompile>
+    <ClCompile Include="CRock.cpp">
+      <Filter>Game\05. Object\Monster\Rock</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

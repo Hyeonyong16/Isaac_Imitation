@@ -229,7 +229,7 @@ void releaseGroundInRigidBody(Vec2 _mainScale, Vec2 _objScale, Vec2 _mainPos, Ve
 
 	else							// 겹친 부분의 y축 길이가 더 길다
 	{
-		_rigidBody->SetGroundX(0);
+		_rigidBody->SetGroundY(0);
 	}
 }
 

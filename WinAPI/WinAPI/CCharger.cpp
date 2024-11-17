@@ -176,7 +176,7 @@ void CCharger::Render()
 
 void CCharger::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)
 {
-	if (_OtherObject->GetLayerType() == LAYER_TYPE::TILE)
+	if (_OtherObject->GetLayerType() == LAYER_TYPE::TILE || _OtherObject->GetLayerType() == LAYER_TYPE::ROCK)
 	{
 		SetGroundInRigidBody(m_Collider->GetScale()
 			, _OtherCollider->GetScale()
@@ -194,7 +194,7 @@ void CCharger::Overlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _Oth
 
 void CCharger::EndOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)
 {
-	if (_OtherObject->GetLayerType() == LAYER_TYPE::TILE)
+	if (_OtherObject->GetLayerType() == LAYER_TYPE::TILE || _OtherObject->GetLayerType() == LAYER_TYPE::ROCK)
 	{
 		releaseGroundInRigidBody(m_Collider->GetScale()
 			, _OtherCollider->GetScale()

@@ -6,6 +6,8 @@ class CPooterAttackState :
 private:
     CObj* m_TargetObject;
 
+    bool    m_isPlay;
+
 public:
     virtual void Enter() override;
     virtual void FinalTick() override;
