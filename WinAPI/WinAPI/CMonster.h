@@ -18,6 +18,7 @@ private:
 
     bool        m_isActive; // 활성화 여부
     bool        m_CanHit;   // 피격 여부
+    int         m_roomNum;   // 몬스터가 속한 방의 번호
 
     //bool        m_isHitted; // 피격 당한 후 포스트프로세싱 진행 여부
 
@@ -49,6 +50,8 @@ public:
 
     bool GetIsActive() { return m_isActive; }
     void SetIsActive(bool _isActive) { m_isActive = _isActive; }
+    void SetRoomNum(int _num) { m_roomNum = _num; }
+    int GetRoomNum() { return m_roomNum; }
 
 public:
     virtual void Begin() override;

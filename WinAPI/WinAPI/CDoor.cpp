@@ -14,6 +14,8 @@
 #include "CLevelMgr.h"
 #include "CLevel_Start.h"
 
+#include "CCamera.h"
+
 CDoor::CDoor()
     : m_doorCollider(nullptr)
     , m_doorPos('u')
@@ -61,6 +63,7 @@ void CDoor::Tick()
     {
         m_isOpen = true;
     }
+
 }
 
 void CDoor::Render()
@@ -76,11 +79,13 @@ void CDoor::Render()
     blend.SourceConstantAlpha = 255;
     blend.AlphaFormat = AC_SRC_ALPHA;
 
+    Vec2 renderPos = CCamera::GetInst()->GetRenderPos(GetPos());
+
     if (m_doorPos == 'u')
     {
         if (m_isOpen)
         {
-            AlphaBlend(hBackDC, GetPos().x - 62.f, GetPos().y - 30.f, 124.f, 150.f
+            AlphaBlend(hBackDC, renderPos.x - 62.f, renderPos.y - 30.f, 124.f, 150.f
                 , m_doorOpenSprite->GetAtlas()->GetDC()
                 , m_doorOpenSprite->GetLeftTop().x, m_doorOpenSprite->GetLeftTop().y
                 , m_doorOpenSprite->GetSlice().x, m_doorOpenSprite->GetSlice().y
@@ -89,20 +94,20 @@ void CDoor::Render()
 
         else
         {
-            AlphaBlend(hBackDC, GetPos().x - 62.f, GetPos().y - 30.f, 62.f, 150.f
+            AlphaBlend(hBackDC, renderPos.x - 62.f, renderPos.y - 30.f, 62.f, 150.f
                 , m_doorCloseLSprite->GetAtlas()->GetDC()
                 , m_doorCloseLSprite->GetLeftTop().x, m_doorCloseLSprite->GetLeftTop().y
                 , m_doorCloseLSprite->GetSlice().x, m_doorCloseLSprite->GetSlice().y
                 , blend);
 
-            AlphaBlend(hBackDC, GetPos().x, GetPos().y - 30.f, 62.f, 150.f
+            AlphaBlend(hBackDC, renderPos.x, renderPos.y - 30.f, 62.f, 150.f
                 , m_doorCloseRSprite->GetAtlas()->GetDC()
                 , m_doorCloseRSprite->GetLeftTop().x, m_doorCloseRSprite->GetLeftTop().y
                 , m_doorCloseRSprite->GetSlice().x, m_doorCloseRSprite->GetSlice().y
                 , blend);
         }
 
-        AlphaBlend(hBackDC, GetPos().x - 62.f, GetPos().y - 30.f, 124.f, 150.f
+        AlphaBlend(hBackDC, renderPos.x - 62.f, renderPos.y - 30.f, 124.f, 150.f
             , m_doorSprite->GetAtlas()->GetDC()
             , m_doorSprite->GetLeftTop().x, m_doorSprite->GetLeftTop().y
             , m_doorSprite->GetSlice().x, m_doorSprite->GetSlice().y
@@ -111,7 +116,6 @@ void CDoor::Render()
     }
     else
     {
-
         if (m_isOpen)
         {
             StretchBlt(hInverseDC
@@ -126,7 +130,7 @@ void CDoor::Render()
                 , m_doorOpenSprite->GetSlice().y
                 , SRCCOPY);
 
-            AlphaBlend(hBackDC, GetPos().x - 62.f, GetPos().y - 115.f, 124.f, 150.f
+            AlphaBlend(hBackDC, renderPos.x - 62.f, renderPos.y - 115.f, 124.f, 150.f
                 , hInverseDC
                 , 0.f, 0.f
                 , m_doorSprite->GetSlice().x, m_doorSprite->GetSlice().y
@@ -149,7 +153,7 @@ void CDoor::Render()
                 , m_doorCloseLSprite->GetSlice().y
                 , SRCCOPY);
 
-            AlphaBlend(hBackDC, GetPos().x, GetPos().y - 115.f, 62.f, 150.f
+            AlphaBlend(hBackDC, renderPos.x, renderPos.y - 115.f, 62.f, 150.f
                 , hInverseDC
                 , 0.f, 0.f
                 , m_doorCloseLSprite->GetSlice().x, m_doorCloseLSprite->GetSlice().y
@@ -169,7 +173,7 @@ void CDoor::Render()
                 , m_doorCloseRSprite->GetSlice().y
                 , SRCCOPY);
 
-            AlphaBlend(hBackDC, GetPos().x - 62.f, GetPos().y - 115.f, 62.f, 150.f
+            AlphaBlend(hBackDC, renderPos.x - 62.f, renderPos.y - 115.f, 62.f, 150.f
                 , hInverseDC
                 , 0.f, 0.f
                 , m_doorCloseRSprite->GetSlice().x, m_doorCloseRSprite->GetSlice().y
@@ -190,7 +194,7 @@ void CDoor::Render()
             , m_doorSprite->GetSlice().y
             , SRCCOPY);
 
-        AlphaBlend(hBackDC, GetPos().x - 62.f, GetPos().y - 115.f, 124.f, 150.f
+        AlphaBlend(hBackDC, renderPos.x - 62.f, renderPos.y - 115.f, 124.f, 150.f
             , hInverseDC
             , 0.f, 0.f
             , m_doorSprite->GetSlice().x, m_doorSprite->GetSlice().y
@@ -199,9 +203,38 @@ void CDoor::Render()
 
 
     }
+
+
+    wchar_t str1[255];
+    swprintf_s(str1, 255, L"Door pos x: %d, y: %d", (int)GetPos().x, (int)GetPos().y);
+    TextOut(CEngine::GetInst()->GetSecondDC(), 10, 110, str1, wcslen(str1));
 }
 
 void CDoor::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)
 {
+    if (m_isOpen)
+    {
+        if (_OtherObject->GetLayerType() == LAYER_TYPE::PLAYER)
+        {
+            CLevel_Start* curLevel = dynamic_cast<CLevel_Start*>(CLevelMgr::GetInst()->GetCurrentLevel());
+            assert(curLevel);
+
+            if (m_doorPos == 'u')
+            {
+                Vec2 vResolution = CEngine::GetInst()->GetResolution();
+
+                curLevel->SetPlayerLocation('u');
+                _OtherObject->SetPos(Vec2(vResolution.x / 2, vResolution.y * m_curRoomPos - 250.f));
+            }
+
+            else
+            {
+                Vec2 vResolution = CEngine::GetInst()->GetResolution();
+
+                curLevel->SetPlayerLocation('d');
+                _OtherObject->SetPos(Vec2(vResolution.x / 2, vResolution.y * (m_curRoomPos + 1) + 250.f));
+            }
+        }
+    }
 }
 

@@ -21,6 +21,7 @@ CMonster::CMonster()
 	, m_RigidBody(nullptr)
 	, m_isActive(false)
 	, m_CanHit(true)
+	, m_roomNum(0)
 {
 	//m_Tex = CAssetMgr::GetInst()->LoadTexture(L"Character", L"Texture\\Character.png");
 
@@ -57,21 +58,9 @@ void CMonster::Begin()
 
 void CMonster::Tick()
 {
+
+
 	return;
-
-	Vec2 vPos = GetPos();
-
-	vPos.x += DT * m_Speed * m_Dir;
-	
-	float fDistance = fabs(m_InitPos.x - vPos.x);
-
-	if (m_Dist < fDistance)
-	{
-		vPos.x = m_InitPos.x + m_Dir * m_Dist;
-		m_Dir *= -1;
-	}
-
-	SetPos(vPos);
 }
 
 void CMonster::Render()

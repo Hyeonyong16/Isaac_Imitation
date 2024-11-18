@@ -165,12 +165,6 @@ void CCharger::Render()
 	m_monsterFlipbook->Render();
 	//DrawDebugRect(PEN_TYPE::GREEN, GetPos(), Vec2(30.f, 30.f), 0.f);
 
-	wchar_t str1[255];
-	swprintf_s(str1, 255, L"MoveDir: %c", m_moveDir);
-	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 90, m_FSM->GetCurState().c_str(), wcslen(m_FSM->GetCurState().c_str()));
-	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 110, str1, wcslen(str1));
-
-
 	wchar_t str2[255];
 	swprintf_s(str2, 255, L"curHP: %d", (int)GetMonInfo().CurHP);
 	TextOut(CEngine::GetInst()->GetSecondDC(), GetPos().x, GetPos().y, str2, wcslen(str2));

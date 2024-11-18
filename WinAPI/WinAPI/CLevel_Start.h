@@ -17,6 +17,7 @@ public:
 class CLevel_Start :
     public CLevel
 {
+private:
     // 벽 표시할 sprite
     CSprite* m_wallSprite;
 
@@ -26,6 +27,7 @@ class CLevel_Start :
     bool m_roomMap[4];
 
     int m_curLevelMonsterObjectCount;
+    bool m_isCameraMove;
 
 public:
     virtual void Begin() override;
@@ -37,6 +39,19 @@ public:
     int monCountInRoom(int _roomPos)
     {
         return m_levelRoomInfo[_roomPos]->monCount;
+    }
+
+    void SetPlayerLocation(char _doorPos)
+    {
+        if (_doorPos == 'u')
+        {
+            m_PlayerRoomLocation -= 1;
+        }
+        else
+        {
+            m_PlayerRoomLocation += 1;
+        }
+        m_isCameraMove = false;
     }
 
 public:
