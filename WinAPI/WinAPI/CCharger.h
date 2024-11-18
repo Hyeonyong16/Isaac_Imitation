@@ -26,6 +26,7 @@ private:
     char                m_TurnDir;          // 왼쪽, 오른쪽 전환 방향
     bool                m_isAttacking;      // 현재 공격중인가(돌진중)
     bool                m_isTurn;           // 다른 콜라이더에 부딪쳐서 방향 전환여부
+    bool                m_isTouchRock;
 
     CFlipbookPlayer*    m_monsterFlipbook;
 
@@ -51,10 +52,14 @@ public:
     void SetIsAttacking(bool _isAttacking) { m_isAttacking = _isAttacking; }
     void SetIsTurn(bool _isTurn) { m_isTurn = _isTurn; }
     void SetMoveDir(char _moveDir) { m_moveDir = _moveDir; }
+    void SetTurnDir(char _turnDir) { m_TurnDir = _turnDir; }
 
     char GetMoveDir() { return m_moveDir; }
 
     void SetMaxSpeed(float _speed);
+
+    bool GetIsTouchRock() { return m_isTouchRock; }
+    void SetIsTouchRock(bool _isTouch) { m_isTouchRock = _isTouch; }
 
 public:
     CCharger();

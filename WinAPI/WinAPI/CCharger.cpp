@@ -24,6 +24,7 @@ CCharger::CCharger()
 	, m_isAttacking(false)
 	, m_isTurn(false)
 	, m_monsterFlipbook(nullptr)
+	, m_isTouchRock(false)
 {
 	m_Collider = new CCollider;
 	m_Collider->SetName(L"Charger_HitBox_01");
@@ -181,6 +182,7 @@ void CCharger::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider*
 			, _OtherObject->GetPos()
 			, m_RigidBody);
 
+		if (m_isAttacking && _OtherObject->GetLayerType() == LAYER_TYPE::ROCK) m_isTouchRock = true;
 		m_isTurn = true;
 	}
 }
@@ -198,6 +200,8 @@ void CCharger::EndOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _
 			, GetPos()
 			, _OtherObject->GetPos()
 			, m_RigidBody);
+
+		if (_OtherObject->GetLayerType() == LAYER_TYPE::ROCK) m_isTouchRock = false;
 	}
 }
 

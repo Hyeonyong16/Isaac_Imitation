@@ -43,8 +43,13 @@ void CPooterTraceState::FinalTick()
 		Vec2 vPos = pPooter->GetPos();
 		float fDist = (vTargetPos - vPos).Length();
 
+		if (pPooter->GetMonInfo().CurHP <= 0)
+		{
+			GetFSM()->ChangeState(L"Death");
+		}
+
 		// 범위 안에 있으면 자신의 상태를 TraceState
-		if (fDist < pPooter->GetAttRange())
+		else if (fDist < pPooter->GetAttRange())
 		{
 			GetFSM()->ChangeState(L"Attack");
 		}

@@ -13,6 +13,7 @@
 #include "CPooterIdleState.h"
 #include "CPooterTraceState.h"
 #include "CPooterAttackState.h"
+#include "CPooterDeathState.h"
 
 #include "CAssetMgr.h"
 
@@ -20,8 +21,8 @@
 
 CPooter::CPooter()
 	: m_LookDir('L')
-	, m_DetectRange(600.f)
-	, m_AttRange(400.f)
+	, m_DetectRange(400.f)
+	, m_AttRange(250.f)
 	, m_AttSpeed(0.5f)
 	, m_AccTime(0.f)
 	, m_monsterFlipbook(nullptr)
@@ -53,6 +54,7 @@ CPooter::CPooter()
 	m_FSM->AddState(L"Idle", new CPooterIdleState);
 	m_FSM->AddState(L"Trace", new CPooterTraceState);
 	m_FSM->AddState(L"Attack", new CPooterAttackState);
+	m_FSM->AddState(L"Death", new CPooterDeathState);
 
 	// RigidBody 컴포넌트 추가
 	m_RigidBody = (CRigidBody*)AddComponent(new CRigidBody);

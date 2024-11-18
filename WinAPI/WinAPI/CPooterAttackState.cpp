@@ -47,8 +47,13 @@ void CPooterAttackState::FinalTick()
 		Vec2 vPos = pPooter->GetPos();
 		float fDist = (vTargetPos - vPos).Length();
 
+		if (pPooter->GetMonInfo().CurHP <= 0)
+		{
+			GetFSM()->ChangeState(L"Death");
+		}
+
 		// 공격 범위 밖일 때
-		if (fDist > pPooter->GetAttRange())
+		else if (fDist > pPooter->GetAttRange())
 		{
 			GetFSM()->ChangeState(L"Trace");
 		}

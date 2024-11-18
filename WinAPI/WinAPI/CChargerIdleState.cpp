@@ -45,28 +45,32 @@ void CChargerIdleState::FinalTick()
 		{
 			Vec2 vTargetPos = m_TargetObject->GetPos();
 			Vec2 vPos = pCharger->GetPos();
+			float fDist = (vTargetPos - vPos).Length();
 
-			// X축 라인선상
-			if (vTargetPos.x > vPos.x - (pCharger->GetScale().x / 2) && vTargetPos.x < vPos.x + (pCharger->GetScale().x / 2))
+			if(fDist <= 350.f)
 			{
-				// 공격 True
-				pCharger->SetIsAttacking(true);
+				// X축 라인선상
+				if (vTargetPos.x > vPos.x - (pCharger->GetScale().x / 2) && vTargetPos.x < vPos.x + (pCharger->GetScale().x / 2))
+				{
+					// 공격 True
+					pCharger->SetIsAttacking(true);
 
-				// 목표 방향으로 이동방향 설정
-				if (vTargetPos.y > vPos.y)
-					pCharger->SetMoveDir('D');
-				else pCharger->SetMoveDir('U');
-			}
+					// 목표 방향으로 이동방향 설정
+					if (vTargetPos.y > vPos.y)
+						pCharger->SetMoveDir('D');
+					else pCharger->SetMoveDir('U');
+				}
 
-			// Y축 라인선상
-			else if (vTargetPos.y > vPos.y - (pCharger->GetScale().y / 2) && vTargetPos.y < vPos.y + (pCharger->GetScale().y / 2))
-			{
-				// 공격 True
-				pCharger->SetIsAttacking(true);
+				// Y축 라인선상
+				else if (vTargetPos.y > vPos.y - (pCharger->GetScale().y / 2) && vTargetPos.y < vPos.y + (pCharger->GetScale().y / 2))
+				{
+					// 공격 True
+					pCharger->SetIsAttacking(true);
 
-				// 목표 방향으로 이동방향 설정
-				if (vTargetPos.x > vPos.x) pCharger->SetMoveDir('R');
-				else pCharger->SetMoveDir('L');
+					// 목표 방향으로 이동방향 설정
+					if (vTargetPos.x > vPos.x) pCharger->SetMoveDir('R');
+					else pCharger->SetMoveDir('L');
+				}
 			}
 		}
 
@@ -98,14 +102,14 @@ void CChargerIdleState::FinalTick()
 			GetFSM()->ChangeState(L"Death");
 		}
 
-		else if (pCharger->GetIsAttacking())
+		else if (pCharger->GetIsAttacking() && !pCharger->GetIsTouchRock())
 		{
 			GetFSM()->ChangeState(L"Attack");
 		}
 
 		Vec2 vRenderPos = CCamera::GetInst()->GetRenderPos(pCharger->GetPos());
-		DrawDebugRect(PEN_TYPE::BLUE, vRenderPos, Vec2(6000.f, pCharger->GetScale().y), 0);
-		DrawDebugRect(PEN_TYPE::BLUE, vRenderPos, Vec2(pCharger->GetScale().x, 6000.f), 0);
+		DrawDebugRect(PEN_TYPE::BLUE, vRenderPos, Vec2(700.f, pCharger->GetScale().y), 0);
+		DrawDebugRect(PEN_TYPE::BLUE, vRenderPos, Vec2(pCharger->GetScale().x, 700.f), 0);
 	}
 }
 

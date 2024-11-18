@@ -16,7 +16,7 @@ CRock::CRock()
 	, m_Sprite(nullptr)
 {
 	m_Collider = (CCollider*)AddComponent(new CCollider);
-	m_Collider->SetScale(Vec2(125.f, 103.f));
+	m_Collider->SetScale(Vec2(103.f, 103.f));
 
 	m_Sprite = CAssetMgr::GetInst()->LoadSprite(L"ROCK", L"Sprite\\ROCK.sprite");
 }
@@ -44,9 +44,11 @@ void CRock::Render()
 	blend.SourceConstantAlpha = 255;
 	blend.AlphaFormat = AC_SRC_ALPHA;
 
+	Vec2 renderPos = CCamera::GetInst()->GetRenderPos(GetPos());
+
 	AlphaBlend(hBackDC
-		, GetPos().x - (GetScale().x / 2)
-		, GetPos().y - (GetScale().y / 2)
+		, renderPos.x - (GetScale().x / 2)
+		, renderPos.y - (GetScale().y / 2)
 		, GetScale().x
 		, GetScale().y
 		, m_Sprite->GetAtlas()->GetDC()

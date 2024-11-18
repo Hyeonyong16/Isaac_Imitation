@@ -91,8 +91,18 @@ void CLevel_Start::Begin()
         {
             pRoom = new roomInfo;
             pRoom->RoomPos = 1;
-            pRoom->IsClear = true;
+            pRoom->IsClear = false;
             pRoom->IsActive = false;
+
+            CDoor* pDoor = new CDoor;
+            pDoor->SetCurRoomPos(1);
+            pDoor->SetDoorPos('u');
+            AddObject(pDoor, LAYER_TYPE::DOOR);
+
+            pDoor = new CDoor;
+            pDoor->SetCurRoomPos(1);
+            pDoor->SetDoorPos('d');
+            AddObject(pDoor, LAYER_TYPE::DOOR);
 
             // Monster 持失
             // Charger
@@ -112,6 +122,8 @@ void CLevel_Start::Begin()
             pMonster->SetScale(100.f, 100.f);
             pMonster->SetIsActive(pRoom->IsActive);
             pMonster->SetRoomNum(1);
+            CCharger* pCharger = dynamic_cast<CCharger*>(pMonster);
+            pCharger->SetTurnDir('R');
             AddObject(pMonster, LAYER_TYPE::MONSTER);
 
             pMonster = new CCharger;
@@ -122,11 +134,78 @@ void CLevel_Start::Begin()
             pMonster->SetRoomNum(1);
             AddObject(pMonster, LAYER_TYPE::MONSTER);
 
+            pMonster = new CRock;
+            pMonster->SetName(L"CRock");
+            pMonster->SetPos(tempMonPos.x + 860.f, tempMonPos.y + 52.f);
+            pMonster->SetScale(103.f, 103.f);
+            AddObject(pMonster, LAYER_TYPE::ROCK);
+
+            pMonster = new CRock;
+            pMonster->SetName(L"CRock");
+            pMonster->SetPos(tempMonPos.x + 63.f, tempMonPos.y + 257.f);
+            pMonster->SetScale(103.f, 103.f);
+            AddObject(pMonster, LAYER_TYPE::ROCK);
+
+            pMonster = new CRock;
+            pMonster->SetName(L"CRock");
+            pMonster->SetPos(tempMonPos.x + 860.f, tempMonPos.y + 670.f);
+            pMonster->SetScale(103.f, 103.f);
+            AddObject(pMonster, LAYER_TYPE::ROCK);
+
             pRoom->monCount = 3;
 
             m_levelRoomInfo.push_back(pRoom);
         }
 
+        // 2腰号
+        {
+            pRoom = new roomInfo;
+            pRoom->RoomPos = 2;
+            pRoom->IsClear = false;
+            pRoom->IsActive = false;
+
+            CDoor* pDoor = new CDoor;
+            pDoor->SetCurRoomPos(2);
+            pDoor->SetDoorPos('u');
+            AddObject(pDoor, LAYER_TYPE::DOOR);
+
+            pDoor = new CDoor;
+            pDoor->SetCurRoomPos(2);
+            pDoor->SetDoorPos('d');
+            AddObject(pDoor, LAYER_TYPE::DOOR);
+
+            // Monster 持失
+            // Charger
+            tempMonPos = Vec2(210.f, 180.f + (pRoom->RoomPos * (vResolution.y)));
+
+            CMonster* pMonster = new CPooter;
+            pMonster->SetName(L"CPooter");
+            pMonster->SetPos(tempMonPos.x + 323.f, tempMonPos.y + 257.f);
+            pMonster->SetScale(100.f, 100.f);
+            pMonster->SetIsActive(pRoom->IsActive);
+            pMonster->SetRoomNum(2);
+            AddObject(pMonster, LAYER_TYPE::MONSTER);
+
+            pMonster = new CPooter;
+            pMonster->SetName(L"CPooter");
+            pMonster->SetPos(tempMonPos.x + 573.f, tempMonPos.y + 360.f);
+            pMonster->SetScale(100.f, 100.f);
+            pMonster->SetIsActive(pRoom->IsActive);
+            pMonster->SetRoomNum(2);
+            AddObject(pMonster, LAYER_TYPE::MONSTER);
+
+            pMonster = new CPooter;
+            pMonster->SetName(L"CPooter");
+            pMonster->SetPos(tempMonPos.x + 823.f, tempMonPos.y + 463.f);
+            pMonster->SetScale(100.f, 100.f);
+            pMonster->SetIsActive(pRoom->IsActive);
+            pMonster->SetRoomNum(2);
+            AddObject(pMonster, LAYER_TYPE::MONSTER);
+
+            pRoom->monCount = 3;
+
+            m_levelRoomInfo.push_back(pRoom);
+        }
 
         // Pooter
         /*CMonster* pMonster = new CPooter;
