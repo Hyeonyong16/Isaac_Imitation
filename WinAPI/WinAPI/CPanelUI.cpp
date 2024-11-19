@@ -18,22 +18,22 @@ CPanelUI::~CPanelUI()
 
 void CPanelUI::Tick_UI()
 {;
-	if(IsLBtnDown())
-	{
-		Vec2 vMousePos = CKeyMgr::GetInst()->GetMousePos();
-		Vec2 vDiff = vMousePos - m_DownPos;
+	//if(IsLBtnDown())
+	//{
+	//	Vec2 vMousePos = CKeyMgr::GetInst()->GetMousePos();
+	//	Vec2 vDiff = vMousePos - m_DownPos;
 
-		Vec2 vPos = GetPos();
-		vPos += vDiff;
-		SetPos(vPos);
+	//	Vec2 vPos = GetPos();
+	//	vPos += vDiff;
+	//	SetPos(vPos);
 
-		m_DownPos = vMousePos;
+	//	m_DownPos = vMousePos;
 
-		// 임의로 확인을 위해서 넣은 부분
-		m_vMousePosTemp = vMousePos;
-		m_vDiffTemp = vDiff;
-		m_vPosTemp = vPos;
-	}
+	//	// 임의로 확인을 위해서 넣은 부분
+	//	m_vMousePosTemp = vMousePos;
+	//	m_vDiffTemp = vDiff;
+	//	m_vPosTemp = vPos;
+	//}
 
 }
 
@@ -77,7 +77,7 @@ void CPanelUI::Render_UI()
 			, vScale.x
 			, vScale.y
 			, m_sprite->GetAtlas()->GetDC()
-			, 0, 0
+			, m_sprite->GetLeftTop().x, m_sprite->GetLeftTop().y
 			, m_sprite->GetSlice().x
 			, m_sprite->GetSlice().y
 			, blend);
@@ -85,12 +85,12 @@ void CPanelUI::Render_UI()
 
 }
 
-void CPanelUI::MouseLBtnDown()
-{
-	m_DownPos = CKeyMgr::GetInst()->GetMousePos();
-}
-
-void CPanelUI::MouseLBtnClikced()
-{
-}
+//void CPanelUI::MouseLBtnDown()
+//{
+//	m_DownPos = CKeyMgr::GetInst()->GetMousePos();
+//}
+//
+//void CPanelUI::MouseLBtnClikced()
+//{
+//}
 

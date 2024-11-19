@@ -26,6 +26,7 @@
 
 #include "CRoom.h"
 #include "CDoor.h"
+#include "CHPUI.h"
 
 CLevel_Start::CLevel_Start()
     : m_PlayerRoomLocation(0)
@@ -265,6 +266,12 @@ void CLevel_Start::Begin()
         //pTileMap->SetPos(Vec2(1000.f, 1000.f));
         //pTileMap->GetTileMap()->LoadTileMap(FilePath + L"TileMap\\tempMap1.tile");
         //AddObject(pTileMap, LAYER_TYPE::TILE);
+
+        CHPUI* pHPUI = new CHPUI;
+        pHPUI->SetScale(Vec2(1.f, 1.f));
+        pHPUI->SetPos(Vec2(20.f, 20.f));
+        AddObject(pHPUI, LAYER_TYPE::UI);
+
 
         // 충돌 설정
         CCollisionMgr::GetInst()->CollisionCheckClear();

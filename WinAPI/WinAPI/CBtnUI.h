@@ -1,5 +1,8 @@
 #pragma once
 #include "CUI.h"
+
+class CSprite;
+
 class CBtnUI :
     public CUI
 {
@@ -10,6 +13,8 @@ private:
     // Delegate
     CBase* m_Inst;
     DELEGATE_0          m_MemFunc;
+
+    CSprite* m_sprite;
 
 public:
     void AddCallBack(PARAM_0 _Func) { m_Func = _Func; }
@@ -23,6 +28,8 @@ public:
 
     // Mouse Click
     virtual void MouseLBtnClikced() override;
+
+    void SetSprite(CSprite* _sprite) { m_sprite = _sprite; }
 
 public:
     CBtnUI();

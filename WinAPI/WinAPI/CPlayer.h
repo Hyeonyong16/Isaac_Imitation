@@ -40,7 +40,8 @@ private:
     float       m_AttSpeed;     // 초당 발사 속도
     float       m_AccTime;      // 시간 누적
 
-    float       m_curHP;
+    int       m_curHP;
+    float     m_DamagedTime;
 
     CCollider*  m_HitBox;
 
@@ -90,6 +91,11 @@ public:
     int GetAttackQueueSize() { return AttackQueue.size(); }
 
     float GetAccTime() { return m_AccTime; }
+
+    int GetCurHP() { return m_curHP; }
+    void SetCurHP(int _curHP) { m_curHP = _curHP; }
+
+    void GetDamaged() { m_curHP -= 1; }
 
 public:
     CPlayer();

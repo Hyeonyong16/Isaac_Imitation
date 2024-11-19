@@ -20,8 +20,8 @@ public:
     virtual void Tick_UI() override;
     virtual void Render_UI() override;
 
-    virtual void MouseLBtnDown() override;
-    virtual void MouseLBtnClikced() override;
+    //virtual void MouseLBtnDown() override;
+    //virtual void MouseLBtnClikced() override;
 
     void SetSprite(CSprite* _sprite) { m_sprite = _sprite; }
 

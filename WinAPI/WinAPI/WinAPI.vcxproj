@@ -158,6 +158,7 @@
     <ClInclude Include="CFlipbookPlayer.h" />
     <ClInclude Include="CFSM.h" />
     <ClInclude Include="CGuidedMissile.h" />
+    <ClInclude Include="CHPUI.h" />
     <ClInclude Include="CIdleState.h" />
     <ClInclude Include="CKeyMgr.h" />
     <ClInclude Include="CLevel.h" />
@@ -236,6 +237,7 @@
     <ClCompile Include="CFlipbookPlayer.cpp" />
     <ClCompile Include="CFSM.cpp" />
     <ClCompile Include="CGuidedMissile.cpp" />
+    <ClCompile Include="CHPUI.cpp" />
     <ClCompile Include="CIdleState.cpp" />
     <ClCompile Include="CKeyMgr.cpp" />
     <ClCompile Include="CLevel.cpp" />

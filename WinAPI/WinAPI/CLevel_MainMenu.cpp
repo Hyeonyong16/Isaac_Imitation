@@ -36,6 +36,7 @@ void CLevel_MainMenu::Begin()
 	CBtnUI* pBtn = new CBtnUI;
 	pBtn->SetScale(Vec2(300.f, 100.f));
 	pBtn->SetPos(Vec2(((vResolution.x / 2) - (pBtn->GetScale().x / 2)), 300.f));
+	pBtn->SetSprite(CAssetMgr::GetInst()->LoadSprite(L"UI_NEW_RUN_BTN", L"Sprite\\UI_NEW_RUN_BTN.sprite"));
 
 	void ChangeStage1Level();
 	pBtn->AddDelegate(this, (DELEGATE_0)&CLevel_MainMenu::ChangeStage1Level);
@@ -48,6 +49,7 @@ void CLevel_MainMenu::Begin()
 
 	void ChangeEditorLevel();
 	pBtn->AddDelegate(this, (DELEGATE_0)&CLevel_MainMenu::ChangeEditorLevel);
+	pBtn->SetSprite(CAssetMgr::GetInst()->LoadSprite(L"UI_MODS_BTN", L"Sprite\\UI_MODS_BTN.sprite"));
 
 	pPanel->AddChildUI(pBtn);
 

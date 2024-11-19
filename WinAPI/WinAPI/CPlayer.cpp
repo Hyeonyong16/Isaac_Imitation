@@ -58,12 +58,14 @@ CPlayer::CPlayer()
 	, m_FlipbookHead(nullptr)
 	//, m_Texture(nullptr)
 	, m_RigidBody(nullptr)
-	, isAttack{false, false, false, false}
+	, isAttack{ false, false, false, false }
 	, m_headDir('D')
 	, m_bodyDir('D')
 	, m_FSM(nullptr)
 	, m_isDamaged(false)
 	, m_isAttacking(false)
+	, m_curHP(6)
+	, m_DamagedTime(0.f)
 {
 	m_HitBox = new CCollider;
 	m_HitBox->SetName(L"HitBox_01");
@@ -120,6 +122,20 @@ void CPlayer::Begin()
 
 void CPlayer::Tick()
 {
+	if (m_isDamaged)
+	{
+		if (m_DamagedTime >= 0.8f)
+		{
+			m_DamagedTime = 0;
+			m_isDamaged = false;
+		}
+
+		else
+		{
+			m_DamagedTime += DT;
+		}
+	}
+
 
 	// ÀÌµ¿
 	{
@@ -363,17 +379,24 @@ void CPlayer::Render()
 
 
 	wchar_t str1[255];
+	wchar_t str2[255];
 	wchar_t str3[255];
 	swprintf_s(str1, 255, L"pos x: %d, y: %d", (int)GetPos().x, (int)GetPos().y);
+	swprintf_s(str2, 255, L"player HP : %d", m_curHP);
 	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 30, str1, wcslen(str1));
+	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 210, str2, wcslen(str2));
 	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 50, m_FSM->GetCurState().c_str(), wcslen(m_FSM->GetCurState().c_str()));
 }
 
 void CPlayer::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)
 {
-	if (_OtherObject->GetName() == L"Monster")
+	if (_OtherObject->GetLayerType() == LAYER_TYPE::MONSTER)
 	{
-		//DeleteObject(_OtherObject);
+		if (!m_isDamaged)
+		{
+			m_isDamaged = true;
+			GetDamaged();
+		}
 	}
 
 	if (_OtherObject->GetLayerType() == LAYER_TYPE::TILE || _OtherObject->GetLayerType() == LAYER_TYPE::ROCK)

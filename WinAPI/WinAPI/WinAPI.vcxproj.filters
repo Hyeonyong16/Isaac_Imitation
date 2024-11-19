@@ -232,6 +232,9 @@
     <Filter Include="Game\05. Object\Door">
       <UniqueIdentifier>{4f09fab3-e7fb-4a84-8f7d-6982a7bae770}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\05. Object\UI\HP">
+      <UniqueIdentifier>{a329bb11-2335-408a-94e0-5501b6a268d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CEngine.h">
@@ -462,6 +465,9 @@
     <ClInclude Include="CDoor.h">
       <Filter>Game\05. Object\Door</Filter>
     </ClInclude>
+    <ClInclude Include="CHPUI.h">
+      <Filter>Game\05. Object\UI\HP</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEngine.cpp">
@@ -665,6 +671,9 @@
     </ClCompile>
     <ClCompile Include="CDoor.cpp">
       <Filter>Game\05. Object\Door</Filter>
+    </ClCompile>
+    <ClCompile Include="CHPUI.cpp">
+      <Filter>Game\05. Object\UI\HP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
