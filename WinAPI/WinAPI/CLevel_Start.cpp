@@ -51,7 +51,7 @@ void CLevel_Start::Begin()
 
     {
         // 배경음 지정
-        CSound* pBGM = CAssetMgr::GetInst()->LoadSound(L"BattleBGM", L"Sound\\BGM_Stage1.wav");
+        CSound* pBGM = CAssetMgr::GetInst()->LoadSound(L"BattleBGM", L"Sound\\Isaac_Stage_BGM.wav");
         if (nullptr != pBGM)
         {
             pBGM->SetVolume(70.f);

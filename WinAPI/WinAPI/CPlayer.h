@@ -6,6 +6,7 @@ class CTexture;
 class CFlipbookPlayer;
 class CRigidBody;
 class CFSM;
+class CSound;
 
 enum PLAYER_HEAD_ANIM_STATE
 {
@@ -53,6 +54,8 @@ private:
     CFlipbookPlayer* m_FlipbookBody;
 
     CRigidBody* m_RigidBody;
+
+    CSound* m_HurtSound;
 
     bool isAttack[4];   // 왼 오 위 아래 순서
     list<char> AttackQueue; // 각 방향 키 들어온 순서

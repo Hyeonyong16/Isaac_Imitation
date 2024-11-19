@@ -10,6 +10,8 @@
 #include "CPanelUI.h"
 #include "CBtnUI.h"
 
+#include "CSound.h"
+
 CLevel_MainMenu::CLevel_MainMenu()
 {
 	//m_MainMenuSprite = CAssetMgr::GetInst()->LoadSprite(L"MAIN_MENU", L"Sprite\\MAIN_MENU.sprite");
@@ -22,6 +24,14 @@ CLevel_MainMenu::~CLevel_MainMenu()
 
 void CLevel_MainMenu::Begin()
 {
+	// 배경음 지정
+	CSound* pBGM = CAssetMgr::GetInst()->LoadSound(L"MainMenuBGM", L"Sound\\Isaac_BGM.wav");
+	if (nullptr != pBGM)
+	{
+		pBGM->SetVolume(70.f);
+		pBGM->PlayToBGM(true);
+	}
+
 	Vec2 vResolution = CEngine::GetInst()->GetResolution();
 
 	CPanelUI* pPanel = new CPanelUI;
@@ -30,12 +40,12 @@ void CLevel_MainMenu::Begin()
 
 	pPanel->SetPos(0, 0);
 	pPanel->SetScale(vScale);
-	pPanel->SetSprite(CAssetMgr::GetInst()->LoadSprite(L"MAIN_MENU", L"Sprite\\MAIN_MENU.sprite"));
+	pPanel->SetSprite(CAssetMgr::GetInst()->LoadSprite(L"UI_MAIN_MENU_BACKGROUND", L"Sprite\\UI_MAIN_MENU_BACKGROUND.sprite"));
 
 	// Panel 에 넣을 자식 UI
 	CBtnUI* pBtn = new CBtnUI;
 	pBtn->SetScale(Vec2(300.f, 100.f));
-	pBtn->SetPos(Vec2(((vResolution.x / 2) - (pBtn->GetScale().x / 2)), 300.f));
+	pBtn->SetPos(Vec2(((vResolution.x / 2) - (pBtn->GetScale().x / 2)), 450.f));
 	pBtn->SetSprite(CAssetMgr::GetInst()->LoadSprite(L"UI_NEW_RUN_BTN", L"Sprite\\UI_NEW_RUN_BTN.sprite"));
 
 	void ChangeStage1Level();
@@ -45,7 +55,7 @@ void CLevel_MainMenu::Begin()
 
 	pBtn = new CBtnUI;
 	pBtn->SetScale(Vec2(300.f, 100.f));
-	pBtn->SetPos(Vec2(((vResolution.x / 2) - (pBtn->GetScale().x / 2)), 450.f));
+	pBtn->SetPos(Vec2(((vResolution.x / 2) - (pBtn->GetScale().x / 2)), 600.f));
 
 	void ChangeEditorLevel();
 	pBtn->AddDelegate(this, (DELEGATE_0)&CLevel_MainMenu::ChangeEditorLevel);
@@ -53,8 +63,16 @@ void CLevel_MainMenu::Begin()
 
 	pPanel->AddChildUI(pBtn);
 
-	AddObject(pPanel, LAYER_TYPE::UI);
+	CPanelUI* pNewPanel = new CPanelUI;
+	pNewPanel->SetName(L"Logo");
+	vScale = Vec2(vResolution.x , 400.f);
+	pNewPanel->SetScale(vScale);
+	pNewPanel->SetPos(Vec2(vResolution.x / 2 - vScale.x / 2, 50.f));
+	pNewPanel->SetSprite(CAssetMgr::GetInst()->LoadSprite(L"UI_MAIN_MENU_LOGO", L"Sprite\\UI_MAIN_MENU_LOGO.sprite"));
 
+	pPanel->AddChildUI(pNewPanel);
+
+	AddObject(pPanel, LAYER_TYPE::UI);
 }
 
 void CLevel_MainMenu::Tick()

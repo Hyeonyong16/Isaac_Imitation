@@ -28,6 +28,8 @@
 #include "CPlayerMoveState.h"
 #include "CPlayerAttackState.h"
 
+#include "CSound.h"
+
 enum PLAYER_ANIM_STATE
 {
 	IDLE_UP,
@@ -66,6 +68,7 @@ CPlayer::CPlayer()
 	, m_isAttacking(false)
 	, m_curHP(6)
 	, m_DamagedTime(0.f)
+	, m_HurtSound(nullptr)
 {
 	m_HitBox = new CCollider;
 	m_HitBox->SetName(L"HitBox_01");
@@ -98,6 +101,8 @@ CPlayer::CPlayer()
 	m_FSM->AddState(L"Idle", new CPlayerIdleState);
 	m_FSM->AddState(L"Move", new CPlayerMoveState);
 	m_FSM->AddState(L"Attack", new CPlayerAttackState);
+
+	m_HurtSound = CAssetMgr::GetInst()->LoadSound(L"HurtSound", L"Sound\\Isaac_Hurt.wav");
 }
 
 CPlayer::~CPlayer()
@@ -390,12 +395,13 @@ void CPlayer::Render()
 
 void CPlayer::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)
 {
-	if (_OtherObject->GetLayerType() == LAYER_TYPE::MONSTER)
+	if (_OtherObject->GetLayerType() == LAYER_TYPE::MONSTER || _OtherObject->GetLayerType() == LAYER_TYPE::MONSTER_OBJECT)
 	{
 		if (!m_isDamaged)
 		{
 			m_isDamaged = true;
 			GetDamaged();
+			m_HurtSound->Play(false);
 		}
 	}
 
