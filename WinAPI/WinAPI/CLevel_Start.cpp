@@ -393,7 +393,7 @@ void CLevel_Start::Tick()
 
     if (m_isSceneChange)
     {
-        if (m_waitTime >= 3.f)
+        if (m_waitTime >= 1.f)
             ChangeLevel(LEVEL_TYPE::STAGE_ENDING);
         m_waitTime += DT;
     }

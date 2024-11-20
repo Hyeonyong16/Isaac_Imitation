@@ -207,7 +207,7 @@ void CDoor::Render()
 
     wchar_t str1[255];
     swprintf_s(str1, 255, L"Door pos x: %d, y: %d", (int)GetPos().x, (int)GetPos().y);
-    TextOut(CEngine::GetInst()->GetSecondDC(), 10, 110, str1, wcslen(str1));
+    //TextOut(CEngine::GetInst()->GetSecondDC(), 10, 110, str1, wcslen(str1));
 }
 
 void CDoor::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)

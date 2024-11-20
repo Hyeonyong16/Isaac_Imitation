@@ -185,6 +185,11 @@ void CCharger::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider*
 		if (m_isAttacking && _OtherObject->GetLayerType() == LAYER_TYPE::ROCK) m_isTouchRock = true;
 		m_isTurn = true;
 	}
+
+	if (_OtherObject->GetLayerType() == LAYER_TYPE::PLAYER_OBJECT)
+	{
+		m_monsterFlipbook->SetIsHitted(true);
+	}
 }
 
 void CCharger::Overlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)

@@ -96,7 +96,7 @@ void CPooter::Render()
 {
 	m_monsterFlipbook->Render();
 
-	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 130, m_FSM->GetCurState().c_str(), wcslen(m_FSM->GetCurState().c_str()));
+	//TextOut(CEngine::GetInst()->GetSecondDC(), 10, 130, m_FSM->GetCurState().c_str(), wcslen(m_FSM->GetCurState().c_str()));
 
 	wchar_t str[255];
 	swprintf_s(str, 255, L"Pooter Pos x: %d, y: %d", (int)GetPos().x, (int)GetPos().y);

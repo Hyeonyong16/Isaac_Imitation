@@ -402,6 +402,8 @@ void CPlayer::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* 
 			m_isDamaged = true;
 			GetDamaged();
 			m_HurtSound->Play(false);
+			m_FlipbookBody->SetIsHitted(true);
+			m_FlipbookHead->SetIsHitted(true);
 		}
 	}
 

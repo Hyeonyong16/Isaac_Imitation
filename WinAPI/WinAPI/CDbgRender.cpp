@@ -9,7 +9,7 @@
 
 
 CDbgRender::CDbgRender()
-	: m_Show(true)
+	: m_Show(false)
 {
 
 }
