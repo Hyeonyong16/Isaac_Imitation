@@ -235,6 +235,12 @@
     <Filter Include="Game\05. Object\UI\HP">
       <UniqueIdentifier>{a329bb11-2335-408a-94e0-5501b6a268d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\04. Level\4. EndingScene">
+      <UniqueIdentifier>{0b168106-045e-4a26-9736-cc89bd31236a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\05. Object\EndingObj">
+      <UniqueIdentifier>{9f8b5333-ad14-405e-95f1-a883f24ed397}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CEngine.h">
@@ -468,6 +474,10 @@
     <ClInclude Include="CHPUI.h">
       <Filter>Game\05. Object\UI\HP</Filter>
     </ClInclude>
+    <ClInclude Include="CLevel_End.h">
+      <Filter>Game\04. Level\4. EndingScene</Filter>
+    </ClInclude>
+    <ClInclude Include="EndingObj.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEngine.cpp">
@@ -675,6 +685,10 @@
     <ClCompile Include="CHPUI.cpp">
       <Filter>Game\05. Object\UI\HP</Filter>
     </ClCompile>
+    <ClCompile Include="CLevel_End.cpp">
+      <Filter>Game\04. Level\4. EndingScene</Filter>
+    </ClCompile>
+    <ClCompile Include="EndingObj.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">

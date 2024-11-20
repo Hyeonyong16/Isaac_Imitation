@@ -28,9 +28,13 @@
 #include "CDoor.h"
 #include "CHPUI.h"
 
+#include "CTimeMgr.h"
+
 CLevel_Start::CLevel_Start()
     : m_PlayerRoomLocation(0)
     , m_isCameraMove(false)
+    , m_isSceneChange(false)
+    , m_waitTime(0.f)
 {
     m_wallSprite = CAssetMgr::GetInst()->LoadSprite(L"MAP_WALL", L"Sprite\\MAP_WALL.sprite");
 
@@ -374,6 +378,26 @@ void CLevel_Start::Tick()
             }
         }
     }
+
+    CObj* pMonstro = CLevel::FindObjectByName(LAYER_TYPE::MONSTER, L"CMonstro");
+    CMonster* pBoss = dynamic_cast<CMonster*>(pMonstro);
+
+    if (pBoss)
+    {
+        if(pBoss->GetMonInfo().CurHP == 0)
+        {
+            if (!m_isSceneChange)
+                m_isSceneChange = true;
+        }
+    }
+
+    if (m_isSceneChange)
+    {
+        if (m_waitTime >= 3.f)
+            ChangeLevel(LEVEL_TYPE::STAGE_ENDING);
+        m_waitTime += DT;
+    }
+
 }
 
 void CLevel_Start::Render()

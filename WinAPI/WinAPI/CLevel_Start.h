@@ -28,6 +28,8 @@ private:
 
     int m_curLevelMonsterObjectCount;
     bool m_isCameraMove;
+    bool m_isSceneChange;
+    float m_waitTime;
 
 public:
     virtual void Begin() override;

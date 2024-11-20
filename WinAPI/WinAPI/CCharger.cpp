@@ -34,8 +34,8 @@ CCharger::CCharger()
 	AddComponent(m_Collider);
 
 	tMonInfo temp;
-	temp.MaxHP = 6;
-	temp.CurHP = 6;
+	temp.MaxHP = 3;
+	temp.CurHP = 3;
 	temp.Speed = 100.f;
 
 	SetMonInfo(temp);

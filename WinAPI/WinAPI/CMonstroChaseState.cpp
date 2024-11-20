@@ -40,6 +40,11 @@ void CMonstroChaseState::Enter()
 	{
 		m_TargetObject = CLevelMgr::GetInst()->FindObjectByName(LAYER_TYPE::PLAYER, L"Player");
 	}
+
+	CMonstro* pMonstro = dynamic_cast<CMonstro*>(GetOwnerObj());
+	assert(pMonstro);
+	pMonstro->SetCanHit(true);
+
 }
 
 void CMonstroChaseState::FinalTick()
