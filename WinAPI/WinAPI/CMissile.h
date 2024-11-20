@@ -1,6 +1,14 @@
 #pragma once
 #include "CObj.h"
 
+class CFlipbookPlayer;
+
+enum BULLET_ANIM_STATE
+{
+    BULLET_IDLE,
+    BULLET_DESTROY,
+};
+
 class CMissile :
     public CObj
 {
@@ -17,6 +25,10 @@ private:
     float       m_existTime;    // 최대 생존 시간
 
     bool        m_isDamaged;    // 데미지를 입혔는가?
+    bool        m_isDeleted;    // 삭제되어야하는가?
+    bool        m_isDeletePlay; // 삭제애니메이션 재생여부
+
+    CFlipbookPlayer* m_BulletFlipbook;
 
 public:
     void SetVelocity(Vec2 _Velocity) { m_Velocity = _Velocity; }

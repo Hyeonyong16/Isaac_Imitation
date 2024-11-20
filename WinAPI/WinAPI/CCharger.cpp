@@ -168,7 +168,7 @@ void CCharger::Render()
 
 	wchar_t str2[255];
 	swprintf_s(str2, 255, L"curHP: %d", (int)GetMonInfo().CurHP);
-	TextOut(CEngine::GetInst()->GetSecondDC(), GetPos().x, GetPos().y, str2, wcslen(str2));
+	//TextOut(CEngine::GetInst()->GetSecondDC(), GetPos().x, GetPos().y, str2, wcslen(str2));
 
 }
 

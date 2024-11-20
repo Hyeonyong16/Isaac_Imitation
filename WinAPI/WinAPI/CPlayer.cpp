@@ -388,9 +388,9 @@ void CPlayer::Render()
 	wchar_t str3[255];
 	swprintf_s(str1, 255, L"pos x: %d, y: %d", (int)GetPos().x, (int)GetPos().y);
 	swprintf_s(str2, 255, L"player HP : %d", m_curHP);
-	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 30, str1, wcslen(str1));
-	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 210, str2, wcslen(str2));
-	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 50, m_FSM->GetCurState().c_str(), wcslen(m_FSM->GetCurState().c_str()));
+	//TextOut(CEngine::GetInst()->GetSecondDC(), 10, 30, str1, wcslen(str1));
+	//TextOut(CEngine::GetInst()->GetSecondDC(), 10, 210, str2, wcslen(str2));
+	//TextOut(CEngine::GetInst()->GetSecondDC(), 10, 50, m_FSM->GetCurState().c_str(), wcslen(m_FSM->GetCurState().c_str()));
 }
 
 void CPlayer::BeginOverlap(CCollider* _Collider, CObj* _OtherObject, CCollider* _OtherCollider)

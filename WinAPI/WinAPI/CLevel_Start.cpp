@@ -208,6 +208,35 @@ void CLevel_Start::Begin()
             m_levelRoomInfo.push_back(pRoom);
         }
 
+        // 3번 방
+        {
+            pRoom = new roomInfo;
+            pRoom->RoomPos = 3;
+            pRoom->IsClear = false;
+            pRoom->IsActive = false;
+
+            CDoor* pDoor = new CDoor;
+            pDoor->SetCurRoomPos(3);
+            pDoor->SetDoorPos('u');
+            AddObject(pDoor, LAYER_TYPE::DOOR);
+
+            // Monster 생성
+            // Charger
+            tempMonPos = Vec2(210.f, 180.f + (pRoom->RoomPos * (vResolution.y)));
+
+            CMonster* pMonster = new CMonstro;
+            pMonster->SetName(L"CMonstro");
+            pMonster->SetPos(tempMonPos.x + vResolution.x/2, tempMonPos.y + vResolution.y/2);
+            pMonster->SetScale(150.f, 150.f);
+            pMonster->SetIsActive(pRoom->IsActive);
+            pMonster->SetRoomNum(3);
+            AddObject(pMonster, LAYER_TYPE::MONSTER);
+
+            pRoom->monCount = 1;
+
+            m_levelRoomInfo.push_back(pRoom);
+        }
+
         // Pooter
         /*CMonster* pMonster = new CPooter;
         pMonster->SetName(L"CPooter");
@@ -400,11 +429,11 @@ void CLevel_Start::Render()
 
     CLevel::Render();
 
-    TextOut(CEngine::GetInst()->GetSecondDC(), 10, 10, L"Start Level", wcslen(L"Start Level"));
+    //TextOut(CEngine::GetInst()->GetSecondDC(), 10, 10, L"Start Level", wcslen(L"Start Level"));
 
     wchar_t str[255];
     swprintf_s(str, 255, L"monsterListSize: %d", m_levelRoomInfo[0]->monCount);
-    TextOut(CEngine::GetInst()->GetSecondDC(), 10, 300, str, wcslen(str));
+    //TextOut(CEngine::GetInst()->GetSecondDC(), 10, 300, str, wcslen(str));
 }
 
 void CLevel_Start::End()

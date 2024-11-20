@@ -100,7 +100,7 @@ void CPooter::Render()
 
 	wchar_t str[255];
 	swprintf_s(str, 255, L"Pooter Pos x: %d, y: %d", (int)GetPos().x, (int)GetPos().y);
-	TextOut(CEngine::GetInst()->GetSecondDC(), 10, 150, str, wcslen(str));
+	//TextOut(CEngine::GetInst()->GetSecondDC(), 10, 150, str, wcslen(str));
 }
 
 
