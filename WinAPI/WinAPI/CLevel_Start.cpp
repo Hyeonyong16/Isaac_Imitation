@@ -73,6 +73,16 @@ void CLevel_Start::Begin()
 
         AddObject(pObject, LAYER_TYPE::PLAYER);
 
+        m_isSceneChange = false;
+        m_waitTime = 0.f;
+        m_PlayerRoomLocation = 0;
+
+        if (!m_levelRoomInfo.empty())
+        {
+            Delete_Vector(m_levelRoomInfo);
+            m_levelRoomInfo.resize(0);
+        }
+
         roomInfo* pRoom = new roomInfo;
 
         Vec2 tempMonPos = Vec2(210.f, 180.f + (pRoom->RoomPos * (vResolution.y)));
@@ -319,7 +329,7 @@ void CLevel_Start::Begin()
         CCollisionMgr::GetInst()->CollisionCheck(LAYER_TYPE::PLAYER, LAYER_TYPE::DOOR);
 
         // Camera 효과
-        CCamera::GetInst()->PostProcessEffect(HEART, 0.5f);
+        // CCamera::GetInst()->PostProcessEffect(HEART, 0.5f);
 
         // 부모 CLevel 의 Begin 호출
         CLevel::Begin();

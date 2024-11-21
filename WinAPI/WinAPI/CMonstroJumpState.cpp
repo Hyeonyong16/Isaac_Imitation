@@ -96,33 +96,33 @@ void CMonstroJumpState::FinalTick()
 				else
 				{
 					pMonstro->SetPos(tempPlayerPos);
-
-					if (!m_isAttack)
-					{
-						srand(time(NULL));
-						int bulletNum = rand() % 10 + 10;
-
-						for (int i = 0; i < bulletNum; ++i)
-						{
-							int degree = rand() % 360;
-							Vec2 vMoveDir = Vec2(cosf(degree), sinf(degree));
-
-							CMissile* pMissile = new CMissile;
-							pMissile->SetPos(pMonstro->GetPos() + Vec2(0.f, -75.f));
-							pMissile->SetScale(20.f, 20.f);
-							pMissile->SetVelocity(vMoveDir * 400.f);
-							CreateObject(pMissile, LAYER_TYPE::MONSTER_OBJECT);
-						}
-
-						pMonstro->SetCanHit(true);
-						m_isAttack = true;
-					}
 				}
 			}
 
 			// 착지 끝난후 콜라이더 충돌 설정
-			else if (pMonstroFlipbook->isFinish())
-			{ 
+			else if (m_isPlay && pMonstroFlipbook->isFinish())
+			{
+				if (!m_isAttack)
+				{
+					srand(time(NULL));
+					int bulletNum = rand() % 10 + 10;
+
+					for (int i = 0; i < bulletNum; ++i)
+					{
+						int degree = rand() % 360;
+						Vec2 vMoveDir = Vec2(cosf(degree), sinf(degree));
+
+						CMissile* pMissile = new CMissile;
+						pMissile->SetPos(pMonstro->GetPos() + Vec2(0.f, -75.f));
+						pMissile->SetScale(20.f, 20.f);
+						pMissile->SetVelocity(vMoveDir * 400.f);
+						CreateObject(pMissile, LAYER_TYPE::MONSTER_OBJECT);
+					}
+
+					pMonstro->SetCanHit(true);
+					m_isAttack = true;
+				}
+
 				if(m_curTime >= 1.0f)
 				{
 					pMonstro->SetIsGround(true);

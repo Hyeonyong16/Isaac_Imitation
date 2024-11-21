@@ -112,5 +112,6 @@ void CLevel_End::Render()
 
 void CLevel_End::End()
 {
+    endObj = nullptr;
 	DeleteAllObject();
 }

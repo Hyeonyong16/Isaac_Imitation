@@ -477,7 +477,9 @@
     <ClInclude Include="CLevel_End.h">
       <Filter>Game\04. Level\4. EndingScene</Filter>
     </ClInclude>
-    <ClInclude Include="EndingObj.h" />
+    <ClInclude Include="EndingObj.h">
+      <Filter>Game\05. Object\EndingObj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEngine.cpp">
@@ -688,7 +690,9 @@
     <ClCompile Include="CLevel_End.cpp">
       <Filter>Game\04. Level\4. EndingScene</Filter>
     </ClCompile>
-    <ClCompile Include="EndingObj.cpp" />
+    <ClCompile Include="EndingObj.cpp">
+      <Filter>Game\05. Object\EndingObj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">

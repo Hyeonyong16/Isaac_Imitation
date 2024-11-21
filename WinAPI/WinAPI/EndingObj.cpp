@@ -38,6 +38,10 @@ EndingObj::~EndingObj()
 
 void EndingObj::Begin()
 {
+	m_isFlipbookEnd = false;
+	m_isFadeIn = false;
+	m_sceneChange = false;
+	m_curTime = 0.f;
 	//m_flipbookPlayer->Play(ENDING_POLAROID, 600.f, false);
 }
 
