@@ -1,20 +1,17 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(517,5): warning MSB8004: Output 디렉터리가 슬래시로 끝나지 않습니다. Output 디렉터리의 적절한 평가를 허용하는 데 필요하므로 이 빌드 인스턴스에서 슬래시를 추가합니다.
-  CPlayer.cpp
-C:\Users\Nyong\Desktop\Study_git\WinAPI_포폴\Issac_Imitation\Isaac_Imitation\WinAPI\WinAPI\CPlayer.h(94,55): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/CPlayer.cpp'을(를) 컴파일하는 중)
+  CMonstroJumpState.cpp
+C:\Users\dizzy\OneDrive\바탕 화면\study_git\Isaac_Imitation\WinAPI\WinAPI\CMonstroJumpState.cpp(102,17): warning C4244: '인수': 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/CMonstroJumpState.cpp'을(를) 컴파일하는 중)
   
-C:\Users\Nyong\Desktop\Study_git\WinAPI_포폴\Issac_Imitation\Isaac_Imitation\WinAPI\WinAPI\CLevel.h(36,91): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/CPlayer.cpp'을(를) 컴파일하는 중)
+C:\Users\dizzy\OneDrive\바탕 화면\study_git\Isaac_Imitation\WinAPI\WinAPI\CMonstroJumpState.cpp(108,34): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/CMonstroJumpState.cpp'을(를) 컴파일하는 중)
   
-C:\Users\Nyong\Desktop\Study_git\WinAPI_포폴\Issac_Imitation\Isaac_Imitation\WinAPI\WinAPI\CFlipbook.h(16,52): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/CPlayer.cpp'을(를) 컴파일하는 중)
-  
-C:\Users\Nyong\Desktop\Study_git\WinAPI_포폴\Issac_Imitation\Isaac_Imitation\WinAPI\WinAPI\CPlayer.cpp(388,10): warning C4101: 'str3' :참조되지 않은 지역 변수입니다.
-  (소스 파일 '/CPlayer.cpp'을(를) 컴파일하는 중)
+C:\Users\dizzy\OneDrive\바탕 화면\study_git\Isaac_Imitation\WinAPI\WinAPI\CMonstroJumpState.cpp(108,48): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/CMonstroJumpState.cpp'을(를) 컴파일하는 중)
   
   코드를 생성하고 있습니다.
   1 of 2320 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    10 functions had inline decision re-evaluated but remain unchanged
+    7 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
-  WinAPI.vcxproj -> C:\Users\Nyong\Desktop\Study_git\WinAPI_포폴\Issac_Imitation\Isaac_Imitation\WinAPI\OutputFile\bin\MyGame.exe
+  WinAPI.vcxproj -> C:\Users\dizzy\OneDrive\바탕 화면\study_git\Isaac_Imitation\WinAPI\OutputFile\bin\MyGame.exe
